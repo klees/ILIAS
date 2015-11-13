@@ -6,6 +6,9 @@ namespace CaT\Report\Filter\Predicates;
 
 /**
  * Base class for Value-like things in Predicates.
+ *
+ * TODO: Is it possible to represent every combination of and and or
+ * and parantheses with this api.
  */
 abstract class Value {
 	/**

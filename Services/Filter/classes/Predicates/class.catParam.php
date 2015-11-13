@@ -10,6 +10,10 @@ namespace CaT\Report\Filter\Predicates;
  * TODO: We need a similar class for parameters that requires lists.
  * That class should have a common ancestor with ValueList to typehint
  * in Value::in.
+ *
+ * TODO: The class hierarchy seems to be a bit broken. If i would implement
+ * ParameterList it should be a Param and a ValueList, which would not work
+ * atm. 
  */
 final class Param extends Value {
 	/**
