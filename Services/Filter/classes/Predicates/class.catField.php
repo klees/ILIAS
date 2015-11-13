@@ -6,6 +6,9 @@ namespace CaT\Report\Filter\Predicates;
 
 /**
  * A field from a table row.
+ *
+ * TODO: I think we somehow need a way to distinguish fields from the original
+ * table from accumulated fields.
  */
 final class Field extends Value {
 	/**

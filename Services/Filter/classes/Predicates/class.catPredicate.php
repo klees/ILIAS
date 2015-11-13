@@ -39,4 +39,21 @@ abstract class Predicate {
 	public function _not() {
 		return $this->factory->_not($this);
 	}
+	
+	/**
+	 * Get all parameters in this predicate.
+	 *
+	 * TODO: What would be the best form to return the parameters. I think
+	 * we somehow need a way to disambiguate parameter names.
+	 *
+	 * @return	array
+	 */
+	abstract public function parameters();
+
+	/**
+	 * Get all fields in this predicate.
+	 *
+	 * @return	array
+	 */
+	abstract public function fields();
 }
