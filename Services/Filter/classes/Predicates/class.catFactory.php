@@ -2,7 +2,7 @@
 
 /* Copyright (c) 2015 Richard Klees, Extended GPL, see docs/LICENSE */
 
-namespace CaT\Report\Filter;
+namespace CaT\Report\Filter\Predicates;
 
 /**
  * A predicate over a row in the table.
