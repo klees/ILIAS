@@ -1,0 +1,99 @@
+<?php
+
+/* Copyright (c) 2015 Richard Klees, Extended GPL, see docs/LICENSE */
+
+namespace CaT\Report\Filter;
+
+/**
+ * Base class for Value-like things in Predicates.
+ */
+abstract class Value {
+	/**
+	 * @var	Factory
+	 */
+	protected $factory;
+	
+	protected function setFactory(Factory $factory) {
+		$this->factory = $factory;
+	}
+
+	// TODO: We could introduce some sugar here, e.g. not taking a Value
+	//       and convert non values to literals.
+	/**
+	 * Get a predicate that this value should be equal to another value.
+	 *
+	 * @param	Value	$other
+	 * @return	Predicate
+	 */
+	public function eq(Value $other) {
+		return $th0is->factory->eq($this, $other);
+	}
+	
+	/**
+	 * Get a predicate that this value should not be equal to another value.
+	 *
+	 * @param	Value	$other
+	 * @return	Predicate
+	 */
+	public function neq(Value $other) {
+		return $this->factory->not($this->eq($other));
+	}
+	
+	/**
+	 * Get a predicate that this value should be lower then another value.
+	 *
+	 * @param	Value	$other
+	 * @return	Predicate
+	 */
+	public function lt(Value $other);
+	
+	/**
+	 * Get a predicate that this value should lower then or equal to another value.
+	 *
+	 * @param	Value	$other
+	 * @return	Predicate
+	 */
+	public function lt_eq(Value $other);
+	
+	/**
+	 * Get a predicate that this value should be greater than another value.
+	 *
+	 * @param	Value	$other
+	 * @return	Predicate
+	 */
+	public function gt(Value $other);
+	
+	/**
+	 * Get a predicate that this value should be greater than or equal another value.
+	 *
+	 * @param	Value	$other
+	 * @return	Predicate
+	 */
+	public function gt_eq(Value $other);
+	
+	/**
+	 * Get a predicate that this value should be null.
+	 *
+	 * @param	Value	$other
+	 * @return	Predicate
+	 */
+	public function is_null();
+	
+	/**
+	 * Get a predicate that this value should be like the other value.
+	 *
+	 * @param	Value	$other
+	 * @return	Predicate
+	 */
+	public function like(Value $other);
+	
+	/**
+	 * Get a predicate that this value should equal another value.
+	 *
+	 * TODO: What is the correct parameter for this?
+	 *
+	 * @param	Value	$other
+	 * @return	Predicate
+	 */
+	abstract function in(ValueList $other);
+}
