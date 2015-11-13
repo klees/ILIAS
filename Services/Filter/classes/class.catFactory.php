@@ -2,10 +2,10 @@
 
 /* Copyright (c) 2015 Richard Klees, Extended GPL, see docs/LICENSE */
 
-namespace CaT\Report\Filter\Predicates;
+namespace CaT\Report\Filter;
 
 /**
- * A predicate over a row in the table.
+ * Factory for all things filter.
  */
 class Factory {
 	// VALUES
