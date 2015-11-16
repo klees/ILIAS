@@ -16,14 +16,19 @@ final class ValueList {
 	/**
 	 * @var	mixed
 	 */
-	protected $value;
+	protected $values = array();
 	
-	public function __construct($value, $type = null) {
+	public function __construct() {
 		// TODO: interfer type if not set.
 		// TODO: throw exception on unknown types.
 		//       types would be: int, string, date
 		// TODO: check, that all values are the same type.
-		$this->value = $value;
-		$this->type = $type;
+
+		// DK: 	I don't get it, why do we need any types here? Why not use a general value list, which may contain anything derived from value? 
+		// 		Then one may add any values-objects here and those would take care of their types themselves?
+	}
+
+	public function addValue(Value $a_value) {
+		$this->values[] 
 	}
 }

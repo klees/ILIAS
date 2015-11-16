@@ -5,7 +5,7 @@
 namespace CaT\Report\Filter\Predicates;
 
 /**
- * 
+  	DK: Combination : predicate x predicate -> predicate
  */
 class Combination extends Predicate {
 	/**

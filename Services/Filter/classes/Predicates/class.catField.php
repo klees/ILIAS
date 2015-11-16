@@ -18,7 +18,11 @@ final class Field extends Value {
 	
 	public function __construct($name) {
 		assert("is_string($name)");
-		// TODO: Maybe check $name for compliance with (table.)name
+		// TODO: Maybe check $name for compliance with (table.)name.
+		// DK: Well, this may also be a way to tell, wether it is an original field.
+		// Here also the way of building the query becomes important. 
+		// Thinking about this, all the field-type values are known from the begining, as soon the rest of the query is built. 
+		// Thus one should take care of this problem at the stage of query building.
 		$this->name = $name;
 	}
 }
