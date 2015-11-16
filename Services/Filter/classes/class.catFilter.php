@@ -60,9 +60,9 @@ abstract class Filter {
 	 * do we need to use a special class for Or'ed Filters? Same question for _and.
 	 *
 	 * DK: So far all the logic seems to be in predicates and it is complete (any bracketed order of and/or). 
-	 * If filter are intended to be just a graphical representation of those (or rather a GUI to build predicates?) why include more logic here ?
-	 * By the way does one filter represent a predicate of first order (comparison of values) or a predicate of any order (also combinations of predicates) ?
-	 * Which means: Are we building a tree of filters or a tree of predicates ?
+	 * If filter are intended to be just a graphical representation of those (or rather a GUI to build predicates?) why include more logic on this level instead of forwarding the or/and/not methods to the predicate level ?
+	 * By the way, does one filter represent a predicate of first order (comparison of values) or a predicate of any order (also combinations of predicates) ?
+	 * Which means: Are we building a tree of filters or a tree of predicates, or anything we may choose ? It seems 
 	 *  One more question: how much freedom is left to the user ? 
 	 *	- May he just fill variables into predicates of provided filters (roughly the system we have now) ? 
 	 *	- May he append predefined filtertypes indefinitely based on present fields of a table ? 
