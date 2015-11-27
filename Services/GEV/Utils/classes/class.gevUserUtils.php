@@ -47,6 +47,14 @@ class gevUserUtils {
 	const WBD_AGENTSTATUS6	= "6 - Sonstiges";
 	const WBD_AGENTSTATUS7	= "7 - keine Zuordnung";
 	
+	const WBD_EMPTY_BWV_ID = "-empty-";
+
+	const WBD_ERROR_WRONG_USERDATA 		= 'WRONG_USERDATA'; 
+	const WBD_ERROR_USER_SERVICETYPE 	= 'USER_SERVICETYPE'; 
+	const WBD_ERROR_USER_DIFFERENT_TP 	= 'USER_DIFFERENT_TP'; 
+	const WBD_ERROR_USER_UNKNOWN 		= 'USER_UNKNOWN';
+	const WBD_ERROR_USER_DEACTIVATED 	= 'USER_DEACTIVATED';
+	const WBD_ERROR_NO_RELEASE			= 'NO_RELEASE';
 
 	static $wbd_agent_status_mapping = array(
 		//1 - Angestellter Außendienst
@@ -105,7 +113,6 @@ class gevUserUtils {
 			,'FDA'
 			,'Ausbilder'
 			,'Azubi'
-			,'Buchhaltung'
 			,'Veranstalter'
 			,'int. Trainer'
 			,'ext. Trainer'
@@ -664,7 +671,7 @@ class gevUserUtils {
 			return true;
 		}
 		require_once("Services/GEV/Desktop/classes/class.gevUserProfileGUI.php");
-		$email = $this->getPrivateEmail();
+		$email = $this->getEmail();
 		$mobile = $this->getMobilePhone();
 		$bday = $this->getUser()->getBirthday();
 		$street = $this->getUser()->getStreet();
@@ -713,6 +720,10 @@ class gevUserUtils {
 	
 	public function getEMail() {
 		return $this->getUser()->getEmail();
+	}
+	
+	public function setEMail($email) {
+		return $this->getUser()->setEmail($email);
 	}
 	
 	public function getOrgUnitId() {
@@ -886,14 +897,6 @@ class gevUserUtils {
 		$this->udf_utils->setField($this->user_id, gevSettings::USR_UDF_COMPANY_NAME, $a_name);
 	}
 	
-	public function getPrivateEmail() {
-		return $this->udf_utils->getField($this->user_id, gevSettings::USR_UDF_PRIV_EMAIL);
-	}
-	
-	public function setPrivateEmail($a_email) {
-		$this->udf_utils->setField($this->user_id, gevSettings::USR_UDF_PRIV_EMAIL, $a_email);
-	}
-	
 	public function getPrivateStreet() {
 		return $this->udf_utils->getField($this->user_id, gevSettings::USR_UDF_PRIV_STREET);
 	}
@@ -981,6 +984,21 @@ class gevUserUtils {
 		catch (Exception $e) {
 			return null;
 		}
+	}
+
+	public function isExitDatePassed() {
+		$now = date("Y-m-d");
+		$exit_date = $this->getExitDate();
+
+		if(!$exit_date) {
+			return false;
+		}
+
+		if($now > $exit_date) {
+			return true;
+		}
+
+		return false;
 	}
 	
 	public function setExitDate(ilDate $a_date) {
@@ -1289,10 +1307,8 @@ class gevUserUtils {
 	}
 	
 	public function isSuperiorOf($a_user_id) {
-		require_once("Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php");
-		$tree = ilObjOrgUnitTree::_getInstance();
-		// propably faster then checking the employees of this->user
-		return in_array($this->user_id, $tree->getSuperiorsOfUser($a_user_id));
+		require_once("Services/GEV/Utils/classes/class.gevOrgUnitUtils.php");
+		return in_array($this->user_id, gevOrgUnitUtils::getSuperiorsOfUser($a_user_id));
 	}
 	
 	static public function removeInactiveUsers($a_usr_ids) {
@@ -1313,30 +1329,60 @@ class gevUserUtils {
 	public function getDirectSuperiors() {
 		require_once("Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php");
 		$tree = ilObjOrgUnitTree::_getInstance();
-		$sups = $tree->getSuperiorsOfUser($this->user_id, false);
-		if (count($sups) > 0) {
-			return gevUserUtils::removeInactiveUsers($sups);
+
+		// This starts with all the org units the user is member in.
+		// During the loop we might fill this array with more org units
+		// if we could not find any superiors for the user in them.
+		$orgus = array_values($tree->getOrgUnitOfUser($this->user_id));
+
+		if (count($orgus) == 0) {
+			return array();
 		}
-		// ok, so there are no superiors in any org-unit where the user is employee
-		// we need to find the superiors by ourselves
-		$sups = array();
-		$orgus = $tree->getOrgUnitOfUser($this->user_id);
-		$parents = array();
-		
-		while (count ($sups) == 0) {
-			foreach ($orgus as $ref) {
-				$parents = $tree->getParent($ref);
+
+		$the_superiors = array();
+
+		$i = -1;
+		$initial_amount = count($orgus);
+		// We need to check this on every loop as the amount of orgus might change
+		// during looping.
+		while ($i < count($orgus)) {
+			$i++;
+			$ref_id = $orgus[$i];
+
+			// Reached the top of the tree.
+			if (!$ref_id || $ref_id == ROOT_FOLDER_ID) {
+				continue;
 			}
-			if (count($parents) == 0) {
-				return array();
+
+			$superiors = $tree->getSuperiors($ref_id);
+			$user_is_superior = in_array($this->user_id, $superiors);
+			$in_initial_orgus = $i < $initial_amount;
+
+			// I always need to go one org unit up if we are in the original
+			// orgu and the user is superior there.
+			if ( $in_initial_orgus && $user_is_superior) {
+				$orgus[] = $tree->getParent($ref_id);
 			}
-			$parents = array_unique($parents);
-			foreach ($parents as $ref) {
-				$sups = array_merge($sups, $tree->getSuperiors($ref, false));
+
+			// Skip the orgu if there are no superiors there.
+			if ( count($superiors) == 0
+			|| (   $in_initial_orgus
+				// This is only about the org units the user actually is a member of
+				&& $user_is_superior
+				// If a user is an employee and a superior in one orgunit, he
+				// actually seem to be his own superior.
+				&& !in_array($this->user_id, $tree->getEmployees($ref_id)))
+			) {
+				$orgus[] = $tree->getParent($ref_id);
+				continue;
 			}
-			$orgus = $parents;
+
+			$the_superiors[] = $superiors;
 		}
-		return gevUserUtils::removeInactiveUsers($sups);
+
+		$the_superiors = call_user_func_array("array_merge", $the_superiors);
+
+		return gevUserUtils::removeInactiveUsers(array_unique($the_superiors));
 	}
 	
 	public function isEmployeeOf($a_user_id) {
@@ -1725,6 +1771,14 @@ class gevUserUtils {
 
 		$this->udf_utils->setField($this->user_id, gevSettings::USR_TP_TYPE, $a_type);
 	}
+
+	public function getNextWBDAction() {
+		return $this->udf_utils->getField($this->user_id, gevSettings::USR_WBD_NEXT_ACTION);
+	}
+
+	public function setNextWBDAction($action) {
+		$this->udf_utils->setField($this->user_id, gevSettings::USR_WBD_NEXT_ACTION, $action);
+	}
 	
 	public function getWBDBWVId() {
 		return $this->udf_utils->getField($this->user_id, gevSettings::USR_BWV_ID);
@@ -1734,7 +1788,13 @@ class gevUserUtils {
 		$this->udf_utils->setField($this->user_id, gevSettings::USR_BWV_ID, $a_id);
 	}
 	
+	public function setTPServiceOld($tp_service_old) {
+		$this->udf_utils->setField($this->user_id, gevSettings::USR_WBD_TP_SERVICE_OLD, $tp_service_old);
+	}
 
+	public function getTPServiceOld() {
+		return $this->udf_utils->getField($this->user_id, gevSettings::USR_WBD_TP_SERVICE_OLD);
+	}
 
 	public function getRawWBDOKZ() {
 		return $this->udf_utils->getField($this->user_id, gevSettings::USR_WBD_OKZ);
@@ -1943,7 +2003,7 @@ class gevUserUtils {
 	}
 	
 	public function getExitDateWBD() {
-		$date = $this->udf_utils->getField($this->user_id, gevSettings::USR_WBD_EXIT_DATE);		
+		$date = $this->udf_utils->getField($this->user_id, gevSettings::USR_WBD_EXIT_DATE);
 		if (!trim($date)) {
 			return null;
 		}
@@ -2028,11 +2088,20 @@ class gevUserUtils {
 		$actions["fehlt_ohne_Absage"] = array();
 
 		require_once("Services/GEV/Utils/classes/class.gevOrgUnitUtils.php");
+		require_once("Modules/OrgUnit/classes/class.ilObjOrgUnitTree.php");
+		$tree = ilObjOrgUnitTree::_getInstance();
 		$org_units = $this->getOrgUnitsWhereUserIsDirectSuperior();
+		$has_view_empl_perm_ref_ids = $this->getOrgUnitsWhereUserCanViewEmployeeBookings();
 		$ref_ids = array();
 		$ref_id_child_orgunit = array();
 		
 		foreach ($org_units as $org_unit) {
+			// Only take the org units where the user is superior and also has the permission
+			// to view bookings of employees.
+			if (!in_array($has_view_empl_perm_ref_ids, $org_unit["ref_id"])) {
+				continue;
+			}
+
 			$ref_ids[] = $org_unit["ref_id"];
 			$org_util = gevOrgUnitUtils::getInstance($org_unit["obj_id"]);
 			foreach($org_util->getOrgUnitsOneTreeLevelBelow() as $org_unit_child) {
@@ -2154,6 +2223,181 @@ class gevUserUtils {
 		
 		return $this->hasRoleIn($roles);
 	}
-}
 
-?>
+	/**
+	* Checks requirements user must have to get in pool for new wbd account
+	*
+	* WBD Resistration done
+	* has specified Role
+	* is an existing user
+	* is aktive
+	* is not root oder anomynos
+	* entry date is passed
+	* has no BWV Id
+	* has specifed TP-Types
+	*
+	* @return boolean
+	*/
+	public function wbdShouldBeRegisteredAsNew() {
+		return $this->hasDoneWBDRegistration() && $this->hasWBDRelevantRole() && $this->userExists() && $this->isActive() && !$this->hasSpecialUserId()
+				&& $this->entryDatePassed() && $this->isWBDBWVIdEmpty() && $this->hasWBDType(self::WBD_NO_SERVICE);
+	}
+
+	/**
+	* Checks requirements user must have to get in pool for affiliate as TP-Service
+	*
+	* WBD Resistration done
+	* has specified Role
+	* is an existing user
+	* is aktive
+	* is not root oder anomynos
+	* entry date is passed
+	* has BWV Id
+	* has not specifed TP-Type
+	* has no open specified errors
+	*
+	* @return boolean
+	*/
+	public function wbdShouldBeAffiliateAsTPService() {
+		$wbd_errors = array(WBD_ERROR_WRONG_USERDATA
+							, WBD_ERROR_USER_SERVICETYPE
+							, WBD_ERROR_USER_DIFFERENT_TP
+							, WBD_ERROR_USER_UNKNOWN
+							, WBD_ERROR_USER_DEACTIVATED);
+
+		return $this->hasDoneWBDRegistration() && $this->hasWBDRelevantRole() && $this->userExists() && $this->isActive() && !$this->hasSpecialUserId()
+				&& $this->entryDatePassed() && !$this->isWBDBWVIdEmpty() && !$this->hasWBDType(self::WBD_TP_SERVICE) 
+				&& !$this->hasOpenWBDErrors($wbd_errors);
+	}
+
+	/**
+	* Checks requirements user must have to get in pool for release
+	*
+	* is an existing user
+	* is not root oder anomynos
+	* exit date is passed
+	* has no wbd exit date
+	* has specifed TP-Type
+	* has BWV Id
+	* has no open specified errors
+	*
+	* @return boolean
+	*/
+	public function wbdShouldBeReleased() {
+		$wbd_errors = array(WBD_ERROR_WRONG_USERDATA
+							, WBD_ERROR_USER_SERVICETYPE
+							, WBD_ERROR_USER_DIFFERENT_TP
+							, WBD_ERROR_USER_UNKNOWN
+							, WBD_ERROR_USER_DEACTIVATED
+							, WBD_ERROR_NO_RELEASE);
+
+		return $this->userExists() && !$this->hasSpecialUserId()
+				&& $this->isExitDatePassed() && !$this->hasExitDateWBD() && $this->hasWBDType(self::WBD_TP_SERVICE) && !$this->isWBDBWVIdEmpty()
+				&& !$this->hasOpenWBDErrors($wbd_errors);
+	}
+
+	/**
+	* checks bwvs id empty or not
+	*
+	* @return boolean
+	*/
+	protected function isWBDBWVIdEmpty() {
+		return $this->getWBDBWVId() === null;
+	}
+
+	/**
+	* checks user is active
+	*
+	* @return boolean
+	*/
+	protected function isActive() {
+		return $this->getUser()->getActive();
+	}
+
+	/**
+	* checks user has one of given wbd tp types
+	*
+	* @param array
+	* @return boolen
+	*/
+	protected function hasOneWBDTypeOf(array $wbd_types) {
+		return in_array($this->getWBDTPType(), $wbd_types);
+	}
+
+	/**
+	* checks user has specified wbd tp type
+	* 
+	* @param string
+	* @return boolean
+	*/
+	protected function hasWBDType($wbd_type) {
+		return $this->getWBDTPType() == $wbd_type;
+	}
+
+	/**
+	* checks if entry date is passed or not
+	*
+	* @return boolean
+	*/
+	protected function entryDatePassed() {
+		$now = date("Y-m-d");
+		$entry_date = $this->getEntryDate();
+
+		if(!$entry_date) {
+			return false;
+		}
+
+		return $entry_date->get(IL_CALC_DATE) <= $now;
+	}
+
+	/**
+	* checks if user is an real ilias user
+	*
+	* @return boolean
+	*/
+	protected function userExists() {
+		return ilObjUser::_lookupLogin($this->user_id) !== false;
+	}
+
+	static $specialUserIds = array(6,13);
+	/**
+	* checks user is not root or anomynos or some one else
+	* look at array $specialUserIds
+	*
+	* @return boolean
+	*/
+	protected function hasSpecialUserId() {
+		return in_array($this->user_id, self::$specialUserIds);
+	}
+
+	/**
+	* checks if there are some open WBD errors according to specified error group
+	*
+	* @param array
+	* @return boolean
+	*/
+	protected function hasOpenWBDErrors(array $wbd_errors) {
+		$sql = "SELECT DISTINCT count(usr_id) as cnt\n"
+				." FROM wbd_errors\n"
+				." WHERE resolved=0\n"
+				."   AND ".$this->db->in("reason", $wbd_errors, false, "text")."\n"
+				."   AND usr_id = ".$this->db->quote($this->user_id,"integer")."\n";
+
+		$res = $this->db->query($sql);
+		while($row = $this->db->fetchAssoc($res)) {
+			return $row["cnt"] > 0;
+		}
+
+		return false;
+	}
+
+	/**
+	* check if there is an WBD Exit date
+	*
+	* @return boolean
+	*/
+	protected function hasExitDateWBD() {
+		return $this->getExitDateWBD() !== null;
+	}
+
+}
