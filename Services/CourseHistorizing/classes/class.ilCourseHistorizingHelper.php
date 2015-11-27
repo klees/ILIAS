@@ -314,4 +314,22 @@ class ilCourseHistorizingHelper
 		return $utils->getVirtualClassType();
 	}
 
+	public static function getDCTType($course) {
+		$utils = gevCourseUtils::getInstanceByObjOrId($course);
+		if($utils->isDecentralTraining()) {
+			return ($utils->isFlexibleDecentrallTraining()) ? 'flexible' : 'fixed';
+		}
+		return;
+	}
+
+	public static function getTemplateObjId($course) {
+		$utils = gevCourseUtils::getInstanceByObjOrId($course);
+		$template_ref_id = $utils->getTemplateRefId();
+		if($template_ref_id) {
+			require_once("Services/GEV/Utils/classes/class.gevObjectUtils.php");
+			return gevObjectUtils::getObjId($template_ref_id);
+		}
+		return;
+	}
+
 }

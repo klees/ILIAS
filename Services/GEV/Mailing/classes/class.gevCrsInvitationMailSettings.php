@@ -88,6 +88,16 @@ class gevCrsInvitationMailSettings {
 		return $attachments;
 	}
 
+	public function setBasicSettings() {
+		require_once("Services/GEV/Utils/classes/class.gevCourseUtils.php");
+		$crs_utils = gevCourseUtils::getInstance($this->crs_id);
+		$functions = $crs_utils->getFunctionsForInvitationMails();
+
+		foreach ($functions as $function) {
+			$this->settings[$function]["template_id"] = $this->getTemplateFor($function);
+		}
+	}
+
 	public function setSettingsFor($a_function_name, $a_template_id, $a_attachments) {
 		//TODO: check validity of function_name here?		
 		if (!array_key_exists($a_function_name, $this->settings)) {
@@ -95,6 +105,33 @@ class gevCrsInvitationMailSettings {
 		}
 		$this->settings[$a_function_name]["template_id"] = $a_template_id;
 		$this->settings[$a_function_name]["attachments"] = $a_attachments;
+	}
+
+	public function addCustomAttachments($function_name, array $attachments) {
+		if (!array_key_exists($function_name, $this->settings)) {
+			$this->settings[$function_name] = array();
+		}
+
+		$current_attachments = $this->settings[$function_name]["attachments"];
+		if(!$current_attachments) {
+			$current_attachments = array();
+		}
+		
+		$new = array_unique($current_attachments + $attachments);
+		sort($new);
+		$this->settings[$function_name]["attachments"] = $new;
+	}
+
+	public function removeCustomAttachment($function_name, $attachments) {
+		if (!array_key_exists($function_name, $this->settings)) {
+			return;
+		}
+
+		$current_attachments = $this->settings[$function_name]["attachments"];
+		if(!$current_attachments) {
+			return;
+		}
+		$this->settings[$function_name]["attachments"] = array_diff($current_attachments, $attachments);
 	}
 
 	/**
@@ -134,6 +171,10 @@ class gevCrsInvitationMailSettings {
 					"attachments" => unserialize($record["attachments"])
 				);
 		}
+
+		if(empty($this->settings)) {
+			$this->setBasicSettings();
+		}
 	}
 
 	protected function lockAttachments() {
@@ -157,11 +198,15 @@ class gevCrsInvitationMailSettings {
 	}
 
 	public function save() {
+		//Speichert die aktuellen Settings
 		$new_settings = $this->settings;
+		//Liest die alten erneut ein
 		$this->read();
-
+		//Unlocked die alten Anhänge
 		$this->unlockAttachments();
+		//Setz wieder wieder die aktuellen Settings
 		$this->settings = $new_settings;
+		//Locked die neuen Anhänge
 		$this->lockAttachments();
 
 		foreach ($this->settings as $function_name => $settings) {

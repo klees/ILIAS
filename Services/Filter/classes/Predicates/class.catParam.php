@@ -14,6 +14,9 @@ namespace CaT\Report\Filter\Predicates;
  * TODO: The class hierarchy seems to be a bit broken. If i would implement
  * ParameterList it should be a Param and a ValueList, which would not work
  * atm. 
+ *	DK: I don't think so, but we may debate, of course: by this logic valueList should extend Value, which it doesn't.
+ *	Shouldn't lists work by inclusion (in this case parameter as class members) and not by extension? 
+ *	Please also see my comment in catValueList.
  */
 final class Param extends Value {
 	/**

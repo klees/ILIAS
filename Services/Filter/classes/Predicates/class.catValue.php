@@ -9,6 +9,7 @@ namespace CaT\Report\Filter\Predicates;
  *
  * TODO: Is it possible to represent every combination of and and or
  * and parantheses with this api.
+ *	DK: I would think so. If I understand this right, logical relations of predicates provide us with the freedom to set brackets anyway we want.
  */
 abstract class Value {
 	/**
@@ -29,7 +30,7 @@ abstract class Value {
 	 * @return	Predicate
 	 */
 	public function eq(Value $other) {
-		return $th0is->factory->eq($this, $other);
+		return $this->factory->eq($this, $other);
 	}
 	
 	/**
@@ -76,8 +77,8 @@ abstract class Value {
 	
 	/**
 	 * Get a predicate that this value should be null.
+	 * DK: This may only refer to a field?
 	 *
-	 * @param	Value	$other
 	 * @return	Predicate
 	 */
 	public function is_null();
@@ -95,7 +96,7 @@ abstract class Value {
 	 *
 	 * TODO: What is the correct parameter for this?
 	 *
-	 * @param	Value	$other
+	 * @param	ValueList	$other
 	 * @return	Predicate
 	 */
 	abstract function in(ValueList $other);

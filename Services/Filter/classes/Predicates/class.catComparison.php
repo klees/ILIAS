@@ -6,6 +6,7 @@ namespace CaT\Report\Filter\Predicates;
 
 /**
  * A comparison between two values.
+ *	DK: Comparison : value x value -> predicate
  */
 class Comparison extends Predicate {
 	/**
