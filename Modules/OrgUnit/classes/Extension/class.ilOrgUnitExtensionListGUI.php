@@ -2,23 +2,25 @@
 
 require_once "Services/Repository/classes/class.ilObjectPluginListGUI.php";
 
+/**
+ * Class ilOrgUnitExtensionListGUI
+ *
+ * @author Oskar Truffer <ot@studer-raimann.ch>
+ */
 abstract class ilOrgUnitExtensionListGUI extends ilObjectPluginListGUI {
 
 	/**
-	 * @return ilObjectPlugin|null
+	 * @return ilOrgUnitExtensionPlugin
 	 */
 	protected function getPlugin() {
-		if(!$this->plugin) {
-			$this->plugin =
-				ilPlugin::getPluginObject(IL_COMP_MODULE, "OrgUnit", "orguext",
-					ilPlugin::lookupNameForId(IL_COMP_SERVICE, "OrgUnit", "orguext", $this->getType()));
+		if (!$this->plugin) {
+			$this->plugin = ilPlugin::getPluginObject(IL_COMP_MODULE, "OrgUnit", "orguext", ilPlugin::lookupNameForId(IL_COMP_SERVICE, "OrgUnit", "orguext", $this->getType()));
 		}
+
 		return $this->plugin;
 	}
 
-	/**
-	 *
-	 */
+
 	protected function initListActions() {
 		$this->delete_enabled = true;
 		$this->cut_enabled = true;
@@ -30,6 +32,7 @@ abstract class ilOrgUnitExtensionListGUI extends ilObjectPluginListGUI {
 		$this->tags_enabled = false;
 		$this->timings_enabled = false;
 	}
+
 
 	/**
 	 * @param string $a_type
@@ -43,31 +46,33 @@ abstract class ilOrgUnitExtensionListGUI extends ilObjectPluginListGUI {
 		return $this->comments_enabled;
 	}
 
+
 	/**
 	 * Comments cannot be enabled.
+	 *
 	 * @param bool $a_value
 	 * @param bool $a_enable_comments_settings
 	 * @return bool
 	 */
-	function enableComments($a_value, $a_enable_comments_settings = true)
-	{
+	public function enableComments($a_value, $a_enable_comments_settings = true) {
 		return false;
 	}
+
 
 	/**
 	 * @param bool $a_value
 	 * @return bool
 	 */
-	function enableNotes($a_value) {
+	public function enableNotes($a_value) {
 		return false;
 	}
+
 
 	/**
 	 * @param bool $a_value
 	 * @return bool
 	 */
-	function enableTags($a_value) {
+	public function enableTags($a_value) {
 		return false;
 	}
-
 }
