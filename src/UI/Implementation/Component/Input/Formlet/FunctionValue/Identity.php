@@ -7,7 +7,7 @@ class Identity extends FunctionValue {
 
     public function __construct()
     {
-        parent::functionValue(function($value){
+        parent::__construct(function($value){
             return $value;
         });
     }

@@ -27,5 +27,5 @@ interface Factory {
 	 * ----
 	 * @return  \ILIAS\UI\Component\Input\Item\Field\Text
 	 */
-	public function text($label);
+	public function text($id,$label);
 }

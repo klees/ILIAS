@@ -1,42 +1,42 @@
 <?php
 
-namespace ILIAS\UI\Implementation\Component\Input\Formlet\Internal\Refactor;
+namespace ILIAS\UI\Implementation\Component\Input\Formlet;
 
-use ILIAS\UI\Implementation\Component\Input\Formlet\Internal\Value as V;
+use ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue as FV;
 
 class Map {
 
 
 	/**
-	 * @var V\FunctionCallable
+	 * @var FV\FunctionValue
 	 */
 	protected $model_to_view = null;
 
 	/**
-	 * @var V\FunctionCallable
+	 * @var FV\FunctionValue
 	 */
 	protected $view_to_model = null;
 
 	/**
 	 * Map constructor.
-	 * @param V\FunctionCallable $mapper_function
+	 * @param FV\FunctionValue $mapper_function
 	 */
 	public function __construct(
-			V\FunctionCallable $model_to_view = null,
-			V\FunctionCallable $view_to_model = null
+			FV\FunctionValue $model_to_view = null,
+			FV\FunctionValue $view_to_model = null
 
 	)
 	{
 		if($model_to_view){
 			$this->model_to_view = $model_to_view;
 		}else{
-			$this->model_to_view = new V\Identity();
+			$this->model_to_view = new FV\Identity();
 		}
 
 		if($view_to_model){
 			$this->view_to_model = $view_to_model;
 		}else{
-			$this->view_to_model  = new V\Identity();
+			$this->view_to_model  = new FV\Identity();
 		}
 
 	}
@@ -52,7 +52,7 @@ class Map {
 	}
 
 	/**
-	 * @return V\FunctionCallable
+	 * @return FV\FunctionValue
 	 */
 	public function getModelToView()
 	{
@@ -60,7 +60,7 @@ class Map {
 	}
 
 	/**
-	 * @return V\FunctionCallable
+	 * @return FV\FunctionValue
 	 */
 	public function getViewToModel()
 	{

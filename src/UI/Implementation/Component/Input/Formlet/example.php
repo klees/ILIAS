@@ -2,33 +2,35 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/libs/composer/vendor/autoload.php");
 
 
-use \ILIAS\UI\Implementation\Component\Input\Formlet\Internal\Refactor as R;
-use \ILIAS\UI\Implementation\Component\Input\Formlet\Internal\Value as V;
-use \ILIAS\UI\Implementation\Component\Input\Formlet\Factory as F;
+use \ILIAS\UI\Implementation\Component\Input\Formlet as F;
+use \ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue as FV;
+use \ILIAS\UI\Implementation\Component\Input\Validation as V;
 
+$f = new F\Factory();
 
-$formlet = new R\Simple("test");
+$formlet = F\Factory::getFactory()->formlet("test");
 $formlet = $formlet->addViewToModelMapping(
 		function($input){
-			var_dump("in Function");
+			var_dump($input);
 			return 2*$input;
 		}
 );
-$formlet = $formlet->addValidation((new R\Validation(function($input){
+$formlet = $formlet->addValidation((new V\Validation(function($input){
 	return $input == 3;//is_numeric($input);
 },"Error1")));
 
 
-$formlet = $formlet->combine($formlet);
+$formlet = $formlet->combine($formlet->createClone("test2"));
 
-$formlet = $formlet->withInputFromView(3);
+
+$formlet = $formlet->withInputFromView(["test2"=>3,"test"=>3]);
 var_dump($formlet->getMessageCollector()->getMessages());
 
 var_dump($formlet->extractToView());
 var_dump($formlet->extractToModel());
 var_dump($formlet->extractToModel());
 exit;
-
+/**
 $formlet = $formlet->withInputFromView("asdf asdf");
 var_dump($formlet->extractToModel());
 var_dump($formlet->isValid());
@@ -76,4 +78,4 @@ $value1 = F::getFactory()->value()->plain("1000000");
 $value2= F::getFactory()->value()->plain(1000000);
 
 var_dump($validation->validateView($value1));
-var_dump($validation->validateModel($value2));
+var_dump($validation->validateModel($value2));**/

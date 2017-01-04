@@ -3,8 +3,6 @@
 /* Copyright (c) 2016 Amstutz Timon <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 namespace ILIAS\UI\Implementation\Component\Input\Formlet;
 
-use \ILIAS\UI\Implementation\Component\Input\Formlet\Internal\Value as V;
-use \ILIAS\UI\Implementation\Component\Input\Formlet\Internal\Collector as C;
 
 /**
  * Class Factory
@@ -19,11 +17,8 @@ class Factory {
 	}
 
 
-	public function value() {
-		return new V\Factory();
+	public function formlet($name) {
+		return new Formlet($name);
 	}
 
-	public function collector() {
-		return new C\Factory();
-	}
 }

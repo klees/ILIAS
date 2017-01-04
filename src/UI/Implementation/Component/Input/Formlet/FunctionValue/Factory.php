@@ -8,6 +8,15 @@ namespace ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue;
  *
  */
 class Factory  {
+	public static function compose(){
+		$args = func_get_args();
+		$temp = array_shift($args);
+		foreach($args as $arg){
+			$temp = $temp->apply($arg);
+		}
+		return $temp;
+	}
+
 	public static function functionValue($function, $arity = null) {
 		return new FunctionValue($function, [], $arity );
 	}
@@ -16,8 +25,8 @@ class Factory  {
 		return new Invert();
 	}
 
-	public static function constant() {
-		return new Constant();
+	public static function constant($value) {
+		return new Constant($value);
 	}
 
 	public static function identity() {

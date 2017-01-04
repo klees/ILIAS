@@ -19,8 +19,24 @@ class Factory implements F\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function text($label) {
-		return new Text($label);
+	public function text($id,$label) {
+		return new Text($id,$label);
 	}
 
+	/**
+	 * @inheritdoc
+	 */
+	public function number($id,$label) {
+		return new Number($label);
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function nameAge($id,$label) {
+		$text = new Text();
+		$number = new Number();
+
+		return new number($label);
+	}
 }

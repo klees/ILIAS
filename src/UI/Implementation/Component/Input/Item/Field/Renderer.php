@@ -18,7 +18,7 @@ class Renderer extends AbstractComponentRenderer {
 	 */
 	public function render(Component\Component $component, RendererInterface $default_renderer) {
 		/**
-		 * @var Component\Input\Item\Item $component
+		 * @var \ILIAS\UI\Implementation\Component\Input\Item\Item $component
 		 */
 		$this->checkComponent($component);
 		$tpl = $this->getTemplate("Filter/tpl.text.html", true, true);
@@ -26,22 +26,19 @@ class Renderer extends AbstractComponentRenderer {
 
 
 		//$tpl->setVariable("ID","TODO");
-		$tpl->setVariable("FOR","Todo");
-		$tpl->setVariable("TITLE","Todo");
+		$tpl->setVariable("FOR",$component->getId());
+		$tpl->setVariable("ID",$component->getId());
 		$tpl->setVariable("VALUE",$component->extractToView());
 
 
 		if($component->isValid()){
-			if($component->validates()){
 				$tpl->touchBlock("success");
-			}else{
-				$tpl->touchBlock("error");
-			}
+		}else{
+			$tpl->touchBlock("error");
 		}
 
+		$tpl->setVariable("LABEL",$component->getLabel());
 
-
-		$tpl->setVariable("LABEL",$component->getName());
 		if($component->isRequired()){
 			$tpl->touchBlock("required");
 			$tpl->setVariable("REQUIRED","true");

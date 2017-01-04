@@ -4,7 +4,7 @@ require_once($_SERVER['DOCUMENT_ROOT']."/libs/composer/vendor/autoload.php");
 
 use ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue\Factory as F;
 
-
+/**
 $times = F::functionValue(function($a,$b){
 	return $a*$b;
 });
@@ -30,14 +30,14 @@ $res = $explodeBySpace->apply("foo bar");
 $unwrapped = $res->get();
 
 echo "Array containing \"foo\" and \"bar\":\n";
-print_r($unwrapped);
+print_r($unwrapped);**/
 
-$equals = F::functionValue(function($a){
-	return $a!=$a;
+$equals = F::functionValue(function($a,$b){
+	return $a==$b;
 });
 $invert = F::invert();
 
-var_dump($invert->apply($equals)->apply(3)->get());
+var_dump($invert->apply($equals)->apply(3)->apply(3)->get());
 
 $a = false;
 

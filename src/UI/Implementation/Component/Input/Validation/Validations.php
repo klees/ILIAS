@@ -1,21 +1,21 @@
 <?php
 
-namespace ILIAS\UI\Implementation\Component\Input\Formlet\Internal\Refactor;
+namespace ILIAS\UI\Implementation\Component\Input\Validation;
 
-use ILIAS\UI\Implementation\Component\Input\Formlet\Internal\Value as V;
+use ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue as F;
 
 class Validations {
 
 
 	/**
-	 * @var Validation[]
+	 * @var FunctionValue[]
 	 */
 	protected $validations = [];
 
 
 	/**
 	 * Validations constructor.
-	 * @param $validation
+	 * @param FunctionValue[]
 	 */
 	public function __construct($validations = [])
 	{
@@ -37,7 +37,7 @@ class Validations {
 	}
 
 	/**
-	 * @return V\FunctionCallable
+	 * @return F\FunctionValue
 	 */
 	public function getValidations()
 	{
