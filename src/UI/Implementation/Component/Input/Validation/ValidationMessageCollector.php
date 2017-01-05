@@ -1,22 +1,25 @@
 <?php
 namespace ILIAS\UI\Implementation\Component\Input\Validation;
+
+use \ILIAS\UI\Component\Input\Validation as V;
+
 /**
  * Class Factory
  *
  * @package ILIAS\UI\Implementation\Component\Filter
  */
-class ValidationMessageCollector {
+class ValidationMessageCollector implements V\ValidationMessageCollector {
 	/**
 	 * @var ValidationMessage[]
 	 */
 	protected $messages = [];
-	public function addMessage(ValidationMessage $message){
+	public function addMessage(V\ValidationMessage $message){
 		$this->messages[] = $message;
 	}
 	public function getMessages(){
 		return $this->messages;
 	}
-	public function join(ValidationMessageCollector $collector){
+	public function join(V\ValidationMessageCollector $collector){
 		$this->messages = array_merge($this->message,$collector->getMessages());
 	}
 	/**

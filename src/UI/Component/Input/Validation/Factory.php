@@ -20,6 +20,17 @@ interface Factory {
 	 * ---
 	 * description:
 	 *   purpose: >
+	 *     The equals validator checks wheter the input equals a certain value.
+	 * ----
+	 * @param $to_be_equaled
+	 * @return mixed
+	 */
+	public function equals($to_be_equaled);
+
+	/**
+	 * ---
+	 * description:
+	 *   purpose: >
 	 *     Regex validators validate content by checking if it complies with a given regular expression.
 	 *
 	 * ----

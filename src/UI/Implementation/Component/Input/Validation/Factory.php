@@ -36,6 +36,12 @@ class Factory implements \ILIAS\UI\Component\Input\Validation\Factory  {
 	 */
 	public function notEmpty() {
 		return new notEmpty();
+	}
 
+	/**
+	 * @inheritdoc
+	 */
+	public function equals($to_be_equaled) {
+		return new Equals($to_be_equaled);
 	}
 }

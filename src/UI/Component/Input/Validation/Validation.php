@@ -3,6 +3,8 @@
 
 namespace ILIAS\UI\Component\Input\Validation;
 
+use \ILIAS\UI\Component\Input\Item\Item;
+
 /**
  * Todo
  */
@@ -13,7 +15,7 @@ interface Validation extends \ILIAS\UI\Component\Component {
 
     public function getValidationMethod();
 
-    public function validate($content_to_validate,
-                             \ILIAS\UI\Component\Input\Validation\ValidationMessageCollector  $collector,
-                            \ILIAS\UI\Component\Input\Item\Item $item);
+    public function validate($value,
+                             ValidationMessageCollector  $collector,
+                             Item $item);
 }

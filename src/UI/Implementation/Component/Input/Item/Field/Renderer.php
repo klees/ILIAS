@@ -31,11 +31,15 @@ class Renderer extends AbstractComponentRenderer {
 		$tpl->setVariable("VALUE",$component->extractToView());
 
 
-		if($component->isValid()){
+		if($component->isValidated()){
+			if($component->isValid()){
 				$tpl->touchBlock("success");
-		}else{
-			$tpl->touchBlock("error");
+			}else{
+				$tpl->touchBlock("error");
+			}
+
 		}
+
 
 		$tpl->setVariable("LABEL",$component->getLabel());
 

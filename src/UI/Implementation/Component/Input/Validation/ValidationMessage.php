@@ -1,9 +1,11 @@
 <?php
 namespace ILIAS\UI\Implementation\Component\Input\Validation;
+use \ILIAS\UI\Component\Input\Validation as V;
+
 /**
  * Todo
  */
-class ValidationMessage {
+class ValidationMessage implements V\ValidationMessage{
 	/**
 	 * @var \ILIAS\UI\Component\Input\Item\Item
 	 */

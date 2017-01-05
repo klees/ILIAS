@@ -3,6 +3,8 @@
 namespace ILIAS\UI\Implementation\Component\Input\Validation;
 
 use ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue as F;
+use \ILIAS\UI\Component\Input\Item\Item;
+use \ILIAS\UI\Component\Input\Validation as V;
 
 class Validation{
 	/**
@@ -44,7 +46,8 @@ class Validation{
 	/**
 	 * @inheritdoc
 	 */
-	public function validate($value, $collector, $item){
+	public function validate($value, V\ValidationMessageCollector $collector,
+	                         Item $item){
 		if($this->method->apply($value)->get()){
 			return true;
 		}

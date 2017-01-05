@@ -14,11 +14,15 @@ function base() {
 	$html = $renderer->render($text_input);
 
 	$text_input = $f->input()->item()->field()->text("id","Textfield");
-	$text_input = $text_input->addValidation((new
-	\ILIAS\UI\Implementation\Component\Input\Validation\Validation(function($input){
-		return $input == 3;//is_numeric($input);
-	},"Error1")));
+	$text_input = $text_input->addValidation(
+			$f->input()->validation()->equals(3));
+
+
 	$text_input->withInputFromView(["id"=>"testView"]);
+
+	$html .= $renderer->render($text_input);
+
+	$text_input->withInputFromView(["id"=>"3"]);
 
 	$html .= $renderer->render($text_input);
 

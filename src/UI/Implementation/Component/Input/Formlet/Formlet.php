@@ -34,7 +34,7 @@ class Formlet {
 	/**
 	 * @var bool
 	 */
-	protected $valid = false;
+	protected $valid = null;
 
 	/**
 	 * @var Formlet[]|string
@@ -166,6 +166,13 @@ class Formlet {
 	 */
 	public function isValid(){
 		return $this->valid;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isValidated(){
+		return $this->valid !== null;
 	}
 
 	/**
