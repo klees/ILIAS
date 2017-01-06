@@ -126,11 +126,12 @@ class Formlet {
 				new FV\FunctionValue($function)
 		);
 		$clone = clone $this;
-		$clone->map = new Map($this->map->getViewToModel(),$comp);
+		$clone->map = new Map($this->map->getModelToView(),$comp);
 		return $clone;
 	}
 
 	/**
+	 * Todo, Move this to map
 	 * @param callable $function
 	 * @return Formlet
 	 */
@@ -139,7 +140,7 @@ class Formlet {
 				new FV\FunctionValue($function)
 		);
 		$clone = clone $this;
-		$clone->map = new Map($comp,$this->map->getModelToView());
+		$clone->map = new Map($comp,$this->map->getViewToModel());
 		return $clone;
 	}
 
@@ -196,15 +197,6 @@ class Formlet {
 	 * @return array
 	 */
 	public function extractToView(){
-		if(is_array($this->content)){
-			$value = [];
-			foreach($this->content as $child){
-				$value[$child->id] = $child->extractToView();
-			}
-
-			return $value;
-		}
-
 		return $this->content;
 	}
 

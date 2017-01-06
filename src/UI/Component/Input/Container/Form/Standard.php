@@ -11,6 +11,5 @@ namespace  ILIAS\UI\Component\Input\Container\Form;
  */
 interface Standard extends \ILIAS\UI\Component\Input\Container\Container {
 
-	public function getAction();
 
 }

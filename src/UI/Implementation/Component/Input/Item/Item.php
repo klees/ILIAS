@@ -45,7 +45,6 @@ class Item  extends Formlet implements \ILIAS\UI\Component\Input\Item\Item{
 	 * @inheritdocs
 	 */
 	public function required($required = false){
-		$this->checkBoolArg("required", $required);
 		$clone = clone $this;
 		$clone->required = $required;
 		return $clone;

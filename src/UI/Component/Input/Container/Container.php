@@ -7,5 +7,5 @@ namespace ILIAS\UI\Component\Input\Container;
  */
 interface Container extends \ILIAS\UI\Component\Component {
 
-
+	public function getAction();
 }

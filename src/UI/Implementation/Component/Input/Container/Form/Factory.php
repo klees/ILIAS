@@ -17,8 +17,8 @@ class Factory implements F\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function standard($action = "#", $items) {
-		return new Standard($action, $items);
+	public function standard($action = "#", $title, $items) {
+		return new Standard($action, $title, $items);
 	}
 
 	/**

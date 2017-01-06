@@ -1,12 +1,11 @@
 <div class="form-group <!-- BEGIN success -->has-success<!-- END success --><!-- BEGIN error -->has-error<!-- END error -->">
     <label for="{FOR}" class="col-sm-3 control-label">
         {LABEL}
-        <!-- BEGIN required -->
-         <span class="asterisk">*</span>
-        <!-- END required -->
     </label>
     <div class="col-sm-9">
         <input class="form-control" type="text" id="title" maxlength="255"
-               name="{ID}" value="{VALUE}" required="{REQUIRED}">
+               name="{ID}" value="{VALUE}" {REQUIRED}>
+        <div class="error-block">{VALIDATION_ERROR}</div>
+        <div class="help-block">{DESCRIPTION}</div>
     </div>
 </div>

@@ -24,9 +24,10 @@ class Renderer extends AbstractComponentRenderer {
 		$tpl = $this->getTemplate("Form/tpl.standard.html", true, true);
 
 		$content = "";
-		foreach($component->getChildren() as $item){
+		foreach($component->extractToView() as $item){
 			$content .= $default_renderer->render($item);
 		}
+
 		$tpl->setVariable("CONTENT",$content);
 		$tpl->setVariable("ACTION",$component->getAction());
 		/**

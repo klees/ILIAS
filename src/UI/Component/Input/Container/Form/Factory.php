@@ -15,7 +15,7 @@ interface Factory {
 	 * @param \ILIAS\UI\Component\Input\Item[]
 	 * @return  \ILIAS\UI\Component\Input\Container\Form\Standard
 	 */
-	public function standard($action ="#", $items);
+	public function standard($action = "#", $title, $items);
 
 	/**
 	 * ---

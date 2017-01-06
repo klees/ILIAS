@@ -36,6 +36,8 @@ class Renderer extends AbstractComponentRenderer {
 				$tpl->touchBlock("success");
 			}else{
 				$tpl->touchBlock("error");
+				$tpl->setVariable("VALIDATION_ERROR",
+				$component->getMessageCollector()->getMessages()[0]->getMessage());
 			}
 
 		}
@@ -44,9 +46,9 @@ class Renderer extends AbstractComponentRenderer {
 		$tpl->setVariable("LABEL",$component->getLabel());
 
 		if($component->isRequired()){
-			$tpl->touchBlock("required");
-			$tpl->setVariable("REQUIRED","true");
-
+			$tpl->setVariable("REQUIRED","required");
+		}else{
+			$tpl->setVariable("REQUIRED","");
 		}
 
 		return $tpl->get();
