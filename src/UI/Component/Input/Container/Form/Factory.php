@@ -57,7 +57,7 @@ interface Factory {
 	 * ----
 	 * @return  \ILIAS\UI\Component\Input\Container\Form\Section
 	 */
-	public function section();
+	public function section($title, $items);
 
 	/**
 	 * ---
@@ -91,5 +91,5 @@ interface Factory {
 	 * ----
 	 * @return  \ILIAS\UI\Component\Input\Container\Form\Sub
 	 */
-	public function sub();
+	public function sub($items);
 }

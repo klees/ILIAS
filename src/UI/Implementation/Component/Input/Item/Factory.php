@@ -27,5 +27,6 @@ class Factory implements I\Factory {
 	 * @inheritdoc
 	 */
 	public function selector() {
+        return new Selector\Factory();
 	}
 }

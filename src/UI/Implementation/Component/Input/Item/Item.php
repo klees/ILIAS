@@ -4,6 +4,7 @@ namespace ILIAS\UI\Implementation\Component\Input\Item;
 
 use \ILIAS\UI\Implementation\Component\Input\Formlet\Formlet;
 use ILIAS\UI\Implementation\Component\ComponentHelper;
+use ILIAS\UI\Implementation\Component\Input\Validation as F;
 
 /**
  * One item in the filter, might be composed from different input elements,
@@ -22,16 +23,15 @@ class Item  extends Formlet implements \ILIAS\UI\Component\Input\Item\Item{
 	 */
 	protected $label = "";
 
-
 	/**
 	 * @inheritdoc
 	 */
-	public function __construct($id, $label) {
+	public function __construct($id, $label,$children = []) {
 		$this->checkStringArg("id",$id);
-
 		$this->checkStringArg("label",$label);
 		$this->label = $label;
-		parent::__construct($id);
+
+		parent::__construct($id,$children);
 	}
 
 	/**
@@ -44,13 +44,18 @@ class Item  extends Formlet implements \ILIAS\UI\Component\Input\Item\Item{
 	/**
 	 * @inheritdocs
 	 */
-	public function required($required = false){
+	public function required(){
 		$clone = clone $this;
-		$clone->required = $required;
+		$clone->required = true;
+        $clone->addValidation(new F\NotEmpty());
 		return $clone;
 	}
 
 	public function isRequired(){
 		return $this->required;
 	}
+
+    public function combineWithSubForm($sub){
+        return $this->combine($sub);
+    }
 }

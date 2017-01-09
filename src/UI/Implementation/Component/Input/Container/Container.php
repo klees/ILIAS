@@ -15,24 +15,5 @@ class Container extends F\Formlet implements
 		\ILIAS\UI\Component\Input\Container\Container{
 	use ComponentHelper;
 
-	/**
-	 * @var string
-	 */
-	protected $action = "";
 
-
-	/**
-	 * Container constructor.
-	 * @param $action
-	 * @param array|null $title
-	 * @param $items
-	 */
-	public function __construct($action, $title, $items) {
-		$this->action = $action;
-		parent::__construct($title,$items);
-	}
-
-	public function getAction(){
-		return $this->action;
-	}
 }

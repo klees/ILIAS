@@ -1,15 +1,13 @@
 <form id="form_" role="form" class="form-horizontal preventDoubleSubmission" action="{ACTION}" method="post" novalidate="novalidate">
-
     <div class="form-horizontal">
-        <div class="ilFormHeader"><h3 class="ilHeader"><a name="il_form_top"></a>Category Settings</h3>
+        <div class="ilFormHeader"><h3 class="ilHeader"><a name="il_form_top"></a>{FORM_TITLE}</h3>
             <div class="ilFormCmds">
                 <input class="btn btn-default btn-sm" type="SUBMIT" name="cmd[update]" value="Save">
             </div>
             <div class="ilHeaderDesc"></div>
         </div>
-
-        {CONTENT}
-
+        {CONTENT_DEFAULT_SECTION}
+        {ADDITIONAL_SECTIONS}
         <div class="ilFormFooter clearfix">
             <div class="col-sm-12 ilFormCmds">
                 <input class="btn btn-default btn-sm" type="submit" name="cmd[update]" value="Save">

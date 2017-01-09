@@ -24,12 +24,14 @@ class Factory implements F\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function section() {
-	}
+	public function section($title, $items) {
+        return new Section($title, $items);
+    }
 
 	/**
 	 * @inheritdoc
 	 */
-	public function sub() {
-	}
+	public function sub($items) {
+        return new Sub($items);
+    }
 }

@@ -5,31 +5,21 @@ namespace ILIAS\UI\Implementation\Component\Input\Container\Form;
 use ILIAS\UI\Component\Input\Container as C;
 use ILIAS\UI\Implementation\Component\Input\Container\Container;
 
-class Standard extends Container implements C\Form\Standard {
-    /**
-     * @var string
-     */
-    protected $action = "";
+class Section extends Container implements C\Form\Section {
+
 
     /**
      * @var string
      */
     protected $title = "";
+
     /**
-     * Container constructor.
-     * @param $action
-     * @param array|null $title
-     * @param $items
+     * @param $title
+     * @param array|null $items
      */
-    public function __construct($action, $title, $items) {
-        $this->action = $action;
+    public function __construct($title, $items) {
         $this->title = $title;
-
         parent::__construct($title,$items);
-    }
-
-    public function getAction(){
-        return $this->action;
     }
 
     /**

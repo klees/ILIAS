@@ -10,16 +10,21 @@ use \ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue as FV;
  * Class Formlet
  * @package ILIAS\UI\Implementation\Component\Input\Formlet
  */
-class Formlet {
+class Formlet implements \ILIAS\UI\Component\Component{
 	/**
 	 * @var string
 	 */
 	protected $id = "";
 
-	/**
-	 * @var Map
-	 */
-	protected $map;
+    /**
+     * @var FV\FunctionValue
+     */
+    protected $model_to_view = null;
+
+    /**
+     * @var FV\FunctionValue
+     */
+    protected $view_to_model = null;
 
 	/**
 	 * @var V\Validations
@@ -56,7 +61,8 @@ class Formlet {
 		}
 
 		$this->validations = new V\Validations();
-		$this->map = new Map();
+        $this->model_to_view = new FV\Identity();
+        $this->view_to_model  = new FV\Identity();
 		$this->message_collector = new V\ValidationMessageCollector();
 	}
 
@@ -113,35 +119,41 @@ class Formlet {
 	 * @return Formlet
 	 */
 	public function addValidation(V\Validation $validation){
-		$this->validations->addValidation($validation);
-		return $this;
+        $clone = clone $this;
+        $clone->validations->addValidation($validation);
+		return $clone;
 	}
 
+    public function modelToView($value){
+        $model_to_view = $this->model_to_view->apply($value);
+        return $model_to_view->get();
+    }
+    public function viewToModel($value){
+        $view_to_model = $this->view_to_model->apply($value);
+        return $view_to_model->get();
+    }
 	/**
 	 * @param callable $function
 	 * @return Formlet
 	 */
 	public function addViewToModelMapping(Callable $function){
-		$comp = $this->map->getViewToModel()->apply(
-				new FV\FunctionValue($function)
-		);
 		$clone = clone $this;
-		$clone->map = new Map($this->map->getModelToView(),$comp);
-		return $clone;
+        $clone->view_to_model = $this->view_to_model->apply(
+            new FV\FunctionValue($function)
+        );
+        return $clone;
 	}
 
 	/**
-	 * Todo, Move this to map
 	 * @param callable $function
 	 * @return Formlet
 	 */
 	public function addModelToViewMapping(Callable $function){
-		$comp = $this->map->getModelToView()->apply(
-				new FV\FunctionValue($function)
-		);
-		$clone = clone $this;
-		$clone->map = new Map($comp,$this->map->getViewToModel());
-		return $clone;
+        $clone = clone $this;
+        $clone->model_to_view = $this->model_to_view->apply(
+            new FV\FunctionValue($function)
+        );
+        return $clone;
 	}
 
 	/**
@@ -153,14 +165,6 @@ class Formlet {
 		return $this;
 	}
 
-	/**
-	 * @param Map $map
-	 * @return $this
-	 */
-	public function withMap(Map $map){
-		$this->map = $map;
-		return $this;
-	}
 
 	/**
 	 * @return bool
@@ -219,7 +223,7 @@ class Formlet {
 		}
 
 
-		return $this->map->viewToModel($value);
+		return $this->viewToModel($value);
 	}
 
 
@@ -265,13 +269,13 @@ class Formlet {
 				$formlet_input[$child->getId()] = $input[$child->getId()];
 			}
 
-			$formlet_input = $this->map->modelToView($formlet_input);
+			$formlet_input = $this->modelToView($formlet_input);
 
 			foreach ($this->content as $child) {
 				$child->withInputFromModel($formlet_input[$child->getId()]);
 			}
 		}else{
-			$this->content = $this->map->modelToView($input[$this->getId()]);
+			$this->content = $this->modelToView($input[$this->getId()]);
 		}
 
 		return $this;

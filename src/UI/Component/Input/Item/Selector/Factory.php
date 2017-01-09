@@ -34,4 +34,56 @@ interface Factory {
 	 * @return  \ILIAS\UI\Component\Input\Item\Selector\Repository
 	 */
 	public function repository();
+
+
+
+    /**
+     * ---
+     * description:
+     *   purpose: >
+     *     A radio group input allows for choosing between mutually exclusive but related options.
+     *   composition: >
+     *     he radio group has one identifier stating the common
+     *     denominator of the mutually exclusive options.
+     *   effect: >
+     *     Options of a radio group may open a sub form.
+     *   rivals:
+     *     Select: Select Inputs are used if a selection of more than 5 items has to be displayed.
+     *
+     * rules:
+     *   usage:
+     *       1: >
+     *          A radio group SHOULD contain 3 to 5 options. They MAY also be used to
+     *          select between two options where one is not automatically the inverse of the
+     *          other (such as “Order by Date” and “Order by Name”).
+     *       2: If more than 5 options are available a Select Input SHOULD be used.
+     *   wording:
+     *       1: >
+     *          Each option in a radio group MUST be labeled. This label SHOULD not consist of more than 5
+     *          words. Simple language in the labels is to be used. Technical terms should be avoided
+     *          whenever possible or relegated to the by-line.
+     *       2: >
+     *          If used in forms, the label of the options SHOULD not simply repeat the identifier on the left.
+     *          A meaningful labeling SHOULD be chosen instead.
+     *   ordering:
+     *       1: The presumably most relevant option SHOULD be the first option.
+     *       2: Potentially damaging options SHOULD be listed last.
+     *
+     * ----
+     * @param RadioOption[] $radio_options Radio options to be offered by the radio Group
+     * @return  \ILIAS\UI\Component\Input\Item\Selector\RadioGroup
+     */
+    public function radioGroup($id,$label,$radio_options);
+
+    /**
+     * ---
+     * description:
+     *   purpose: >
+     *     Todo
+     *
+     * ----
+     * @param RadioOption[] $radio_options Radio options to be offered by the radio Group
+     * @return  \ILIAS\UI\Component\Input\Item\Selector\RadioGroup
+     */
+    public function radioOption($id,$label);
 }

@@ -21,29 +21,57 @@ class Renderer extends AbstractComponentRenderer {
 		 * @var Component\Input\Container\Container $component
 		 */
 		$this->checkComponent($component);
-		$tpl = $this->getTemplate("Form/tpl.standard.html", true, true);
+        $tpl = null;
 
-		$content = "";
-		foreach($component->extractToView() as $item){
-			$content .= $default_renderer->render($item);
-		}
+        if($component instanceof Standard){
+            $default_content = "";
+            $sections = "";
 
-		$tpl->setVariable("CONTENT",$content);
-		$tpl->setVariable("ACTION",$component->getAction());
-		/**
-		if($component->isRequired()){
-			$tpl->touchBlock("required");
-			$tpl->setVariable("REQUIRED","true");
+            $tpl = $this->getTemplate("Form/tpl.standard.html", true, true);
 
-		}**/
+            foreach($component->extractToView() as $item){
+                if($item instanceof Section){
+                    $sections .= $default_renderer->render($item);
+                }else{
+                    $default_content  .= $default_renderer->render($item);
+                }
+            }
+            $tpl->setVariable("CONTENT_DEFAULT_SECTION",$default_content);
+            $tpl->setVariable("ADDITIONAL_SECTIONS",$sections);
+            $tpl->setVariable("ACTION",$component->getAction());
+            $tpl->setVariable("FORM_TITLE",$component->getTitle());
 
-		return $tpl->get();
+
+        }else{
+            if($component instanceof SECTION)
+            {
+                $tpl = $this->getTemplate("Form/tpl.section.html", true, true);
+                $tpl->setVariable("SECTION_TITLE", $component->getTitle());
+            }else
+            {
+                $tpl = $this->getTemplate("Form/tpl.sub.html", true, true);
+            }
+
+
+            $content = "";
+            foreach($component->extractToView() as $item){
+                $content .= $default_renderer->render($item);
+            }
+
+
+            $tpl->setVariable("CONTENT",$content);
+
+        }
+
+        return $tpl->get();
+
+
 	}
 
 	/**
 	 * @inheritdocs
 	 */
 	protected function getComponentInterfaceName() {
-		return [Component\Input\Container\Form\Standard::class];
+		return [Component\Input\Container\Container::class];
 	}
 }

@@ -22,7 +22,7 @@ interface Item extends \ILIAS\UI\Component\Component {
 	 *
 	 * @param   mixed $default
 	 */
-	public function required($required = false);
+	public function required();
 
 	/**
 	 * @return boolean
