@@ -13,8 +13,8 @@ class NameAge extends I\Item implements F\Text {
 	/**
 	 * @inheritdoc
 	 */
-	public function __construct($name) {
-		$children = [new Text($name."_Name"),new Number($name."_Age")];
-		parent::__construct($name,$children);
+	public function __construct($id,$name) {
+		$children = [new Text($id,$name."_Name"),new Number($id,$name."_Age")];
+		parent::__construct($id,$name,$children);
 	}
 }

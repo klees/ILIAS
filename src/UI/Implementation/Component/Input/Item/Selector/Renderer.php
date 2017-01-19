@@ -27,6 +27,7 @@ class Renderer extends AbstractComponentRenderer {
             $tpl = $this->getTemplate("Item/Selector/tpl.radio_group.html", true, true);
 
             $options = "";
+
             foreach($component->extractToView() as $option){
                 $options .= $default_renderer->render($option);
             }

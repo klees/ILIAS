@@ -14,7 +14,7 @@ class Validation{
 	/**
 	 * @var string
 	 */
-	protected $message_text = "Test Validation Text";
+	protected $message_text = "";
 	/**
 	 * @var bool
 	 */

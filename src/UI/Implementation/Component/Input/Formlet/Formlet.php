@@ -61,9 +61,10 @@ class Formlet implements \ILIAS\UI\Component\Component{
 		}
 
 		$this->validations = new V\Validations();
-        $this->model_to_view = new FV\Identity();
-        $this->view_to_model  = new FV\Identity();
 		$this->message_collector = new V\ValidationMessageCollector();
+
+		$this->model_to_view = new FV\Identity();
+        $this->view_to_model  = new FV\Identity();
 	}
 
 	protected function assertNoIdDupblicates(){
@@ -218,7 +219,15 @@ class Formlet implements \ILIAS\UI\Component\Component{
 		if(is_array($this->content)){
 			$value = [];
 			foreach($this->content as $child){
-				$value[$child->getId()] = $child->extractToModel();
+				$view_out = $child->extractToModel();
+				if(is_array($view_out)){
+					foreach($view_out as $key => $out){
+						$value[$key] = $out;
+					}
+				}else{
+					$value[$child->getId()] = $view_out;
+
+				}
 			}
 		}
 
@@ -271,8 +280,8 @@ class Formlet implements \ILIAS\UI\Component\Component{
 
 			$formlet_input = $this->modelToView($formlet_input);
 
-			foreach ($this->content as $child) {
-				$child->withInputFromModel($formlet_input[$child->getId()]);
+			foreach ($this->content as $key => $child) {
+				$this->content[$key] = $child->withInputFromModel($formlet_input[$child->getId()]);
 			}
 		}else{
 			$this->content = $this->modelToView($input[$this->getId()]);

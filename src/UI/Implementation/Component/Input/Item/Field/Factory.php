@@ -27,16 +27,13 @@ class Factory implements F\Factory {
 	 * @inheritdoc
 	 */
 	public function number($id,$label) {
-		return new Number($label);
+		return new Number($id,$label);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public function nameAge($id,$label) {
-		$text = new Text();
-		$number = new Number();
-
-		return new number($label);
+	public function nameAge($id) {
+		return new NameAge($id, "");
 	}
 }

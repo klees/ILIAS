@@ -17,6 +17,8 @@ interface IFormlet {
 	/**
 	 * Combined the formlet with another formlet and get a new formlet. Will apply
 	 * a function value in this formlet to any value in the other formlet.
+	 * More or less syntactic sugar for apply with the special quality to just
+	 * allow other formlet here.
 	 *
 	 * @return  Formlet
 	 */
@@ -30,12 +32,21 @@ interface IFormlet {
 	 * @return  Formlet
 	 */
 	public function validates( $validator);
+
 	/**
-	 * Map a function over the input value.
+	 * Again, Syntactic Sugar for apply. This time we do not take other formlet
+	 * but transformation to apply to the formlets.
 	 *
 	 * @return Formlet
 	 */
-	public function map( $transformation);
+	public function collect( $transformation);
 
+
+	/**
+	 * Syntactic Sugar for get.
+	 *
+	 * @throws errorIfNotValidOrNotSatisfied
+	 * @return boolean
+	 */
 	public function extract();
 }

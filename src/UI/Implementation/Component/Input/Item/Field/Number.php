@@ -10,10 +10,4 @@ use ILIAS\UI\Implementation\Component\Input\Item as I;
 
 class Number extends I\Item implements F\Text {
 
-	/**
-	 * @inheritdoc
-	 */
-	public function __construct() {
-
-	}
 }

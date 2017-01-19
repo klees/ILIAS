@@ -1,6 +1,6 @@
 <?php
 /**
- * Base Example for rendering an Image
+ * Base Example for rendering a Form
  */
 function base() {
 	//Loading factories
@@ -9,60 +9,59 @@ function base() {
 	$renderer = $DIC->ui()->renderer();
 
 	$items = [];
-    $options2 = [];
-    $options2[] = $f->input()->item()->selector()->radioOption("id13","Radio Sub 1");
-    $options2[] = $f->input()->item()->selector()->radioOption("id12","Radio Sub 2")->combineWithSubform(
-        $f->input()->container()->form()->sub(
-            [$f->input()->item()->field()->text("id15","Section Sub Sub Textfield 1")]
-        ));
-    $group = $f->input()->item()->selector()->radioGroup("id3","Radio Group Sub ", $options2);
 
-    $options = [];
-    $options[] = $f->input()->item()->selector()->radioOption("id1","Radio 1");
-    $options[] = $f->input()->item()->selector()->radioOption("id2","Radio 2")->combineWithSubform(
-        $f->input()->container()->form()->sub(
-            [$f->input()->item()->field()->text("id5","Section Textfield 1"),$group]
-        ));
-
-    $items[] = $f->input()->item()->selector()->radioGroup("id103","Radio Group", $options);
-    /**
-	//Genarating and rendering the text input
-	$text_input = $f->input()->item()->field()->text("id1","Textfield 1");
-
-	$items[] = $text_input->withInputFromModel(["id1"=>"test"])
+	//Genarating a text input with default content "test"
+	$items[] = $f->input()->item()->field()->text("id1","Textfield 1")
+			->withInputFromModel(["id1"=>"test"])
 			->required(true);
 
-	$text_input = $f->input()->item()->field()->text("id2","Textfield 2");
-    $text_input = $text_input->addValidation($f->input()->validation()->equals(3));
-    $text_input = $text_input->addViewToModelMapping(function($input){
-		return "Output to Model is Input times 2:".($input*2);
-	});
-	$items[] = $text_input->addModelToViewMapping(function($input){
-		return number_format ($input, 2);
-	})->withInputFromModel(["id2"=>6]);
+	//Genarating a text input with default content 3, which is transformed to
+	// 1.50 for the view by the ModelToViewMapper. Output is validated to
+	// equal 3 and finally doubled and enhanced with some text before passed
+	// back to the model.
+	$test = new stdClass();
+	$items[] = $f->input()->item()->field()->text("id2","Textfield 2")
+			->addModelToViewMapping(
+					function($input){
+						return number_format ($input, 2);
+					})
+			->addModelToViewMapping(
+					function($input){
+						return $input/2;
+					})
+			->withInputFromModel(["id2"=>3])
+			->addViewToModelMapping(
+					function($input) use ($test){
+						$test->content = "Test: ".$input;
+						return "Output to Model is Input times 2: ".$input;
+					})
+			->addViewToModelMapping(
+					function($input){
+						return $input*2;
+					})
+			->addValidation($f->input()->validation()->equals(3));
 
-    $items[] = $f->input()->container()->form()->section("Section 1",
-        [$f->input()->item()->field()->text("id4","Section Textfield 1")]);
+	//Section with Name Age field
+	//$items[] = $f->input()->container()->form()->section("Section 1",
+    //    [$f->input()->item()->field()->nameAge("id3")]);
 
-    $items[] = $f->input()->item()->field()->text("id7","Section Textfield 1")->combineWithSubform(
-        $f->input()->container()->form()->sub(
-        [$f->input()->item()->field()->text("id5","Section Textfield 1")]
-        ));
-
-**/
+	//Stuff it all to the form
 	$form = $f->input()->container()->form()->standard("#","Test Form",$items);
 
+
+	//Show some output if form has been sent;
 	$output = "";
 	if($_POST){
 		$form->withInputFromView($_POST);
 		if($form->isValid()){
 			foreach($form->extractToModel() as $out){
-				$output .= $out;
+				$output .= $out."</br>";
 			}
 
 		}else{
 			$output .= "Invalid Input";
 		}
+		$output .= "Test: ".$test->content."</br>";
 	}
 
 	return $renderer->render($form).$output;

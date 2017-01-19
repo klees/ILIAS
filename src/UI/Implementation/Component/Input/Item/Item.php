@@ -7,8 +7,8 @@ use ILIAS\UI\Implementation\Component\ComponentHelper;
 use ILIAS\UI\Implementation\Component\Input\Validation as F;
 
 /**
- * One item in the filter, might be composed from different input elements,
- * which all act as one filter input.
+ * Class Item
+ * @package ILIAS\UI\Implementation\Component\Input\Item
  */
 class Item  extends Formlet implements \ILIAS\UI\Component\Input\Item\Item{
 	use ComponentHelper;
@@ -55,6 +55,11 @@ class Item  extends Formlet implements \ILIAS\UI\Component\Input\Item\Item{
 		return $this->required;
 	}
 
+	/**
+	 * Todo this needs to be changed
+	 * @param $sub
+	 * @return Formlet
+	 */
     public function combineWithSubForm($sub){
         return $this->combine($sub);
     }
