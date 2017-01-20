@@ -12,7 +12,6 @@ function base() {
 
 	//Genarating a text input with default content "test"
 	$items[] = $f->input()->item()->field()->text("id1","Textfield 1")
-			->withInputFromModel(["id1"=>"test"])
 			->required(true);
 
 	//Genarating a text input with default content 3, which is transformed to
@@ -21,15 +20,6 @@ function base() {
 	// back to the model.
 	$test = new stdClass();
 	$items[] = $f->input()->item()->field()->text("id2","Textfield 2")
-			->addModelToViewMapping(
-					function($input){
-						return number_format ($input, 2);
-					})
-			->addModelToViewMapping(
-					function($input){
-						return $input/2;
-					})
-			->withInputFromModel(["id2"=>3])
 			->addViewToModelMapping(
 					function($input) use ($test){
 						$test->content = "Test: ".$input;
@@ -46,6 +36,12 @@ function base() {
     //    [$f->input()->item()->field()->nameAge("id3")]);
 
 	//Stuff it all to the form
+
+	$item1 = $f->input()->item()->field()->text("id1","Textfield 1")
+			->required(true);
+
+	$items[] = $item1->combine($item1);
+
 	$form = $f->input()->container()->form()->standard("#","Test Form",$items);
 
 

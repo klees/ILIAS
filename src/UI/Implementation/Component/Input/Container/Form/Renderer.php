@@ -29,13 +29,21 @@ class Renderer extends AbstractComponentRenderer {
 
             $tpl = $this->getTemplate("Form/tpl.standard.html", true, true);
 
+
             foreach($component->extractToView() as $item){
                 if($item instanceof Section){
                     $sections .= $default_renderer->render($item);
-                }else{
+                }else {
+                    if (!($item instanceof Component\Component)) {
+                        var_dump($component->extractToView());
+                        exit;
+
+                    }
+
                     $default_content  .= $default_renderer->render($item);
                 }
             }
+
             $tpl->setVariable("CONTENT_DEFAULT_SECTION",$default_content);
             $tpl->setVariable("ADDITIONAL_SECTIONS",$sections);
             $tpl->setVariable("ACTION",$component->getAction());

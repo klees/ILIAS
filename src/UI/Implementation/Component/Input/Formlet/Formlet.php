@@ -14,17 +14,12 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	/**
 	 * @var string
 	 */
-	protected $id = "";
+	protected $id = 0;
 
     /**
      * @var FV\FunctionValue
      */
-    protected $model_to_view = null;
-
-    /**
-     * @var FV\FunctionValue
-     */
-    protected $view_to_model = null;
+    protected $collector = null;
 
 	/**
 	 * @var V\Validations
@@ -34,7 +29,7 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	/**
 	 * @var V\ValidationMessageCollector
 	 */
-	protected $message_collector = null;
+	protected $view_to_model = null;
 
 	/**
 	 * @var bool
@@ -46,24 +41,34 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	 */
 	protected $content;
 
+	function setId($id){
+		$clone = clone $this;
+		$clone->id = $id;
+		return $clone;
+	}
 	/**
 	 * @param $name
 	 * @param array $children
 	 */
-	public function __construct($id, $children = null){
-		$this->id = $id;
-
+	public function __construct($content = "",$children = null){
 		if($children){
-			$this->content = $children;
+			$children_clones = [];
+			$i = 0;
+			foreach($children as $child){
+				$children_clones[] = $child->setId($this->getId()."_".$i);
+				$i++;
+			}
+
+
+			$this->content = $children_clones;
 			$this->assertNoIdDupblicates();
 		}else{
-			$this->content = "";
+			$this->content = $content;
 		}
 
 		$this->validations = new V\Validations();
 		$this->message_collector = new V\ValidationMessageCollector();
 
-		$this->model_to_view = new FV\Identity();
         $this->view_to_model  = new FV\Identity();
 	}
 
@@ -125,10 +130,7 @@ class Formlet implements \ILIAS\UI\Component\Component{
 		return $clone;
 	}
 
-    public function modelToView($value){
-        $model_to_view = $this->model_to_view->apply($value);
-        return $model_to_view->get();
-    }
+
     public function viewToModel($value){
         $view_to_model = $this->view_to_model->apply($value);
         return $view_to_model->get();
@@ -140,18 +142,6 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	public function addViewToModelMapping(Callable $function){
 		$clone = clone $this;
         $clone->view_to_model = $this->view_to_model->apply(
-            new FV\FunctionValue($function)
-        );
-        return $clone;
-	}
-
-	/**
-	 * @param callable $function
-	 * @return Formlet
-	 */
-	public function addModelToViewMapping(Callable $function){
-        $clone = clone $this;
-        $clone->model_to_view = $this->model_to_view->apply(
             new FV\FunctionValue($function)
         );
         return $clone;
@@ -262,29 +252,6 @@ class Formlet implements \ILIAS\UI\Component\Component{
 					$this->valid = false;
 				}
 			}
-		}
-
-		return $this;
-	}
-
-	/**
-	 * @param $input
-	 * @return $this
-	 */
-	public function withInputFromModel($input){
-		$formlet_input = null;
-		if(is_array($this->content)) {
-			foreach($this->content as $child){
-				$formlet_input[$child->getId()] = $input[$child->getId()];
-			}
-
-			$formlet_input = $this->modelToView($formlet_input);
-
-			foreach ($this->content as $key => $child) {
-				$this->content[$key] = $child->withInputFromModel($formlet_input[$child->getId()]);
-			}
-		}else{
-			$this->content = $this->modelToView($input[$this->getId()]);
 		}
 
 		return $this;
