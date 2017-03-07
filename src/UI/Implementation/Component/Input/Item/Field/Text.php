@@ -14,5 +14,15 @@ use ILIAS\UI\Implementation\Component\Input\Item as I;
  */
 class Text extends I\Item implements F\Text {
 
+	/**
+	 * @var string
+	 */
+	protected $type = "text";
 
+	/**
+	 * @inheritdoc
+	 */
+	public function __construct($label) {
+		parent::__construct($label);
+	}
 }

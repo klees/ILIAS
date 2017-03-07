@@ -26,10 +26,10 @@ class Validations {
 		$this->validations[] = $validation;
 	}
 
-	public function validate($value, $collector, $item){
+	public function validate($value, $collector,$item){
 		$valid = true;
 		foreach($this->validations as $validation){
-			if(!$validation->validate($value,$collector, $item)){
+			if(!$validation->validate($value,$collector,$item)){
 				$valid = false;
 			}
 		}

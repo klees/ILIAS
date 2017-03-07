@@ -32,9 +32,9 @@ class Renderer extends AbstractComponentRenderer {
 			return $inputs;
 		}else{
 			//$tpl->setVariable("ID","TODO");
-			$tpl->setVariable("FOR",$component->getId());
-			$tpl->setVariable("ID",$component->getId());
-			$tpl->setVariable("VALUE",$component->extractToView());
+			$tpl->setVariable("FOR",$component->getName());
+			$tpl->setVariable("ID",$component->getName());
+			$tpl->setVariable("VALUE",$component->getValue());
 
 
 			if($component->isValidated()){

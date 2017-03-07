@@ -26,12 +26,11 @@ class Item  extends Formlet implements \ILIAS\UI\Component\Input\Item\Item{
 	/**
 	 * @inheritdoc
 	 */
-	public function __construct($id, $label,$children = []) {
-		$this->checkStringArg("id",$id);
+	public function __construct($label,$children = []) {
 		$this->checkStringArg("label",$label);
 		$this->label = $label;
 
-		parent::__construct($id,$children);
+		parent::__construct($children);
 	}
 
 	/**

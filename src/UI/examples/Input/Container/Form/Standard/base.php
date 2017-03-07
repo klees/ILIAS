@@ -9,25 +9,27 @@ function base() {
 	$renderer = $DIC->ui()->renderer();
 
 	$items = [];
+	$out = new stdClass();
 
 	//Genarating a text input with default content "test"
-	$items[] = $f->input()->item()->field()->text("id1","Textfield 1")
-			->required(true);
+	$items[] = $f->input()->item()->field()->text("Textfield 1")
+			->required(true)
+			->withValue(1);
 
 	//Genarating a text input with default content 3, which is transformed to
 	// 1.50 for the view by the ModelToViewMapper. Output is validated to
 	// equal 3 and finally doubled and enhanced with some text before passed
 	// back to the model.
 	$test = new stdClass();
-	$items[] = $f->input()->item()->field()->text("id2","Textfield 2")
-			->addViewToModelMapping(
-					function($input) use ($test){
-						$test->content = "Test: ".$input;
+	$items[] = $f->input()->item()->field()->text("Textfield 2")
+			->addMapping(
+					function($input){
 						return "Output to Model is Input times 2: ".$input;
 					})
-			->addViewToModelMapping(
+			->addMapping(
 					function($input){
-						return $input*2;
+
+						return intval($input)*2;
 					})
 			->addValidation($f->input()->validation()->equals(3));
 
@@ -37,10 +39,14 @@ function base() {
 
 	//Stuff it all to the form
 
-	$item1 = $f->input()->item()->field()->text("id1","Textfield 1")
-			->required(true);
+	$item1 = $f->input()->item()->field()->text("Textfield 3")
+			->addMapping(
+				function($input) use ($out){
+					$out->content = $input;
+				});
 
-	$items[] = $item1->combine($item1);
+	$combined = $item1->combine($item1);
+	$items[] = $combined;
 
 	$form = $f->input()->container()->form()->standard("#","Test Form",$items);
 
@@ -48,16 +54,14 @@ function base() {
 	//Show some output if form has been sent;
 	$output = "";
 	if($_POST){
-		$form->withInputFromView($_POST);
+		$form = $form->withInputFromView($_POST['test']);
 		if($form->isValid()){
-			foreach($form->extractToModel() as $out){
-				$output .= $out."</br>";
-			}
+			$output .=print_r($form->map(),true);
+			$output .=print_r($out,true);
 
 		}else{
 			$output .= "Invalid Input";
 		}
-		$output .= "Test: ".$test->content."</br>";
 	}
 
 	return $renderer->render($form).$output;

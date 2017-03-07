@@ -6,6 +6,12 @@ use ILIAS\UI\Component\Input\Container as C;
 use ILIAS\UI\Implementation\Component\Input\Container\Container;
 
 class Standard extends Container implements C\Form\Standard {
+
+    /**
+     * @var string
+     */
+    protected $type = "form";
+
     /**
      * @var string
      */
@@ -25,7 +31,7 @@ class Standard extends Container implements C\Form\Standard {
         $this->action = $action;
         $this->title = $title;
 
-        parent::__construct($title,$items);
+        parent::__construct($items);
     }
 
     public function getAction(){
