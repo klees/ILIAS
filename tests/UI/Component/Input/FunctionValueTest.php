@@ -1,10 +1,14 @@
 <?php
 /******************************************************************************
- * An implementation of the "Formlets"-abstraction in PHP.
+ * This work is inspired by work for Richard Klees. Published under:
+ *
+ * "An implementation of the "Formlets"-abstraction in PHP.
  * Copyright (c) 2014 Richard Klees <richard.klees@rwth-aachen.de>
  *
  * This software is licensed under The MIT License. You should have received
- * a copy of the along with the code.
+ * a copy of the along with the code."
+ *
+ * See: https://github.com/lechimp-p/php-formlets
  */
 namespace ILIAS\UI\Implementation\Component\Input\Formlet\Factory\Test\Value;
 
@@ -197,6 +201,4 @@ class FunctionValueTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(10,$res);
 	}
-
 }
-?>

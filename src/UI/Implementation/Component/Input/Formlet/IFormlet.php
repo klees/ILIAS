@@ -18,7 +18,7 @@ interface IFormlet {
 	 * Combined the formlet with another formlet and get a new formlet. Will apply
 	 * a function value in this formlet to any value in the other formlet.
 	 * More or less syntactic sugar for apply with the special quality to just
-	 * allow other formlet here.
+	 * allow other formlets here.
 	 *
 	 * @return  Formlet
 	 */
@@ -35,12 +35,11 @@ interface IFormlet {
 
 	/**
 	 * Again, Syntactic Sugar for apply. This time we do not take other formlet
-	 * but transformation to apply to the formlets.
+	 * but a transformation to apply to the formlet.
 	 *
 	 * @return Formlet
 	 */
 	public function collect( $transformation);
-
 
 	/**
 	 * Syntactic Sugar for get.

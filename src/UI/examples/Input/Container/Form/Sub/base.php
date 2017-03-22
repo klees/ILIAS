@@ -7,7 +7,7 @@ function base() {
 	global $DIC;
 	$f = $DIC->ui()->factory();
 	$renderer = $DIC->ui()->renderer();
-
+/**
 	$items = [];
 	$options = [];
 	$options[] = $f->input()->item()->selector()->radioOption("radio_option1", "Radio 1");
@@ -32,7 +32,7 @@ function base() {
 		}else{
 			$output .= "Invalid Input";
 		}
-	}
+	}**/
 
-	return $renderer->render($form).$output;
+	return "";//$renderer->render($form).$output;
 }

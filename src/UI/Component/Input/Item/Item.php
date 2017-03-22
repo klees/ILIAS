@@ -16,7 +16,6 @@ interface Item extends \ILIAS\UI\Component\Component {
 	 */
 	public function getLabel();
 
-
 	/**
 	 * Set the default value to be displayed.
 	 *

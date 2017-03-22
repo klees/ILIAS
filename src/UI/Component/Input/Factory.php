@@ -94,7 +94,7 @@ interface Factory {
 	 *   composition: >
 	 *     Validation components are usually placed inside of other inputs components. They can not work on their own.
 	 *   effect: >
-	 *     Validations show wheter an input is (or will be) accepted by the system or is (or was) rejected.
+	 *     Validations show whether an input is (or will be) accepted by the system or is (or was) rejected.
 	 *
 	 * ----
 	 * @return  \ILIAS\UI\Component\Input\Validation\Factory

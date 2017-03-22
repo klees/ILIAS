@@ -21,7 +21,7 @@ namespace ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue;
 interface IFunctionValue {
 
 	/**
-	 * Returns wheter the has been applied enough times to have a result.
+	 * Returns whether the has been applied enough times to have a result.
 	 *
 	 * @return bool
 	 */

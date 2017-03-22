@@ -14,7 +14,7 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	/**
 	 * @var string
 	 */
-	protected $name = "";
+	protected $name = "test";
 
 	/**
 	 * @var string
@@ -205,13 +205,10 @@ class Formlet implements \ILIAS\UI\Component\Component{
 		$cloned_children = [];
 		foreach($clone->getChildren() as $key => $child){
 			$cloned_child = clone $child;
+
 			if(!is_array($clone->getValue())||!array_key_exists('formlet_0',
 							$clone->getValue())){
-				var_dump($_POST);
-				var_dump($clone->getValue());
-				var_dump($clone);
 
-				exit;
 			}
 			$child_input = $clone->getValue()[$this->generateKey($key, $cloned_child->getType())];
 

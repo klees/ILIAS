@@ -11,24 +11,22 @@ function base() {
 	$items = [];
 	$out = new stdClass();
 
-	//Genarating a text input with default content "test"
+	//Generating a text input with default content "test"
 	$items[] = $f->input()->item()->field()->text("Textfield 1")
 			->required(true)
 			->withValue(1);
 
-	//Genarating a text input with default content 3, which is transformed to
-	// 1.50 for the view by the ModelToViewMapper. Output is validated to
+	//Generating a text input with default content 3. Output is validated to
 	// equal 3 and finally doubled and enhanced with some text before passed
 	// back to the model.
-	$test = new stdClass();
 	$items[] = $f->input()->item()->field()->text("Textfield 2")
+			->withValue(3)
 			->addMapping(
 					function($input){
 						return "Output to Model is Input times 2: ".$input;
 					})
 			->addMapping(
 					function($input){
-
 						return intval($input)*2;
 					})
 			->addValidation($f->input()->validation()->equals(3));
@@ -39,6 +37,7 @@ function base() {
 
 	//Stuff it all to the form
 
+	/**
 	$item1 = $f->input()->item()->field()->text("Textfield 3")
 			->addMapping(
 				function($input) use ($out){
@@ -46,7 +45,7 @@ function base() {
 				});
 
 	$combined = $item1->combine($item1);
-	$items[] = $combined;
+	$items[] = $combined;**/
 
 	$form = $f->input()->container()->form()->standard("#","Test Form",$items);
 
