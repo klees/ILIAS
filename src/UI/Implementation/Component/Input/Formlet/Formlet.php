@@ -1,33 +1,58 @@
 <?php
+/******************************************************************************
+ * This work is inspired/based on work by Richard Klees published under:
+ *
+ * "An implementation of the "Formlets"-abstraction in PHP.
+ * Copyright (c) 2014 Richard Klees <richard.klees@rwth-aachen.de>
+ *
+ * This software is licensed under The MIT License. You should have received
+ * a copy of the along with the code."
+ *
+ * See: https://github.com/lechimp-p/php-formlets
+ */
+/* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 
 namespace ILIAS\UI\Implementation\Component\Input\Formlet;
 
-use \ILIAS\UI\Implementation\Component\Input\Formlet as F;
-use \ILIAS\UI\Implementation\Component\Input\Validation as V;
+use \ILIAS\UI\Component\Input\Input;
+use \ILIAS\UI\Component\Input\Validation\Validation;
+use \ILIAS\UI\Implementation\Component\Input\Validation\Validations;
+use \ILIAS\UI\Implementation\Component\Input\Validation\ValidationMessageCollector;
 use \ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue as FV;
 
+
 /**
+ * A formlet represents one part of a form. It can be combined with other formlets
+ * to yield new formlets. Formlets are immutable, that is they can be reused in
+ * as many places as liked. All methods return fresh Formlets instead of muting
+ * the Formlets they are called upon.
+ *
+ * Todo: Rethink the name. The currently proposed "Formlet" seems to have shifted from
+ * the initial concept of formlets.
+ *
  * Class Formlet
  * @package ILIAS\UI\Implementation\Component\Input\Formlet
  */
-class Formlet implements \ILIAS\UI\Component\Component{
+class Formlet implements IFormlet{
 	/**
+	 * Todo: Improve this! What is name?
 	 * @var string
 	 */
 	protected $name = "test";
 
 	/**
+	 * Todo: Improve this! What is type?
 	 * @var string
 	 */
 	protected $type = "formlet";
 
     /**
-     * @var FV\FunctionValue
+     * @var ValidationMessageCollector
      */
     protected $message_collector = null;
 
 	/**
-	 * @var V\Validations
+	 * @var Validations
 	 */
 	protected $validations;
 
@@ -58,78 +83,48 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	 */
 	public function __construct($children = []){
 		$this->children = $children;
-		$this->validations = new V\Validations();
-		$this->message_collector = new V\ValidationMessageCollector();
-        $this->mapping  = new FV\Identity();
+		$this->validations = new Validations();
+		$this->message_collector = new ValidationMessageCollector();
+        $this->mapping  = FV\Factory::identity();
 	}
 
 	/**
-	 * @param Formlet $other
-	 * @return Formlet
+	 * @inheritdoc
 	 */
-	public function combine(Formlet $other){
+	public function combine(Input $other){
 		return new self([$this, $other]);
 	}
 
 	/**
-	 * @param V\Validation $validation
-	 * @return Formlet
-	 */
-	public function addValidation(V\Validation $validation){
-		$clone = clone $this;
-		$clone->validations->addValidation($validation);
-		return $clone;
-	}
-
-
-
-
-
-	/**
-	 * @param callable $function
-	 * @return Formlet
+	 * @inheritdoc
 	 */
 	public function addMapping(Callable $function){
 		$clone = clone $this;
-		$clone->mapping = $clone->mapping->apply(
-				new FV\FunctionValue($function)
-		);
+		$fv = FV\Factory::functionValue($function);
+		$clone->mapping = $fv->apply($clone->mapping);
 		return $clone;
 	}
 
 	/**
-	 * @return bool
+	 * @inheritdoc
 	 */
-	public function isValid(){
-		return $this->valid;
-	}
+	public function map(){
 
-	/**
-	 * @return bool
-	 */
-	public function isValidated(){
-		return $this->valid !== null;
-	}
-
-	/**
-	 * @return V\ValidationMessageCollector
-	 */
-	public function getMessageCollector()
-	{
-		return $this->message_collector;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function extractToView(){
-		$children = [];
-		foreach($this->getChildren() as $key => $child){
-			$children[] = $child->setName($this->generateName($this->getName(),
-					$key,$child->getType()));
+		if(!$this->valid){
+			//Todo: improve this
+			return "error";
 		}
 
-		return $children;
+		$mapped_values = [];
+
+		foreach($this->getChildren() as $key => $child){
+			$mapped_values[] = $child->map();
+		}
+
+		if(empty($mapped_values)){
+			return $this->mapValue($this->getValue());
+		}
+		return $this->mapValue($mapped_values);
 	}
 
 	/**
@@ -143,79 +138,71 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	}
 
 	/**
-	 * @return mixed|string
+	 * @inheritdoc
 	 */
-	public function map(){
+	public function addValidation(Validation $validation){
+		$clone = clone $this;
+		$clone->validations = $clone->validations->addValidation($validation);
+		return $clone;
+	}
 
-		if(!$this->valid){
-			//Todo: improve this
-			return "error";
-		}
+	/**
+	 * @inheritdoc
+	 */
+	public function isValid(){
+		return $this->valid;
+	}
 
-		$mapped_values = [];
+	/**
+	 * @inheritdoc
+	 */
+	public function isValidated(){
+		return $this->valid !== null;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getMessageCollector()
+	{
+		return $this->message_collector;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function extractToView(){
+		$children = [];
 
 		foreach($this->getChildren() as $key => $child){
-			$mapped_values[] = $child->map($child->getValue());
+			$children[] = $child->setName($this->generateName($this->getName(),
+					$key,$child->getType()));
 		}
 
-		if(empty($mapped_values)){
-			return $this->mapValue($this->getValue());
-		}
-		return $this->mapValue($mapped_values);
+		return $children;
 	}
 
 	/**
-	 * @param Formlet $child
-	 * @param $counter
-	 * @return Formlet
-	 */
-	protected function getNamedChild(Formlet $child, $counter){
-		return $child->setName($this->generateName($this->getName(), $counter, $child->getType()));
-	}
-
-	/**
-	 * @param $prefix
-	 * @param $counter
-	 * @param $type
-	 * @return string
-	 */
-	protected function generateName($prefix,$counter,$type){
-		return $prefix."[".$this->generateKey($counter,$type)."]";
-	}
-
-	/**
-	 * @param $counter
-	 * @param $type
-	 * @return string
-	 */
-	protected function generateKey($counter,$type){
-		return $type."_".$counter;
-	}
-
-	/**
-	 * @param $input
-	 * @return $this
+	 * @inheritdoc
 	 */
 	public function withInputFromView($input){
 		$formlet_input = null;
 
 		$clone = $this->withValue($input);
+
 		$clone->valid = $clone->validations->validate($clone->getValue(), $clone->getMessageCollector(),$clone);
 
 		$cloned_children = [];
 		foreach($clone->getChildren() as $key => $child){
 			$cloned_child = clone $child;
 
-			if(!is_array($clone->getValue())||!array_key_exists('formlet_0',
-							$clone->getValue())){
-
-			}
 			$child_input = $clone->getValue()[$this->generateKey($key, $cloned_child->getType())];
 
 			$cloned_child = $cloned_child->withInputFromView($child_input);
 
 			if (!$cloned_child->isValid()) {
 				$clone->valid = false;
+				$clone->message_collector->join($cloned_child->getMessageCollector());
 			}
 
 			$cloned_children[] = $cloned_child;
@@ -225,8 +212,6 @@ class Formlet implements \ILIAS\UI\Component\Component{
 
 		return $clone;
 	}
-
-
 
 	/**
 	 * @return string
@@ -267,8 +252,7 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	}
 
 	/**
-	 * @param $children
-	 * @return Formlet
+	 * @inheritdoc
 	 */
 	public function withChildren($children)
 	{
@@ -278,20 +262,44 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	}
 
 	/**
-	 * @return Formlet[]
+	 * @inheritdoc
 	 */
 	public function getChildren(){
 		return $this->children;
 	}
 
 	/**
-	 * @return bool
+	 * @inheritdoc
 	 */
 	public function hasChildren(){
 		return empty($this->getChildren());
 	}
 
+
 	/**
+	 * Todo: Improve this! What is name?
+	 * @param $prefix
+	 * @param $counter
+	 * @param $type
+	 * @return string
+	 */
+	protected function generateName($prefix,$counter,$type){
+		return $prefix."[".$this->generateKey($counter,$type)."]";
+	}
+
+	/**
+	 * Todo: Improve this! What is name? What is key? etc...
+	 * @param $counter
+	 * @param $type
+	 * @return string
+	 */
+	protected function generateKey($counter,$type){
+		return $type."_".$counter;
+	}
+
+
+	/**
+	 * Todo: Improve this! What is name?
 	 * @param $name
 	 * @return Formlet
 	 */
@@ -302,10 +310,10 @@ class Formlet implements \ILIAS\UI\Component\Component{
 	}
 
 	/**
+	 * Todo: Improve this! What is name?
 	 * @return string
 	 */
 	public function getName(){
 		return $this->name;
 	}
-
 }

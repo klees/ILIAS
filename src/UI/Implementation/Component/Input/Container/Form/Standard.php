@@ -5,6 +5,10 @@ namespace ILIAS\UI\Implementation\Component\Input\Container\Form;
 use ILIAS\UI\Component\Input\Container as C;
 use ILIAS\UI\Implementation\Component\Input\Container\Container;
 
+/**
+ * Class Standard
+ * @package ILIAS\UI\Implementation\Component\Input\Container\Form
+ */
 class Standard extends Container implements C\Form\Standard {
 
     /**
@@ -21,6 +25,7 @@ class Standard extends Container implements C\Form\Standard {
      * @var string
      */
     protected $title = "";
+
     /**
      * Container constructor.
      * @param $action
@@ -34,12 +39,15 @@ class Standard extends Container implements C\Form\Standard {
         parent::__construct($items);
     }
 
+    /**
+     * @inheritdocs
+     */
     public function getAction(){
         return $this->action;
     }
 
     /**
-     * @return string
+     * @inheritdocs
      */
     public function getTitle()
     {

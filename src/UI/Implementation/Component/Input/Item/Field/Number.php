@@ -9,5 +9,15 @@ use ILIAS\UI\Component\Input\Item\Field as F;
 use ILIAS\UI\Implementation\Component\Input\Item as I;
 
 class Number extends I\Item implements F\Text {
+	/**
+	 * @var string
+	 */
+	protected $type = "number";
 
+	/**
+	 * @inheritdoc
+	 */
+	public function __construct($label) {
+		parent::__construct($label);
+	}
 }

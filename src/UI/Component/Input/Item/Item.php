@@ -1,29 +1,29 @@
 <?php
 
-/* Copyright (c) 2016 Fabian Schmid <fs@studer-raimann.ch> Extended GPL, see docs/LICENSE */
-/* Copyright (c) 2016 Richard Klees <richard.klees@concepts-and-training.de> Extended GPL, see docs/LICENSE */
-
 namespace ILIAS\UI\Component\Input\Item;
 
 /**
- * One item in the filter, might be composed from different input elements,
- * which all act as one filter input.
+ * Interface Item
+ * @package ILIAS\UI\Component\Input\Item
  */
-interface Item extends \ILIAS\UI\Component\Component {
+interface Item extends \ILIAS\UI\Component\Input\Input {
 
 	/**
+	 * Get the label of the Input Item
 	 * @return string
 	 */
 	public function getLabel();
 
 	/**
-	 * Set the default value to be displayed.
+	 * Create a new Input that requires input to be validated.
 	 *
-	 * @param   mixed $default
+	 * @return Item
 	 */
 	public function required();
 
 	/**
+	 * Get if the input is required
+	 *
 	 * @return boolean
 	 */
 	public function isRequired();

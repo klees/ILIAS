@@ -10,6 +10,7 @@ use ILIAS\UI\Component;
 
 /**
  * Class Renderer
+ * Todo this is mostly experimenting
  * @package ILIAS\UI\Implementation\Component\Image
  */
 class Renderer extends AbstractComponentRenderer {

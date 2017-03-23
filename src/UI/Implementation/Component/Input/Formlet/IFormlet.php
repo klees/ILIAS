@@ -1,51 +1,46 @@
 <?php
 /******************************************************************************
- * An implementation of the "Formlets"-abstraction in PHP.
+ * This work is inspired/based on work by Richard Klees published under:
+ *
+ * "An implementation of the "Formlets"-abstraction in PHP.
  * Copyright (c) 2014 Richard Klees <richard.klees@rwth-aachen.de>
  *
  * This software is licensed under The MIT License. You should have received
- * a copy of the along with the code.
+ * a copy of the along with the code."
+ *
+ * See: https://github.com/lechimp-p/php-formlets
  */
+/* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 namespace  ILIAS\UI\Implementation\Component\Input\Formlet;
+
+use \ILIAS\UI\Component\Input\Input;
 /**
  * A formlet represents one part of a form. It can be combined with other formlets
  * to yield new formlets. Formlets are immutable, that is they can be reused in
- * as many places as you like. All methods return fresh Formlets instead of muting
+ * as many places as liked. All methods return fresh Formlets instead of muting
  * the Formlets they are called upon.
+ *
+ * Todo: Rethink the name. The currently proposed "Formlet" seems to have shifted from
+ * the initial concept of formlets.
  */
-interface IFormlet {
+interface IFormlet extends Input{
 	/**
-	 * Combined the formlet with another formlet and get a new formlet. Will apply
-	 * a function value in this formlet to any value in the other formlet.
-	 * More or less syntactic sugar for apply with the special quality to just
-	 * allow other formlets here.
+	 * Internally used to get the content to be rendered by the renderer
 	 *
-	 * @return  Formlet
+	 * @return array
 	 */
-	public function combine(Formlet $formlet);
-	/**
-	 * Get a new formlet with an additional check of a predicate on the input to
-	 * the formlet and an error message for the case the predicate fails. The
-	 * predicates has to be a function from mixed to bool.
-	 *
-	 * @param   \ILIAS\UI\Component\Input\Validation\Validation  $validator
-	 * @return  Formlet
-	 */
-	public function validates( $validator);
+	public function extractToView();
 
 	/**
-	 * Again, Syntactic Sugar for apply. This time we do not take other formlet
-	 * but a transformation to apply to the formlet.
-	 *
-	 * @return Formlet
+	 * Todo: Improve this! What is name?
+	 * @param string $name
+	 * @return Input
 	 */
-	public function collect( $transformation);
+	public function setName($name);
 
 	/**
-	 * Syntactic Sugar for get.
-	 *
-	 * @throws errorIfNotValidOrNotSatisfied
-	 * @return boolean
+	 * Todo: Improve this! What is name?
+	 * @return string
 	 */
-	public function extract();
+	public function getName();
 }

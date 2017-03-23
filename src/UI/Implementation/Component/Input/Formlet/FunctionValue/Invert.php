@@ -1,7 +1,5 @@
 <?php
-
 namespace ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue;
-
 
 /**
  * Function value inverting possible input. a = Invert(Invert(a))
@@ -11,6 +9,9 @@ namespace ILIAS\UI\Implementation\Component\Input\Formlet\FunctionValue;
  */
 class Invert extends FunctionValue {
 
+    /**
+     * Invert constructor.
+     */
     public function __construct()
     {
         parent::__construct(function($value){

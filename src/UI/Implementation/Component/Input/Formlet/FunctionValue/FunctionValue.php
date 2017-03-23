@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * This work is inspired by work for Richard Klees. Published under:
+ * This work is inspired/based on work by Richard Klees published under:
  *
  * "An implementation of the "Formlets"-abstraction in PHP.
  * Copyright (c) 2014 Richard Klees <richard.klees@rwth-aachen.de>

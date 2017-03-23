@@ -9,8 +9,8 @@ namespace ILIAS\UI\Component\Input\Item\Field;
  * Interface Selector
  * @package ILIAS\UI\Component\Selector
  */
-interface Text extends \ILIAS\UI\Component\Input\Item\Item {
+interface Text extends \ILIAS\UI\Component\Input\Item\Item  {
 	/**
-	 * @Todo: Add Interface to pass tree
+	 * @Todo: Add Interface
 	 */
 }

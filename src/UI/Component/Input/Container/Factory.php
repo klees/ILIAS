@@ -1,7 +1,7 @@
 <?php
 namespace ILIAS\UI\Component\Input\Container;
 /**
- * This is how a factory for inputs looks like.
+ * This is how a factory for inputs container looks like.
  */
 interface Factory {
 	/**
@@ -17,7 +17,7 @@ interface Factory {
 	 *     1: Every Input Element in every Input Collection MUST be accessible by keyboard.
 	 *
 	 * ----
-	 * @return  \ILIAS\UI\Component\Input\Container\Filter\Filter
+	 * @return  \ILIAS\UI\Component\Container\Filter\Filter
 	 */
 	public function filter();
 

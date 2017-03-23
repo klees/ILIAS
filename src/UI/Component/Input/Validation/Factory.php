@@ -2,7 +2,7 @@
 namespace ILIAS\UI\Component\Input\Validation;
 
 /**
- * This is how a factory for inputs looks like.
+ * Factory for distinct validation types
  */
 interface Factory {
 
@@ -22,8 +22,8 @@ interface Factory {
 	 *   purpose: >
 	 *     The equals validator checks wheter the input equals a certain value.
 	 * ----
-	 * @param $to_be_equaled
-	 * @return mixed
+	 * @param mixed $to_be_equaled
+	 * @return \ILIAS\UI\Component\Input\Validation\Regex
 	 */
 	public function equals($to_be_equaled);
 
@@ -34,6 +34,7 @@ interface Factory {
 	 *     Regex validators validate content by checking if it complies with a given regular expression.
 	 *
 	 * ----
+	 * @param string $regex
 	 * @return  \ILIAS\UI\Component\Input\Validation\Regex
 	 */
 	public function regex($regex);
@@ -45,6 +46,8 @@ interface Factory {
 	 *     Custom validators accept a user defined function for validating content.
 	 *
 	 * ----
+	 * @param callable $validation
+	 * @param string $message
 	 * @return  \ILIAS\UI\Component\Input\Validation\Custom
 	 */
 	public function custom(callable $validation, $message);

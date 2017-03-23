@@ -1,7 +1,7 @@
 <?php
 namespace ILIAS\UI\Component\Input\Item;
 /**
- * This is how a factory for inputs looks like.
+ * This is how a factory for input items looks like.
  */
 interface Factory {
 	/**

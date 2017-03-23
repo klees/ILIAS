@@ -1,11 +1,14 @@
 <?php
 /******************************************************************************
- * An implementation of the "Formlets"-abstraction in PHP.
+ * This work is inspired/based on work by Richard Klees published under:
+ *
+ * "An implementation of the "Formlets"-abstraction in PHP.
  * Copyright (c) 2014 Richard Klees <richard.klees@rwth-aachen.de>
  *
  * This software is licensed under The MIT License. You should have received
- * a copy of the along with the code.
+ * a copy of the along with the code."
  *
+ * See: https://github.com/lechimp-p/php-formlets
  */
 /* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
 

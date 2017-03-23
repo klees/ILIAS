@@ -26,8 +26,8 @@ class Factory implements F\Factory {
 	/**
 	 * @inheritdoc
 	 */
-	public function number($id,$label) {
-		return new Number($id,$label);
+	public function number($label) {
+		return new Number($label);
 	}
 
 	/**

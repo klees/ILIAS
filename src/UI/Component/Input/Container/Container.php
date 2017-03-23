@@ -3,8 +3,8 @@
 namespace ILIAS\UI\Component\Input\Container;
 
 /**
- * Bundles some filter items together to form a complete filter. This interface represents the state of the filter after an input has applied to.
+ * Common interface shared by all containers.
  */
-interface Container extends \ILIAS\UI\Component\Component {
+interface Container extends \ILIAS\UI\Component\Input\Input {
 
 }

@@ -3,7 +3,8 @@ namespace ILIAS\UI\Implementation\Component\Input\Validation;
 use \ILIAS\UI\Component\Input\Validation as V;
 
 /**
- * Todo
+ * Class ValidationMessage
+ * @package ILIAS\UI\Implementation\Component\Input\Validation
  */
 class ValidationMessage implements V\ValidationMessage{
 	/**
@@ -14,6 +15,7 @@ class ValidationMessage implements V\ValidationMessage{
 	 * @var string
 	 */
 	protected $message = "";
+
 	/**
 	 * @inheritdoc
 	 */
@@ -21,9 +23,17 @@ class ValidationMessage implements V\ValidationMessage{
 		$this->message = $message;
 		$this->item = $item;
 	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getMessage(){
 		return $this->message;
 	}
+
+	/**
+	 * @inheritdoc
+	 */
 	public function getItem(){
 		return $this->item;
 	}

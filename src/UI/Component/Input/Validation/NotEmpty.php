@@ -3,8 +3,9 @@ namespace ILIAS\UI\Component\Input\Validation;
 
 
 /**
- * Todo
+ * Interface NotEmpty
+ * @package ILIAS\UI\Component\Input\Validation
  */
-interface notEmpty extends Validation {
+interface NotEmpty extends Validation {
 
 }

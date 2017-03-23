@@ -5,18 +5,18 @@ namespace ILIAS\UI\Implementation\Component\Input\Container\Form;
 use ILIAS\UI\Component\Input\Container as C;
 use ILIAS\UI\Implementation\Component\Input\Container\Container;
 
+/**
+ * Class Sub
+ * Todo this is mostly experimenting
+ * @package ILIAS\UI\Implementation\Component\Input\Container\Form
+ */
 class Sub extends Container implements C\Form\Section {
 
     /**
-     * @var int
-     */
-    static $nr_sub = 0;
-    /**
-     * @param $title
-     * @param array|null $items
+     * Sub constructor.
+     * @param array $items
      */
     public function __construct($items) {
-        Sub::$nr_sub++;
-        parent::__construct("sub_".Sub::$nr_sub,$items);
+        parent::__construct($items);
     }
 }

@@ -133,6 +133,20 @@ class FunctionValueTest extends PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function testComposeEqualsApply(){
+		$mult = $this->getMultiplyFunction();
+		$div = $this->getDivideFunction();
+
+		$composed = F::compose($mult,2,$div,12,3);
+
+
+		$this->assertEquals(8,$composed->get());
+		$this->assertEquals(
+				$mult->apply(2)->apply($div)->apply(12)->apply(3)->get(),
+				$composed->get()
+		);
+	}
+
 	public function testCompose1(){
 		$invert = F::invert();
 		$equals = $this->getEqualsFunction();

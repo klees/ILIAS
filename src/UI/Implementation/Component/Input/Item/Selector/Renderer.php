@@ -1,7 +1,5 @@
 <?php
 
-/* Copyright (c) 2016 Timon Amstutz <timon.amstutz@ilub.unibe.ch> Extended GPL, see docs/LICENSE */
-
 namespace ILIAS\UI\Implementation\Component\Input\Item\Selector;
 
 use ILIAS\UI\Implementation\Render\AbstractComponentRenderer;
@@ -10,6 +8,8 @@ use ILIAS\UI\Component;
 
 /**
  * Class Renderer
+ * Todo this is mostly experimenting
+ *
  * @package ILIAS\UI\Implementation\Component\Image
  */
 class Renderer extends AbstractComponentRenderer {

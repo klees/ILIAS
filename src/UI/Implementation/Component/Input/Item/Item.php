@@ -29,7 +29,6 @@ class Item  extends Formlet implements \ILIAS\UI\Component\Input\Item\Item{
 	public function __construct($label,$children = []) {
 		$this->checkStringArg("label",$label);
 		$this->label = $label;
-
 		parent::__construct($children);
 	}
 
@@ -46,20 +45,14 @@ class Item  extends Formlet implements \ILIAS\UI\Component\Input\Item\Item{
 	public function required(){
 		$clone = clone $this;
 		$clone->required = true;
-        $clone->addValidation(new F\NotEmpty());
+		$clone = $clone->addValidation(new F\NotEmpty());
 		return $clone;
 	}
 
+	/**
+	 * @inheritdocs
+	 */
 	public function isRequired(){
 		return $this->required;
 	}
-
-	/**
-	 * Todo this needs to be changed
-	 * @param $sub
-	 * @return Formlet
-	 */
-    public function combineWithSubForm($sub){
-        return $this->combine($sub);
-    }
 }

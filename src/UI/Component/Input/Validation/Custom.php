@@ -2,8 +2,9 @@
 namespace ILIAS\UI\Component\Input\Validation;
 
 /**
- * Todo
+ * Interface Custom
+ * @package ILIAS\UI\Component\Input\Validation
  */
-class Custom extends \ILIAS\UI\Component\Input\ValidationValidation {
+interface Custom extends Validation {
 
 }
