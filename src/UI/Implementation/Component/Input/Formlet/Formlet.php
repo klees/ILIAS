@@ -41,37 +41,53 @@ class Formlet implements IFormlet{
 	protected $name = "test";
 
 	/**
-	 * Todo: Improve this! What is type?
+	 * Todo: Improve this! What is type? Ist this needed? Currently only for better
+	 * Todo: readability of the array, dom output.
+	 * readability
 	 * @var string
 	 */
 	protected $type = "formlet";
 
     /**
+     * Holds all validations errors in the input
+     *
      * @var ValidationMessageCollector
      */
     protected $message_collector = null;
 
 	/**
+	 * Holds all validations to be applied on the POST data
+	 *
 	 * @var Validations
 	 */
 	protected $validations;
 
 	/**
+	 * Function value resulting from applying all mappings for this input on each other
+	 *
 	 * @var FV\FunctionValue
 	 */
 	protected $mapping = null;
 
 	/**
-	 * @var bool
+	 * Holds wheter the function has been validated, and if, wheter it has been validated
+	 * successfully
+	 *
+	 * @var bool|null
 	 */
 	protected $valid = null;
 
 	/**
+	 * Potential children of this input if any.
+	 *
 	 * @var Formlet[]
 	 */
 	protected $children = [];
 
 	/**
+	 * Value that this input holds (not mapped). If the input holds children, it also
+	 * holds the values of the children as array.
+	 *
 	 * @return string[]|string|null
 	 */
 	protected $value;
@@ -89,6 +105,8 @@ class Formlet implements IFormlet{
 	}
 
 	/**
+	 * Todo: do we really need this?
+	 *
 	 * @inheritdoc
 	 */
 	public function combine(Input $other){
@@ -121,9 +139,12 @@ class Formlet implements IFormlet{
 			$mapped_values[] = $child->map();
 		}
 
+		//If children did not return anything or if there are no children, map the value
+		//the object holds
 		if(empty($mapped_values)){
 			return $this->mapValue($this->getValue());
 		}
+		//If the children did return anything map the values returned by the children
 		return $this->mapValue($mapped_values);
 	}
 
@@ -174,6 +195,7 @@ class Formlet implements IFormlet{
 	public function extractToView(){
 		$children = [];
 
+		//Note, that the recursive nature of this currently takes place in the renderer
 		foreach($this->getChildren() as $key => $child){
 			$children[] = $child->setName($this->generateName($this->getName(),
 					$key,$child->getType()));
@@ -277,10 +299,20 @@ class Formlet implements IFormlet{
 
 
 	/**
-	 * Todo: Improve this! What is name?
-	 * @param $prefix
-	 * @param $counter
-	 * @param $type
+	 * Todo: Improve this! What is name? really rethink the naming
+	 *
+	 * Generate the name shown in the DOM for this input element. This is needed by the
+	 * rendered. Using the formName[parentInput][ChildInput] enables PHP the automatically
+	 * read the POST data as nested-array. Note, only the parent can name the child, the
+	 * child can not name itself, since it is unaware of it's parents name. Also note,
+	 * that names can only be given/generated as soon as all input building has been
+	 * completed (since all parents need to be set at this point).
+	 *
+	 * @param $prefix Part of the name that stems from the parents of the element
+	 * @param $counter Number of the element needed to let it be distinguishable from
+	 * it's siblings
+	 * @param $type E.g. 'Text'. Only used for better readability (we only really need
+	 * 'counter')
 	 * @return string
 	 */
 	protected function generateName($prefix,$counter,$type){
@@ -288,7 +320,11 @@ class Formlet implements IFormlet{
 	}
 
 	/**
-	 * Todo: Improve this! What is name? What is key? etc...
+	 * Todo: Improve this!
+	 * See description of generateName. This is needed if only the last part of
+	 * formName[parentInput][ChildInput] is needed. E.g. to get the value of the
+	 * children out of the array of values of the parents
+	 *
 	 * @param $counter
 	 * @param $type
 	 * @return string
@@ -299,7 +335,7 @@ class Formlet implements IFormlet{
 
 
 	/**
-	 * Todo: Improve this! What is name?
+	 * Todo: Improve this! What is name? really rethink the naming of 'name' ;-)
 	 * @param $name
 	 * @return Formlet
 	 */
@@ -310,7 +346,7 @@ class Formlet implements IFormlet{
 	}
 
 	/**
-	 * Todo: Improve this! What is name?
+	 * Todo: Improve this! What is name? really rethink the naming of 'name' ;-)
 	 * @return string
 	 */
 	public function getName(){
