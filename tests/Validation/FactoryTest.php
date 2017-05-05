@@ -3,6 +3,7 @@
 /* Copyright (c) 2017 Stefan Hecken <stefan.hecken@concepts-and-training.de> Extended GPL, see docs/LICENSE */
 
 use ILIAS\Validation;
+use ILIAS\Data;
 
 /**
  * TestCase for the factory of constraints
@@ -11,7 +12,7 @@ use ILIAS\Validation;
  */
 class FactoryTest extends PHPUnit_Framework_TestCase {
 	protected function setUp() {
-		$this->f = new Validation\Factory();
+		$this->f = new Validation\Factory(new Data\Factory());
 	}
 
 	protected function tearDown() {
@@ -24,17 +25,17 @@ class FactoryTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testGreaterThan() {
-		$gt = $this->g->greaterThan(5);
+		$gt = $this->f->greaterThan(5);
 		$this->assertInstanceOf(Validation\Constraint::class, $gt);
 	}
 
 	public function testLessThan() {
-		$lt = $this->g->lessThan(5);
+		$lt = $this->f->lessThan(5);
 		$this->assertInstanceOf(Validation\Constraint::class, $lt);
 	}
 
 	public function testCustom() {
-		$custom = $this->f->custom(function ($value) { return "This was fault":}), 5);
+		$custom = $this->f->custom(function ($value) { return "This was fault";}, 5);
 		$this->assertInstanceOf(Validation\Constraint::class, $custom);
 	}
 
