@@ -1143,8 +1143,8 @@ class ilInitialisation
 		self::initGlobal("tree", $tree);
 		unset($tree);
 
-		self::initGlobal("ilCtrl", "ilCtrl",
-				"./Services/UICore/classes/class.ilCtrl.php");
+		self::initGlobal("ilCtrl", "ilCtrlDataBase",
+				"./Services/UICore/classes/class.ilCtrlDataBase.php");
 
 		self::setSessionCookieParams();
 	}
