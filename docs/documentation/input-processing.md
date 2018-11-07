@@ -220,7 +220,7 @@ ILIAS implements PSR-7 since 5.3, at least in some parts of the application.
 This suggests, that this implementation needs to be the base for secure input
 processing, at least regarding the usage of `$_GET`, `$_POST` and `$_COOKIE`.
 
-We also need to consider carefully what the benefits of a future API are and
+We thus need to consider carefully what the benefits of a future API are and
 how we document and communicate them.
 
 ### Reality of ILIAS Development
