@@ -307,12 +307,82 @@ detection of attempts to temper with the system), the logging-topic is considere
 to be out of scope for the rest of the paper.
 
 
-### Policy vs. Structure
+### Structure vs. Policy
 
+The cause for requirements to data that should cross the systems boundary can
+be divided into two categories that might look similar at first sight but show
+significant difference on a closer look.
 
+The first cause for constraints on input are derived from requirements on the
+structure of the input, that is which types of data the input needs to contain
+in which position and shape. A multiselect input, e.g. might require a `list
+of strings` as input, while a SOAP-call to copy an ILIAS object might require
+a dictionary containing an integer at the key `source` and one at `target`.
+If these requirements are not met the application often will stop at some point
+and generate some form or more or less informative exception or error message.
+If e.g. the "target" is missing in the example of the SOAP call, the operation
+cannot be completed in a meaningful way.
+
+It is not enough to expect the application to fail at some point in case the
+input is not structured correctly. On the one hand, the input might propagate
+deeply into the system, cause subsequent errors or make it hard to debug the
+root cause of an exception or error. In the SOAP-call, for example, a missing
+"target"-parameter might be interpreted as `null`, be written as `0` into the
+database before the actual error happens and later on cause all kind of havoc
+when read from the database again. On the other hand data that  propagates into
+the system, creates unexpected effects and possibly generates helpful output
+for an attacker means that the available surface for every attack is unnecessarily
+large.
+
+Structural requirements thus need to be checked as early as possible and deeper
+layers in the system need to put requirements on their consumers that data is
+in fact shaped as expected. This of course has a deep connection to the primitive
+obsession antipattern explained earlier, as the requirements on the shape need
+to be documented and enforced properly.
+
+The second cause for constraints roots not in the shape of the data but in their
+very content and the specific circumstances in which the data is processed. Data
+that is shaped in the form of a date might be invalid under the policy that a
+users birthday most possibly ain't a future date. The same date would be a
+perfectly valid date for an appointment. The integer shaped target for the SOAP
+copy operation might be invalid under the policy that only writeable categories
+are a valid target for a certain user. This might be true or false depending on
+the user that performs the operation.
+
+Other than the shape of the data a policy seems to require more feedback to
+the agent that attempts to input the data to the system. While, e.g. the shape
+of the date might be guaranteed by the input field that the user used to enter
+his birthday, he will need feedback when the date is out of some expected range.
+Also requirements from policies are often more volatile than requirements from
+shape. The answer to "is this category writeable" might be answered differently
+from one second to the other when some permission was changed. This also shows,
+that policies often have authorities that judge and enforce them, as the RBAC-
+system does for the permissions. Consequently, a policy on some data most possibly
+cannot be enforced directly at the boundary of the system but will already
+require some processing of the data that checks the policy.
+
+This makes the picture when and how policies can be enforced to secure input
+processing a lot fuzzier than the this is the case for structural requirements.
+It will be cumbersome or even impossible to document policy requirements in the
+PHP type system via classes. It also will be a lot harder to find a framework for
+enforcing policies on data that fits all cases, since policies mostly will arise
+at the business rules of the application of a framework, thus being responsibility
+of the user.
+
+Policies still are indispensable regarding the security of the system. If e.g.
+permission policies can't be enforced this will render the RBAC-system useless
+and hence knock out an essential security feature of the application. We thus
+will try to look how policy enforcing systems may hook into the general input
+processing, but we will not be able to exhaustively examine all requirements
+from said systems in this paper. We request the maintainers of said systems to
+understand the role of their systems in this regard and work towards sensible
+solutions to secure input processing regarding the nature of the policies their
+systems want to enforce.
 
 
 ### Declarative vs. Imperative
+
+### Performance
 
 ## State of the Art: Core Libraries
 
