@@ -22,6 +22,7 @@ we derive which enhancements and extensions to ILIAS are required to span the
 components currently not included in the systematical approach to input security
 and how these can be implemented technically as well as socially.
 
+
 ## Core Considerations
 
 ### Primitive Obsession
@@ -174,6 +175,7 @@ of the system.
 The phenomenon that primitive datatypes are used instead of semantically richer
 structures is known as the antipattern "primitive obsession".
 
+
 ### API-Design
 
 The native PHP-API to access values provided by the user via GET and POST is
@@ -220,14 +222,97 @@ ILIAS implements PSR-7 since 5.3, at least in some parts of the application.
 This suggests, that this implementation needs to be the base for secure input
 processing, at least regarding the usage of `$_GET`, `$_POST` and `$_COOKIE`.
 
-We thus need to consider carefully what the benefits of a future API are and
-how we document and communicate them.
+We thus need to consider carefully how a future API looks from a consumers
+perspective, what the benefits of the API are and how we document and communicate
+them.
 
 ### Reality of ILIAS Development
 
+There are certain circumstances in the development in ILIAS that need to be
+recognized when thinking about a systematic approach to secure input processing
+in ILIAS.
+
+First and foremost, ILIAS is a software under 20 years of continous development.
+This on the one hand means, that a systematic approach needs to somehow address
+different historical layers of the software, either by integrating into them as
+seamlessly as possible, by showing clear pathes to migrate these layers to new
+approaches or by deprecating these old layers with intelligible arguments. On the
+other hand there are habbits and approaches that are ingrained in processes and
+procedures of the community that won't change immediately but might require a
+long term engagement to be effectively changed.
+
+During the development, security was historically seldomly addressed as a seperate
+requirement or concern, neither in conceptual phases nor in the coding itself.
+There currently aren't any tools or processes that systematically attempt to raise
+security of ILIAS, besides the recently improved possibility to hand in security
+reports to the community. Other approaches that are common in environments that
+frequently have higher security requirements as an LMS, like pen-tests, systematic
+training and instruction of developers, risk analysis, automated or manual code
+reviews, are not implemented in the general developement process of ILIAS. This
+on the one hand means that there certainly are low hangy fruits to be picked
+regarding security. On the other hand it again shows, that technical approaches
+most certainly won't be enought to raise the general level of security. Even if
+considering social implications, like we attempt to do in this paper, the
+improvement of the security of input processing won't be enough in general and
+will have a hard stand if not backed by other means. There are, however, measures
+in the scope of input processing, like proper communication and good API-design,
+that might help to form new habbits regarding security in the long run.
+
+We thus try to show approaches besides technical measures for the scope of this
+paper, but also ask the project leadership of ILIAS to keep thinking about and
+implementing more hollistic approaches to security.
+
+
 ### Feedback when Rejecting Input
 
+The circumstances in which the system receives input have a huge variety regarding
+their sources. There are forms that are operated by users, that need to be informed
+regarding the success or failure of the desired input. There are forms of input
+that are very technical in their nature, like reading data from the database or
+XML-import files, where machines are talking to other machines along a more or
+less strictly defined interface. There are forms of input, that seem to be machine-
+to-machine like the former, but where we in fact don't really know if and how
+humans that need feedback are involved, e.g. the SOAP-Interface or JSON-over-HTTP-
+interfaces.
+
+The requirements regarding the mere filtering of the data that reach the system
+are very similar in all these cases: We need to make sure that only data maching
+certain criteria in shape and content may pass the boundary of the system and be
+subject to further processing. Data should be scrutinized as closely and early
+as possible. The requirements regarding feedback to the other side of the
+communication are, however, widely different.
+
+A human sitting in front of a form might just input improper data and every nice
+system will try to give her feedback in the most helpful and detailed form as
+possible. Reading some data from the database seems to require no feedback to a
+user at all, as every missformed data indicates some deeper problem that most
+certainly cannot be solved at the interface to the database itself. A malformed
+XML-file in an import might hint at incompatibel versions or objects regarding the
+import, as well as at some attempt to tamper with an import file and use it as a
+vector to degrade security of the system. A user importing the file might require
+the feedback "incompatible version", but less likely seems to be interested in
+the information which exact field of which datastructure didn't match expectations.
+A detailed response to a missformed SOAP-request might help a desperate developer
+of a webservice-interface, but also inform a malicious hacker regarding new
+approaches to degrade security.
+
+Thus, the question how, where and which feedback is given as a reponse to a
+malformed input is of interest when designing an API to secure input. It must be
+possible for the consumers of the API to give detailed feedback to human users,
+as well as discarding and hiding that feedback completely when the nature of
+the interface to the system makes this appropriate. To be able to detect tempering
+we suggest to address the logging of failed input attempts in the future. As this
+paper tries to lay the ground for securing the input processing (and not the
+detection of attempts to temper with the system), the logging-topic is considered
+to be out of scope for the rest of the paper.
+
+
 ### Policy vs. Structure
+
+
+
+
+### Declarative vs. Imperative
 
 ## State of the Art: Core Libraries
 
