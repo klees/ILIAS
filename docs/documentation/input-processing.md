@@ -382,7 +382,56 @@ systems want to enforce.
 
 ### Declarative vs. Imperative
 
+When enforcing constraints on the inputs to a software system, it is not enough,
+that the desired constraints are, in fact, enforced. It is also important that
+other people (e.g. developers, reviewers, even the developer herself at a later
+point in time) can understand and scrutinize the constraints in place. This allow
+to check, if constraints are sufficient and up to date, as well as to understand
+which data is allowed to passed the boundary of the system and which data is
+discarded.
+
+Code written in an imperative style focusses on *how* a problem is solved, while
+declarative code focusses on *what* the developer wants. Typically, well written
+declarative code is easier to understand as according imperative code, as it
+allows to hide intricate details in some implementation, while the writer of the
+declaration can focus on what he wants. Think about the difference between CSS
+and a CSS rendering engine for an extreme example of that observation.
+
+Using declarative approaches can lead to an (embedded) domain specific language
+((E)DSL) that allows to express solutions in a narrow domain of problems with a
+specific set of language constructs. The language for Dicto is an example for such
+a DSL. DSLs allow for a concise and readable formulation of a desired solution
+that shows the information essential to the problem with little boilerplate.
+
+To express the constraints on inputs to the system, a declarative approach or
+EDSL is the right choice, since it allows the developer to focus on the task
+of choosing his constraints on the input without being bothered by the question
+how a check may be conducted. For readers of her code, a well crafted set of
+tools to express constraints will simplify to understand which data should be
+discarded and why. The imperative part, how the checks are performed, then can
+moved to a location common for all components and be put under extra scrutiny.
+This will free developers as well as reviewers of the question if constraints
+actually work as desired.
+
+
 ### Performance
+
+Checking inputs early and thorough will always require more computational
+ressources then letting the data pass unscrutinized. However, ILIAS is not a
+system that needs to process huge amounts of input in a time critical environment.
+For that reason, performance will be considered a non-issue throughout this paper.
+
+If at some point in the future the validation of input will become crucial for
+the performance of the system, we will have some strategies to work on performance
+of the validation by (e.g.):
+
+* using external programmes to validate input, e.g. for huge blobs of data like
+  movies
+* giving names to complex constraints and programme them directly instead of
+  composing them from smaller parts
+* compiling constraints into more efficient PHP-code that e.g. uses references
+  to pass data instead of copy it or uses other methods to improve PHP performance
+
 
 ## State of the Art: Core Libraries
 
