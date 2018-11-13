@@ -438,9 +438,34 @@ of the validation by (e.g.):
 During the implementation of Form Inputs in the UI-Framework three libraries where
 created that tackle various problems when processing input via forms in ILIAS. The
 functionality was created in libraries to be used in other scenarios as well and thus
-offers a base to design secure input processing for other components as well.
+offers a base to design secure input processing for other components. The libraries
+also already reflect some of the core considerations outlined before. We show the
+current state of the art in these libraries to give an impression of what is already
+there and later on derive what needs to be added.
 
 ### Data
+
+The [Data-library](../../src/Data) aims at providing standard datatypes that are
+used throughout the system and thus do not belong to a certain component in ILIAS.
+Currently it contains types for `Color`, `DataSize`, `Password` and `URI`. There
+also is the `Result`-type which captures the possibility of error in a calculation
+by containing either some other value or some error information.
+
+The [Data-library](../../src/Data) thus will be an important tool to tackle the
+primitive obsession. When, for example, dealing with passwords, the `Password`
+type in conjunction with typehints will allow PHP to help us installing guards
+against unintendedly publishing a password.
+
+The library will also be a part of a good API design. It objects will allow IDEs
+to help developers, the methods on the objects are easier to find and document
+than keys in some array. The off-the-shelf types in the library can help developers
+to save work.
+
+A precondition for the success of the library will be, that it contains some
+interesting types and that it is known to developers. Besides the commonly used
+types captured in the library, there still will be a lot of datastructures that
+belong to a certain component and not into a common library.
+
 
 ### Validation
 
