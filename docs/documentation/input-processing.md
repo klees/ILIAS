@@ -12,9 +12,11 @@ regarding code as well as processes. The document was created on request of
 and under involvement of the Technical Board of the ILIAS-Society.
 
 We begin by explaining the core considerations that were taken into account
-when designing measures to improve the security of input processing in ILIAS.
-We go on by explaining recently implemented libraries to improve the input
-processing and showcase it at the forms in the UI-Framework.
+when designing measures to improve the security of input processing in ILIAS
+and issues that some might find interesting when talking about input processing
+but that were not considered here. We go on by explaining recently implemented
+libraries to improve the input processing and showcase it at the forms in the
+UI-Framework.
 
 We then evaluate requirements from components of ILIAS that currently do not
 implement systematical approaches to security when processing input. From there
@@ -414,6 +416,8 @@ This will free developers as well as reviewers of the question if constraints
 actually work as desired.
 
 
+## Non-Issues
+
 ### Performance
 
 Checking inputs early and thorough will always require more computational
@@ -431,6 +435,58 @@ of the validation by (e.g.):
   composing them from smaller parts
 * compiling constraints into more efficient PHP-code that e.g. uses references
   to pass data instead of copy it or uses other methods to improve PHP performance
+
+
+### Escaping
+
+"Escaping" is the procedure to prepare some data to be outputted in a certain context.
+It is a measure to allow another system to correctly interpret the data in the way
+our system intends it to be interpreted. This has security implications in some
+contexts, since incorrect interpretation of some user provided data will lead to
+a degraded security in some subsystem. Widely known vectors that use missing or
+incorrect escaping are SQL-injection and Cross-Side-Scripting. The famously and
+widely used `ilDB::quote`-method is an example for such a procedure that defends
+the database against injections of SQL.
+
+Escaping thus is a question of the context in which data is outputted from the
+system and thus on the exact other end of the data processing the system performs.
+When data is inputted to the system it certainly in general ain't possible to
+determine the context to which the data will be outputted later on. The correct
+means of escaping thus cannot be determined at that point as well. Escaping thus
+is a problem that needs to be tackled at the various output interfaces of the
+system.
+
+
+### Sanitizing
+
+"Sanitizing" is the attempt to clean up the data provided by users and remove
+unwanted parts of the input to derive acceptable input. On the one hand,
+sanitizing input data can be understood to be an implementation of [Postels Law of
+robustness](https://en.wikipedia.org/wiki/Robustness_principle). On the other hand
+it might be understood as security measure to remove dangerous parts of some
+input in order to prevent injection attacks or at least make them less likely.
+
+As an attempt to make the system more robust, sanitizing input certainly is a valid
+approach that can be understood as a step, or even the step, in the transformation
+from primitive user input to richer internal data types. As such it does not require
+extra attention.
+
+As an attempt to prevent injection, sanitizing is a very weak measure. Similar
+to escaping, it is not possible to know the output context for some data and
+hence the required escaping at the moment the data is handed to the system as
+input. This problem will get bigger once the system gets more interfaces that
+actually output data.
+
+Instead of removing data from input that is deemed unsecure in some context, it
+is more advisable to reject said data, either with a detailed message to the user
+or not. This on the one hand allows the user to act accordingly and modify the
+data she send, while simply discarding parts of the data may leave the user in
+the wrong impression that the input was actually accepted. On the other hand,
+input containing data that could be used in an injection-vector could be a hint
+that someone tries to tamper with the system. This attempt should be noticed
+somehow and not silently be ignored by removing the injection code. Last but not
+least, a sanitizing procedure might become an attack surface in its own right
+when elaborate and complex enough.
 
 
 ## State of the Art: Core Libraries
@@ -454,9 +510,11 @@ by containing either some other value or some error information.
 The [Data-library](../../src/Data) thus will be an important tool to tackle the
 primitive obsession. When, for example, dealing with passwords, the `Password`
 type in conjunction with typehints will allow PHP to help us installing guards
-against unintendedly publishing a password.
+against unintendedly publishing a password. The security gains that can be provided
+by using the library will mostly be on the structure-side of the policy/structure-
+scale that was presented in the core considerations.
 
-The library will also be a part of a good API design. It objects will allow IDEs
+The library will also be a part of a good API design. Its objects will allow IDEs
 to help developers, the methods on the objects are easier to find and document
 than keys in some array. The off-the-shelf types in the library can help developers
 to save work.
@@ -464,19 +522,73 @@ to save work.
 A precondition for the success of the library will be, that it contains some
 interesting types and that it is known to developers. Besides the commonly used
 types captured in the library, there still will be a lot of datastructures that
-belong to a certain component and not into a common library.
+belong to a certain component and not into a common library. For these types
+similar strategies than these showcased in the [Data-library](../../src/Data)
+will need to be deployed by the responsible maintainers.
+
+
+### Transformation
+
+The [Transformation-library](../../src/Transformation) declares properties of
+`Transformation`s which are understood as structural conversions between different
+shapes and types of data that do not perform side effects. It further aims at
+providing common `Transformations` to be reused throughout the system. The library
+thus is the tool to transform primitive input data into semantically richer
+structures in a declarative way.
+
+Currently it only provides three prefactored transformations and one transformation
+that allows a user to define a closure that performs the desired task. To become
+part of a good API we certainly will need to add more transformations that can be
+reused by consumers and showcase the benefits of a declarative approach to input
+security.
+
+Like the [Data-library](../../src/Data), the [Transformation-library](../../src/Transformation)
+deals with structural constraints on the data and not policies. It will need to
+be backed by semantically rich data types that protect their structural integrity
+properly to become effective in securing input processing. If the transformations
+only work on primitive datatypes, they will only amount to shuffeling array entries
+back and forth without documenting the effort in the type of the created data.
+It thus will be a tool to quickly and easily derive meaningful data from primitive
+input but will also require additions to the [Data-library](../../src/Data) and the
+components that use their own data structures.
 
 
 ### Validation
 
-### Transformation
+The [Validation-library](../../src/Validation) provides an abstraction for
+`Constraints` on data, where a `Constraint` is a check in conjunction with a
+builder for a human readable error-message. Like the [Transformation-library](../../src/Transformation)
+the [Validation-library](../../src/Validation) also attempts to provide a set of
+standard constraints and facilities to compose complex constraints from simpler
+ones.
+
+Currently the library provides 14 prefactored constraints and one constrain
+that allows to create custom constraints via closures. Here we certainly
+require additions to the currently available constraints as well as a better
+internal structure that e.g. groups the constraints by the type they are acting
+upon.
+
+Other then the two aforementioned library, the [Validation-library](../../src/Validation)
+mostly will deal with constraints derived from policies on the input data. It
+thus will certainly need backup from those two libraries regarding the structures
+it operates upon. Like the `Transformations` the `Constraints` offer the possibility
+to declaratively define these constraints and thus make them understandable and
+readable. To fully unfold this potential the general use of custom constraints
+needs to be minimal.
+
+This also offers a perspective how other policy enforcing components in the system
+may come into play here: Like the [Validation-library](../../src/Validation) itself
+they may offer sets of constraints regarding the policies they are enforcing.
+
+
+## ilUtil::stripSlashes and ilInitialisation::recusivelyRemoveUnsafeCharacters
 
 ## Showcase: Input via Forms in the UI-Framework
 
 ## Evaluation
 
 ### Widen Concept to GET-Requests via the UI-Framework
-
+a
 ### Requirements of XML-Imports
 
 ### Requirements of SOAP
