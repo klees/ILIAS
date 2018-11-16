@@ -529,10 +529,10 @@ will need to be deployed by the responsible maintainers.
 These strategies are:
 
 * Primitive data types should be used as little as possible. Instead semantically
-richer datastructures should be used to put PHP's type system to a greater use.
-This will help security as well as correctness and understandability.
-* The richer datastructures should protect their structural integrity via an
-correctness by construction approach. This means, that structural constraints
+richer datastructures should be used to put PHP's type system to a greater
+effectiveness. This will help security as well as correctness and understandability.
+* The richer datastructures should protect their structural integrity via a
+"correctness by construction"-approach. This means, that structural constraints
 should be enforced in the constructor and by all methods to change the datastructure,
 be it setters or mutators. Structural integrity needs to be enforced by the
 datatype to make invalid data unexpressable.
@@ -643,10 +643,282 @@ to provide a proper method to get values from `$_GET` as outlined in [API-Design
 
 ## Showcase: Input via Forms in the UI-Framework
 
+The libraries outline in the [State of the Art](#state-of-the-art) have been build
+to implement input via forms in the UI-Framework. We thus want to use the form
+input in the UI-Framework as a showcase for the libraries and explain their
+cooperation with regards to the principles outlined in the [Core Considerations](#core-consideration).
+On the other hand, the current state of the form inputs might already hint at
+some potential for future improvements in the libraries an in general. The code
+presented in the following was discussed in [this PR](https://github.com/ILIAS-eLearning/ILIAS/pull/1189)
+and is now [part of the ILIAS-core](https://github.com/ILIAS-eLearning/ILIAS/blob/trunk/Modules/StudyProgramme/classes/class.ilObjStudyProgrammeSettingsGUI.php#L159).
+Since we want to show case how input data can be secured here, we refer to the
+explanation of the [Inputs in the UI-Framework](https://github.com/ILIAS-eLearning/ILIAS/tree/trunk/src/UI/Component/Inputi/README.md)
+for further explanation regarding visual aspects of the form.
+
+We first will have a look into [`ilObjStudyProgrammeSettingsGUI::update`](https://github.com/ILIAS-eLearning/ILIAS/blob/trunk/Modules/StudyProgramme/classes/class.ilObjStudyProgrammeSettingsGUI.php#L159) to get a general idea of the structure of the processing. The example
+is shortened a little to highlight the essentials, while comments are added
+for explanation:
+
+```php
+$form = $this
+
+	// We first build the form, which contains the definition of the shape of the 
+	// expected input, the constraints on that input and the procedure to transform
+	// it into the required structure (along with the visuals).
+	->buildForm($this->getObject(), $this->ctrl->getFormAction($this, "update"))
+
+	// We then attach the actual source of that data, which is a PSR-7 `ServerRequestInterface`.
+	// Note that this attaches values and (possibly) errors to the input fields in
+	// the form, that directly allows the developer to again show it to the user.
+	->withRequest($this->request);
+
+// Finally we attempt to acquire the data from the form. Note, that this data will
+// either be not available or already fit the structure and policies we defined
+// in buildForm.
+$content = $form->getData();
+
+// If the input of the user did not fit the expected structure and policies, we won't
+// have been able to retreive any data and hence can't process anything.
+$update_possible = !is_null($content);
+if ($update_possible) {
+	// perform update process
+} else {
+	// print form with errors to the user
+}
+```
+
+The essential part of the input processing is the definition of shape, constraints
+and transformations of the input, which goes along with visual requirements when
+definining forms. We thus have a look at the shortened and commented method
+[`ilObjStudyProgrammeSettingsGUI::buildForm`](https://github.com/ILIAS-eLearning/ILIAS/blob/trunk/Modules/StudyProgramme/classes/class.ilObjStudyProgrammeSettingsGUI.php#L216):
+
+```php
+// We define some shortcuts for brevity in the definition later on.
+$ff = $this->input_factory->field();
+$tf = $this->trafo_factory;
+$txt = function($id) { return $this->lng->txt($id); };
+
+// We gather some options to be used in a select-field later on.
+$sp_types = ilStudyProgrammeType::getAllTypesArray();
+
+// We construct a form by using the factories of the UI-Framework defined
+// previously.
+return $this->input_factory->container()->form()->standard(
+	// We need to tell where the input is posted to...
+	$submit_action,
+	// ... and which fields the form contains
+	[
+		// We assign (local!) names to these fields...
+		self::PROP_TITLE =>
+			// ...define the types of the fields...
+			$ff->text($txt("title"))
+				// ...the value that is shown initially...
+				->withValue($prg->getTitle())
+				// ...and (if so) whether input is required from the user.
+				->withRequired(true),
+		// We do this again for the remaining fields...
+		self::PROP_TYPE =>
+			$ff->select($txt("type"), $sp_types)
+				->withValue($prg->getSubtypeId() == 0 ? "" : $prg->getSubtypeId())
+				// ...and may also attach more transformations to the data in the
+				// fields if our usecase requires us to. Here we need to wrap around
+				// the fact, that an  non-selection in the select-field is represented
+				// by an empty string in the inputs, while the Study Programme uses 0
+				// to represent a Programme with no type.
+				->withAdditionalTransformation($tf->custom(function($v) {
+					if ($v == "") {
+						return 0;
+					}
+					return $v;
+				})),
+		self::PROP_POINTS =>
+			// The UI-Framework offers types of input that already carry some
+			// constraints, like `numeric` that only allows for numeric values
+			// in the users input.
+			$ff->numeric($txt("prg_points"))
+				->withValue((string)$prg->getPoints())
+		)
+	]
+);
+```
+Note the key components in the construction of the input processing of forms in
+the UI-framework:
+
+* The API of the form is very small and only contains two interesting methods
+with a clearly defined purpose. `withRequest` attaches user input to the form,
+while `getData` allows to retrieve it. All the nitty-gritty details of how the
+data is collected from `$_POST`, processed, checked, filled in the form etc. is
+hidden in the definition of the form and these two methods.
+* The definition of the form is declarative and the structure of the code can
+be arranged in a way that closely resembles the structure of the form as it is
+found on the screen. Besides the closure in `withAdditionalTransformation` no
+statement code is used. This makes it easy to grasp what is going on here,
+possibly even for people that don't know ILIAS or PHP in general very well.
+* The syntax for the declaration of the form uses techniques well known for users
+of the UI-Framework, like named factories, immutable objects and easy composition
+of larger structures from smaller parts. The mechanismn to process the input
+was created with care to fit these techniques  and maintain their properties. The
+input processing is weaved naturally into the definition of the visuals.
+
+This all amounts to an API-design that encourages the user to properly process
+input received via forms. The correct approach is made easy, while incorrect
+procedures are hard to implement. To stress this principle: also it might look as
+if it could be possible to retreive data from `$_POST` by using `$_POST[self::PROP_TITLE]`,
+this actually won't work. The name `self::PROP_TITLE` of the field only occurs
+locally while the names of the field in the actual `$_POST` are set by the
+abstraction. This enhances composability and disencourages incorrect procedures
+at the same time.
+
+The subject [Structure vs. Policy](#structure-vs-policy) needs to get some extra
+attention since it is only present in this example very implicitely. The form
+only declares a few constraints in a visible manner. First note, that `withRequired`
+and `numeric` in fact are constraints. While `numeric` is a structural constraint
+(only ints or floats are allowed), `withRequired` may be viewed as a policy, as
+there won't be any technical problems with an empty string as title besides the
+quite comprehensible expectation that a title at least contains one character.
+
+The method `ILIAS\UI\Component\Input\Field::withAdditionalConstraint` can be used
+to attach additional constraints over the ones that the input fields define by
+default. If one would want, for example, a numeric field that may only contain
+numbers larger than 0, one could attach a an according constraint to the field:
+
+```php
+
+$ff = $this->input_factory->field();
+$cf = $this->constraint_factory;
+
+$numeric_larger_than_zero =
+	$ff->numeric($txt("prg_points"))
+		->withAdditionalConstraint($cf->greaterThan(0));
+
+``` 
+
+Note that this defines a constraint on the input as well as the error message
+that is shown when the input of the user didn't match the expected value. Since
+there most probably is some user sitting in front of a screen showing the form,
+it is nice of the system to provide him with some hint on his mistake to put
+him into the position to fix it. Constraints can be added to singular fields
+as well as to compositions of fields to express constraints that concern multiple
+fields at the same time.
+
+While constraints are more about policies then structure, the method
+`ILIAS\UI\Component\Input\Field::withAdditionalConstraint` is used to derive
+required structure from the data provided by the users. Similar to the
+constraints, the input fields already bring transformations, but the user
+may add additional ones on top of them. The `text` and `textarea` inputs, e.g.
+currently `strip_tags` from the provided strings. Similar to `ilUtil::stripSlashes`
+this is a weak measure to provide security, while the non-existing feedback about
+the operation might lead users to think they actually entered html-tags when
+in fact they didn't (see [Sanitizing](#sanitizing)). This transformation should
+thus be removed once the according problems for `ilUtil::stripSlashes` are solved.
+
+The advice to define datastructures that enforce their structural constraints
+by construction (see [Data](#data)) also is not implemented in the given example,
+as the data is retrieved from the form as an array. Two show how this might look
+like, we might imaging a data structure that carries some basic data for every
+`ilObject`:
+
+```php
+class ilObjectData {
+	/**
+	 * @var string
+	 */
+	protected $title;
+
+	/**
+	 * @var string
+	 */
+	protected $description;
+
+	public function __construct(string $title, string $description) {
+		// Enforce policy that titles need to contain at least one character.
+		if (strlen($title) == 0) {
+			throw new \InvalidArgumentException(
+				"Title needs to have at least one character");
+		}
+		$this->title = $title;
+		$this->description = $description;
+	}
+}
+```
+
+This could be used with the API for inputs as such:
+
+```php
+public function getObjectDataSection(string $title, string $description) {
+	$ff = $this->input_factory->field();
+	$tf = $this->trafo_factory;
+	$cf = $this->constraint_factory;
+	$txt = function($id) { return $this->lng->txt($id); };
+
+	return $ff->section(
+		[ $this
+			->text($txt("title")
+			->withValue($title)
+			->withRequired(true)
+		, $this
+			->textarea($txt("description"))
+			->withValue($description)
+		],
+		$txt("object_data"),
+		""
+	)->withAdditionalTransformation($tf->custom(function($vs) {
+		return new ilObjectData($vs[0], $vs[1]);
+	});
+}
+```
+
+This approach will document the check on the "no empty title"-policy in the
+datatype and bundle the two primitive strings together, like they were
+actually given by the user. The API allows to handle a defined chunk of a
+form with its visuals, constraints and transformations and reuse it in various
+locations.
+
+This example also shows potential for improvements in the libraries that are
+used. The [Transformation-library](../../src/Transformation) currently doesn't
+offer a premade solution to the common task of creating new objects and the
+user needs to fall back to a `custom`-transformation. Although not very visible
+in the example, the check on the "no empty title"-policy is duplicated, once
+in the form (via `withRequired`) once in `ilObjectData::__construct`. It does
+not seem to be possible to remove the check in this example (since `withRequired`
+is not only a constraint but also adds a visual marker to that field). In general
+it should be possible to check constraints in some classes constructor and hook
+into the mechanisms of the [Validation-library](../../src/Validation) without
+duplicating the check.
+
+The processing of user input via forms in the UI-Framework by using the libraries
+that where created thus implements the requirements outlines in the [Core
+Considerations](#core-considerations) as such:
+
+* It allows to tackle primitive obsession by considering the transformation of data
+at the boundary of the system from the start and weaving it into the visual requirements
+of forms.
+* It offers an API that is declarative but still allows to introduce imperative
+parts as required. The compositionality of the components on different levels
+(fields of the form, constraints, transformations) allow to adopt to a huge
+bandwith of requirements and as well as to construct reusable parts. This cannot
+compete with the `$_GET`- and `$_POST`-APIs in simplicity, but still offers
+compelling advantages with a pleasant surface.
+* The new API can be introduced gradually and will work besides (but not with!)
+the existing ilPropertyFormGUI. As the [PR for the Study Programme](https://github.com/ILIAS-eLearning/ILIAS/pull/1189)
+shows, it is possible to use the new API with only minimal adjustments to rest of
+the component.
+* The API can express structural constraints as well as policy while being able
+to give feedback to the user of the form.
+
+
 ## Evaluation
 
+In the following we will evaluate parts of the system currently not subject to
+a systematic approach to security in input processing. We will gather requirements
+and assess, if and how the libraries written for the form input in the UI-Framework
+can be put to use to implement them. In this process we will derive which extensions
+are required for said libraries, as well as find realms that currently are not
+covered by ILIAS libraries or services.
+
+
 ### Widen Concept to GET-Requests via the UI-Framework
-a
+
 ### Requirements of XML-Imports
 
 ### Requirements of SOAP
@@ -656,6 +928,21 @@ a
 ## Outlook
 
 ### Improvements of Existing Libraries
+
+#### Input UI-Framework
+
+* Remove `strip_tags` in the `Text Field` and `Textarea Field` once wrappers around
+the primitive string and proper output escaping is in place.
+* Build inputs that allow for some formatting like bold, italic, enumerations, ...
+
+#### Validation
+
+* Allow datastructures that protect their own integrity to work hook into the
+constraints via Exceptions.
+
+#### Transformation
+
+* Add transformation to build an object from some data.
 
 ### New Libraries and Services
 
