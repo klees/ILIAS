@@ -662,7 +662,7 @@ for explanation:
 ```php
 $form = $this
 
-	// We first build the form, which contains the definition of the shape of the 
+	// We first build the form, which contains the definition of the shape of the
 	// expected input, the constraints on that input and the procedure to transform
 	// it into the required structure (along with the visuals).
 	->buildForm($this->getObject(), $this->ctrl->getFormAction($this, "update"))
@@ -917,17 +917,75 @@ are required for said libraries, as well as find realms that currently are not
 covered by ILIAS libraries or services.
 
 
-### Widen Concept to GET-Requests via the UI-Framework
-
 ### Requirements of XML-Imports
 
+XML is used as the format to export and import objects from and to ILIAS. The
+import via XML is a huge surface for potential attacks on ILIAS, as most ILIAS
+objects and some ILIAS services offer possibilities to import and export XML
+files. At the same time, the surface is not only huge but also is deeply rooted
+in ILIAS, since the XML-files are representing ILIAS-objects and their according
+settings and contents and thus allow to set these and trigger or influence
+functionality depending on these.
+
+Thus there are different possible vectors for an attack via XML-imports:
+
+* There is a rather large amount of well known attacks via XML that are outlined
+in a [cheat sheet from OWASP](https://www.owasp.org/index.php/XML_Security_Cheat_Sheet).
+These may degrade the systems security as well as its availability.
+* Similar to other inputs, the XMLs contain values that are processed and
+interpreted by ILIAS in different contexts. If constraints on structure and from
+policies cannot be enforced on these values, similar problems like in other
+contexts may arise.
+* The deeply rooted nature of the import may allow for attacks that use e.g.
+race conditions or problems in specific subsystems of ILIAS that are triggered
+via import.
+
+Most problems outlined in the [OWASP cheat sheet](https://www.owasp.org/index.php/XML_Security_Cheat_Sheet)
+are well out of context of this investigation regarding a general input filter
+service. They still are worth considering, this ILIAS seems to be indeed vulnerable
+to most of them, e.g.:
+
+* ILIAS has an XSD for the export-files, but currently uses the [PHP XML-Parser](http://php.net/manual/de/intro.xml.php),
+which cannot validate provided XML-documents. Also, XSDs are considered to be too
+weak by OWASP.
+* ILIAS has no defenses against malformed XML or XML-bombs that attempt to blow
+up the stack.
+
+We thus urge the leadership of the project to consider XML-based attacks as
+a general field of action to strengthen ILIAS security.
+
+The problem of "Improper Data Validation" outlined in the [OWASP cheat sheet](https://www.owasp.org/index.php/XML_Security_Cheat_Sheet)
+is the same problem other types of input have, but from a different perspective.
+While OWASP considers this problem from the perspective that stricter validation
+needs to be performed on the XML-document itself, from the perspective of this
+paper, the XML can be considered to be just a deeply nested datastructure with
+unknown content. It thus needs to be scrutinized and constraints regarding
+structure and policies need to be enforced on the data just like this is the
+case for data provided via `$_POST`. This vector thus is exactly in the scope
+of this paper.
+
+The attacks that may arise due to the deeply rooted nature of the import in ILIAS
+are considered to be out of scope of this paper as well. A general framework to
+filter inputs needs to outline how different subsystem may hook into the enforcement
+of constraints but cannot consider all policy requirements, as explained in
+[Policy vs. Structure](#policy-vs-structure).
+
+That leaves one set of requirements to look into a little deeper regarding the
+XML-report: How can we validate and read deeply nested structures to make sure
+that the provided data matches the expected constraints?
+
+
+
+
 ### Requirements of SOAP
+
+### Widen Concept to GET-Requests via the UI-Framework
 
 ### Other Input Mechanisms
 
 ## Outlook
 
-### Improvements of Existing Libraries
+### Improvements of Existing Components
 
 #### Input UI-Framework
 
@@ -944,6 +1002,12 @@ constraints via Exceptions.
 
 * Add transformation to build an object from some data.
 
-### New Libraries and Services
+#### Services/Export
+
+### Policy Enforcement by Various Subsystems
+
+### New Components
+
+### Process Enhancements
 
 ### Implementation
