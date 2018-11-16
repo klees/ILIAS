@@ -526,6 +526,17 @@ belong to a certain component and not into a common library. For these types
 similar strategies than these showcased in the [Data-library](../../src/Data)
 will need to be deployed by the responsible maintainers.
 
+These strategies are:
+
+* Primitive data types should be used as little as possible. Instead semantically
+richer datastructures should be used to put PHP's type system to a greater use.
+This will help security as well as correctness and understandability.
+* The richer datastructures should protect their structural integrity via an
+correctness by construction approach. This means, that structural constraints
+should be enforced in the constructor and by all methods to change the datastructure,
+be it setters or mutators. Structural integrity needs to be enforced by the
+datatype to make invalid data unexpressable.
+
 
 ### Transformation
 
@@ -582,6 +593,53 @@ they may offer sets of constraints regarding the policies they are enforcing.
 
 
 ## ilUtil::stripSlashes and ilInitialisation::recusivelyRemoveUnsafeCharacters
+
+Currently ILIAS has two methods that are used to systematically secure input
+processing: `ilUtil::stripSlashes` and `ilInitialisation::recusivelyRemoveUnsafeCharacters`.
+
+`ilUtil::stripSlashes` is used in many places throughout ILIAS. Other than its
+name suggests, it does not only attempt to strip slashes from some string but
+also attempts to remove html-tags, where the user can define which tags will
+remain in the input. PHP's standard `stripslashes` will only be called if the
+ini-setting `magic_quotes_gpc` is defined, which is deprecated by PHP and thus
+most likely won't be present. `stripslashes` thus most likely will not be called.
+
+Although `ilUtil::stripSlashes` is used on input, it workings suggest that it is
+actually a device that removes data according to some output context (html) which
+means that it is a form of escaping. This also shows in the fact, that it does
+not remove data that would be dangerous in other contexts, e.g. SQL for databases
+or `"` for json. Also, data treated with `ilUtil::stripSlashes` won't work in
+an attribute context of html, since `"` is kept.
+
+The problem that `ilUtil::stripSlashes` currently seams to tackle mostly is that
+in some locations users want to use some html-markup in their input, but the
+system needs to ensure, that not all html-markup is used to protect from XSS.
+We suggest to solve that problem by introducing a proper input field in the
+UI-framework and maybe use markdown for the requirements that are currently
+fulfilled via markup. On the other hand we propose to introduce a proper output
+escaping at the various layers that perform output, similar to `ilDB::quote`.
+Finally we propose to introduce datatypes that wrap strings and make their
+content more explicit, e.g. `HTMLString` for strings that contain HTML-markup or
+`AlphaNumericString` for strings that contain alphanumeric characters only.
+The new datatypes will be crucial to allow new inputs and escaping to work
+together, as they will tag the data on the way between input and output and will
+allow proper decisions on how data needs to be trated when escaping it. A very
+similar problem already emerged in the Mail-Service, where the service needs to
+work with raw `string`s without really knowing if they need to be escaped for
+HTML or not. We thus suggest to phase out the use of `ilUtil::stripSlashes`.
+
+`ilInitialisation::recusivelyRemoveUnsafeCharacters` is called in the initialisation-
+process of ILIAS to remove HTML-tags and some single characters that are deemed
+unsafe from `$_GET`. Since the output context is not known the situation is similar
+`ilUtil::stripSlashes`, still `ilInitialisation::recusivelyRemoveUnsafeCharacters`
+seems to cover a broader range of output as it removed `"` and `'` as well. We
+propose a similar approach than for `ilUtil::stripSlashes` by introducing proper
+datatypes to capture the use of parameters in  `$_GET`. We suspect this uses to
+be very narrow, mostly ids, alphanumerics and the control path. It should be
+simple to device proper datatypes for these usecases. To phase out the use of
+`ilInitialisation::recusivelyRemoveUnsafeCharacters` we will additionally have
+to provide a proper method to get values from `$_GET` as outlined in [API-Design](#api-design).
+
 
 ## Showcase: Input via Forms in the UI-Framework
 
