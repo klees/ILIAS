@@ -1081,11 +1081,40 @@ and `$_GET["cmdNode"]`.
 * Passing information regarding the sortation and pagination in the `table_nav`
 -Parameter.o
 
-While the two latter use cases are handled by the according componente (`ilCtrl`
-and `ilTable2GUI`), the former require direct access to the `$_GET` superglobal
-by GUI-classes or access data that could not be scrutinized.
+The case of `$_GET["cmd"]` is especially interesting. From a consumers perspective,
+the command is retrieved via `ilCtrl::getCmd`. There is no hint that the command
+is received directly from `$_GET` which is what actually happens. The user might
+be tempted to use the command (which is a simple string) without further inspection,
+e.g. by using it as a method name `$this->$cmd()`. This pattern is actually found
+in the ILIAS code base several times and allows an attacker to just call any method
+on the GUI-class that uses this pattern. This again shows a situation where it is
+unclear if and how constraints on input need to be applied.
 
-The case of `$_GET["cmd"]` is especially interesting.
+The case of `ilCtrl` and `ilTable2GUI` also shows a principle that the forms in
+the UI-Framework use as well: instead of accessing `$_GET` directly, the users
+access a component that wraps the access, which gives an opportunity for the
+wrapping component to control the data that the user sees. `ilTable2GUI` has
+enough information to validate the data it reads from `$_GET`, since it is fully
+determine by the controls `ilTable2GUI` adds itself. `ilCtrl` on the other hand
+cannot know which commands a GUI class provides and thus cannot perform the
+validation. The forms in the UI-Framework handle the same situation (not knowing
+which validations need to be performed in the use case at hand) by forcing the
+users to add at least some constraints and transformations on the input, thus
+making it impossible to simply forget to scrutinize the input. We expect that
+this principle will work in similar situations as well.
+
+The requirements to process input provided via GET securly thus can be phrased
+as such:
+
+* Move as many processing of `$_GET` into closed components and perform as much
+validation as possible in these components. This will work well for components
+that are "closed" in some sense, like `ilTable2GUI` is.
+* Provide a pattern to be used for retrieving data from GET via some component
+for cases that are "not closed" in some sense and do not know enough about the
+provided data to scrutinize it thoroughly.
+* Provide a wrapper around `$_GET` according to that pattern to be used by
+the aforementioned components and in cases where an according componente cannot
+be provided or is not provided yet.
 
 
 ### Other Input Mechanisms
