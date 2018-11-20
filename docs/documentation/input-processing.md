@@ -1045,7 +1045,48 @@ constraints on the input to the actions. We thus recommend to further pursue
 that project and embrace its positive impact regarding security.
 
 
-### Widen Concept to GET-Requests via the UI-Framework
+### Requirements of GET-Requests
+
+The current state of the art in the UI-Framework is mostly concerned about input
+via forms and POST at the moment, but already contains one component (the Pagination
+View Control) that uses GET to pass required parameters. The Mode View Control
+or general buttons are also controls that use GET to pass parameters, but there
+the creation and reading of the parameters is under complete control of the consumer
+of the UI- Framework. We expect the quantity of controls using GET in the UI-
+Framework to grow, since using GET is required for every control that somehow
+needs to control the view, i.e. isn't just a passive display for some data.
+
+On the other hand, virtually every GUI-class of ILIAS uses GET to retrieve commands
+or parameters, and the components in the UI-Framework can be viewed as pars pro
+toto to understand how input via GET can be handled securely. At some point the
+UI-Framework might evolve in a direction that requires it to have more knowledge
+about how URLs are build in ILIAS. The problem to read GET will have persisted
+then, either inside the UI-Framework or at the side of the consumers of the
+framework.
+
+Besides the already mentioned `ilInitialisation::recusivelyRemoveUnsafeCharacters`,
+there currently is no systematic approach to secure `$_GET`. `grep -r "\$_GET"` in
+the ILIAS folder currently shows ~4600 locations where `$_GET` is used. Although
+we can find locations that guard the parameter from `$_GET` with typecasts or
+handle them with due diligence, we do not expect all usage locations to be actually
+careful enough to prevent attacks via `$_GET`.
+
+There use cases when using `$_GET` mostly seem to be these:
+* Passing ids, be it `ref_id`s, `obj_id`s or other internal ids like ids for
+questions. `grep -r "\$_GET" . | grep "_id"` reveals ~2500 locations.
+* Passing commands to be executed by the GUI via `$_GET["cmd"]`.
+* Passing routing information to find out which GUI-classes should be executed
+to build a view or perform some action via `$_GET["baseClass"]`, `$_GET["cmdClass"]`
+and `$_GET["cmdNode"]`.
+* Passing information regarding the sortation and pagination in the `table_nav`
+-Parameter.o
+
+While the two latter use cases are handled by the according componente (`ilCtrl`
+and `ilTable2GUI`), the former require direct access to the `$_GET` superglobal
+by GUI-classes or access data that could not be scrutinized.
+
+The case of `$_GET["cmd"]` is especially interesting.
+
 
 ### Other Input Mechanisms
 
