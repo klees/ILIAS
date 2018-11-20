@@ -1119,6 +1119,34 @@ be provided or is not provided yet.
 
 ### Other Input Mechanisms
 
+There are other input mechanism that currently are not mentioned or analyzed in
+this paper, but still need to be regarded at some point from a security perspective.
+The following candidates come to mind easily, while there will be even more
+mechanisms not mentioned here:
+
+* Submission of data via JSON-over-HTTP, e.g. for asynchronous form submission.
+* Reading data from Cookies.
+* Reading data from Sessions.
+* Reading data from the database in general.
+* Reading data from an LDAP-server.
+* Retrieving data from SCORM-Objects.
+
+We expect that these scenarios at least have one general requirement in common
+with the example analyzed so far: In each of the cases we have some boundary
+of the system that is crossed by primitive data, constructed by ints, floats,
+strings, dictionaries, lists and nothing (or very little) else, possibly nested
+deeply. The task than is to find out, if that data fits some constraints from
+structure or policy and transform it to an appropriate internal datatype quickly
+before it is processed further in the guts of the system.
+
+Moreover, we expect that these cases will have an object that can act as a
+representation of that boundary to the user (like `$_GET`, the form in the UI-
+Framework or the `ilDataSet` for XML-Imports) or that it is at least possible
+to create such an object. We then expect it to be possible to either completely
+internalize the validation or use the pattern to force the user to give
+constraints and transformations on the data before he may retrieve it.
+
+
 ## Outlook
 
 ### Improvements of Existing Components
