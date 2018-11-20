@@ -942,7 +942,7 @@ via import.
 
 Most problems outlined in the [OWASP cheat sheet](https://www.owasp.org/index.php/XML_Security_Cheat_Sheet)
 are well out of context of this investigation regarding a general input filter
-service. They still are worth considering, this ILIAS seems to be indeed vulnerable
+service. They still are worth considering, since ILIAS seems to be indeed vulnerable
 to most of them, e.g.:
 
 * ILIAS has an XSD for the export-files, but currently uses the [PHP XML-Parser](http://php.net/manual/de/intro.xml.php),
@@ -974,10 +974,76 @@ That leaves one set of requirements to look into a little deeper regarding the
 XML-report: How can we validate and read deeply nested structures to make sure
 that the provided data matches the expected constraints?
 
+Currently the XML-parsing at import is mostly handled by classes in `Services\DataSet`
+and extensions of these classes. Although it is necessary to define types for the
+fields a dataset should contain, there is no discernible general check regarding
+this types on the data provided via the XML, although the base classes allow
+derived classes to implement said checks on their own. The import parser in the
+`Services\Dataset` creates arrays according to the provided XML. They support
+different versions of ILIAS, thus need to deal with optional fields in the array.
+The datatypes, that the `DataSet` currently supports are `text`, `integer` and
+`timestamp`.
 
+The requirements for a general service to secure input via XML thus are:
+* It should support text, integer and timestamp.
+* It should support arrays.
+* It should allow to express constraints on said types.
+* It should invite users to actually perform checks and validations instead of
+omitting them.
 
 
 ### Requirements of SOAP
+
+In ILIAS SOAP is used for internal administration as well as to provide an
+interface to ILIAS for external systems. When used for internal administration,
+the according endpoint can be closed for the outside world and the SOAP-functions
+are used to provide concurrent processes. When used by other systems, the SOAP-
+endpoints need to be opened to the outside world and the provieded functions
+create a huge and potentially powerful attack surface.
+
+Similar to XML-import, there are different vectors to discuss when looking into
+attack vectors via SOAP:
+
+* There is a [cheat sheet from OWASP](https://www.owasp.org/index.php/Web_Service_Security_Cheat_Sheet)
+that  contains rules that attempt to secure webservices.
+* Since SOAP uses XML for its messages, the attack vectors that may apply to XML
+may also apply to SOAP.
+* The data provided users via SOAP needs to be subject to various constraints
+derived from required structures and policies, as any other input needs to be.
+
+The general rules to secure webservices given on the [OWASP cheat sheet](https://www.owasp.org/index.php/Web_Service_Security_Cheat_Sheet)
+mostly apply to the transport layer of the communication and thus are of no
+concern for this paper. Also the possible vectors regarding general XML-
+processing (XML-bombs, DoS, ...) should be tackled but are considered to be
+outside the scope of this paper.
+
+Similar to XML-import, the SOAP-servers used by ILIAS seem to [perform no
+validation of structure and content](https://stackoverflow.com/questions/106401/validate-an-incoming-soap-request-to-the-wsdl-in-php),
+although the user may be tempted to think so, since a WSDL is supplied to the
+SOAP-Server. In fact, PHPs `SoapServer` only seems to perform a typecast according
+to the WSDL. To add complex objects, the ILIAS SOAP-interface uses the import
+via XML under the hood.
+
+The requirements for SOAP thus seem to be rather similar than those for the XML-
+import. We need to able to check if given data complies with some type and we
+need to be able to check policy constraints on the data. We need to be able to
+understand primitive types and arrays of said types, but we do not need to deal
+with deeply nested types.
+
+Also, SOAP shows very well, that currently ILIAS does not have a clear rules
+where and how inputs need to be scrutinized. Currently the classes providing
+the SOAP-functions seem to call very basic ILIAS-layers (e.g. ilObjectFactory)
+and it is not clear which constraints are enforced by these layers or the
+SOAP-layer itself.
+
+However, it seems as if checks would need to be duplicated on the SOAP-layer
+and in the GUI-classes (at least), since currently there often is no explicit
+layer which has the responsibility to perform actions. The introduction of
+a "service discovery", driven by the Workflow Engine, would introduce such a
+layer, which then would be the natural place to check structural or policy
+constraints on the input to the actions. We thus recommend to further pursue
+that project and embrace its positive impact regarding security.
+
 
 ### Widen Concept to GET-Requests via the UI-Framework
 
@@ -1002,9 +1068,16 @@ constraints via Exceptions.
 
 * Add transformation to build an object from some data.
 
-#### Services/Export
+#### Services/DataSet
+
+#### Webservices
 
 ### Policy Enforcement by Various Subsystems
+
+### Guidelines for Input Processing
+
+* Constraints on input need to be validated by the first component that has enough
+information to understand them.
 
 ### New Components
 
