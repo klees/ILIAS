@@ -1149,6 +1149,59 @@ constraints and transformations on the data before he may retrieve it.
 
 ## Outlook
 
+### Improve Transformation and Validation
+
+The investigations so far suggest, that the concepts of a `Transformation` and
+a `Constraint` are similar from the perspective of a data validation process,
+i.e. we need to perform a serious of steps on some given primitive input to check
+constraints and derive semantically richer structures, while it is not important
+if a given steps actually transforms the data or merely checks some constraint
+and passes the data on when it was successfull. This also shows in the observation
+that we indeed need to be able to incorporate checks into constructors of
+datastructure that can be processed in a way meaningful to humans.
+
+We thus propose to add a new method to the `ILIAS\Transformations\Transformation`
+interface:
+
+```php
+/**
+ * A transformation is a function from one datatype to another.
+ *
+ * It MUST NOT perform any sideeffects, i.e. it must be morally impossible to observe
+ * how often the transformation was actually performed. It MUST NOT touch the provided
+ * value, i.e. it is allowed to create new values but not to modify existing values.i
+ * This would be an observable sideeffect.
+ */
+interface Transformation {
+	/**
+	 * Perform the transformation and reify possible failures.
+	 *
+	 * If `$data->isError()`, the method MUST do nothing. It MUST transform the value
+	 * in `$data` like it would transform $data provided to `transform`. It must reify
+	 * every exception thrown in this process by returning a `Result` that `isError()`
+	 * and contains the exception that happened.
+	 *
+	 * If you simply need to implement a transformation you most probably want to
+	 * implement transform and derive this via the trait `DeriveTransformationInterface`.
+	 *
+	 * If you simply want to call the transformation, you most probably want to use
+	 * `transform`, since it simply throws expections that occured while doing the
+	 * transformation.
+	 *
+	 * If you are implementing some entity that performs processing of input data at
+	 * some boundary, the reification of exceptions might help you to write cleaner
+	 * code.
+	 */
+	public function applyTo(Result $data) : Result
+
+	// [..]
+}
+```
+
+The current `ILIAS\Validation\Constraint` interface can then implement this interface
+by simply renaming `Constraint::restrict` to `Constraint::applyTo`.
+
+
 ### Improvements of Existing Components
 
 #### Input UI-Framework
