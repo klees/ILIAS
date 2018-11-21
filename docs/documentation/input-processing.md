@@ -1169,7 +1169,7 @@ interface:
  *
  * It MUST NOT perform any sideeffects, i.e. it must be morally impossible to observe
  * how often the transformation was actually performed. It MUST NOT touch the provided
- * value, i.e. it is allowed to create new values but not to modify existing values.i
+ * value, i.e. it is allowed to create new values but not to modify existing values.
  * This would be an observable sideeffect.
  */
 interface Transformation {
@@ -1199,7 +1199,49 @@ interface Transformation {
 ```
 
 The current `ILIAS\Validation\Constraint` interface can then implement this interface
-by simply renaming `Constraint::restrict` to `Constraint::applyTo`.
+by simply renaming `Constraint::restrict` to `Constraint::applyTo`. This change
+will allow simplification in the current form-implementation of the UI-Framework,
+on the consumer side as well as on the implementation side. This will also allow
+to implement `Transformations` that perform checks and alter the value as well,
+like we need for constructors of datastructures.
+
+We furthermore propose to unify the two concepts on a library level as well and
+propose `Refinery` as name for the new library. The factory for its structures
+should then be organized as such:
+
+TODO
+
+To allow constructors of datastructures to throw exceptions that can be picked
+up by the `Validation`-mechanism, we propose to introduce a new type of exception
+that resembles the interface for i18n that is passed to the closure provided via
+`Constraint::withProblemBuilder`:
+
+```php
+/***
+ * Signals the violation of some constraint on a value in a way that can be subject
+ * to i18n.
+ */
+class ConstraintViolation extends \UnexpectedValueException {
+	// [..]
+
+	/**
+	 * Construct a violation on a constraint.
+	 *
+	 * @param	string	$message	developer-readable message in english.
+	 * @param	string	$lng_id		id of a human-readable string in the "violation" lng-module
+	 * @param	mixed[]	$values		values to be substituted in the lng-variable
+	 */
+	public function __construct(string $message, string $lng_id, ...$lng_values) {
+		// [..]
+	}
+
+	// [..]
+}
+```
+
+This will allow for less duplication of checks in the constructors of datastructures
+vs. external constraints applied via subclasses of `Constraint`, as found in the
+forms-showcase.
 
 
 ### Improvements of Existing Components
