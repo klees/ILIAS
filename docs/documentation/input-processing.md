@@ -1505,7 +1505,8 @@ grouped according to their source-type, as required and methods to create a cust
 constraint and transformation. If common usage patterns of the basic building blocks
 emerge, they could very well get their own constructor on the factory to be available
 more simple. Also there might be other forms of syntactic sugar that could be poured
-over the basic building blocks to make the usage nicer.
+over the basic building blocks to make the usage nicer, e.g. allowing simple lists
+of transformations instead of `inSeries` in appropriate places.
 
 The example from the showcase above than could look like this:
 
@@ -1603,25 +1604,131 @@ $course_data_from_json = $refine->inSeries(
 );
 ```
 
+During the design of this interface we considered the possibility of a fluent
+interface instead of the explicit combination outlined above:
 
-### Improvements of Existing Components
+```php
+$refine = new ILIAS\Refinery\Factory(/* ... */);
+
+$object_data_from_array =
+	$refine->selection([
+		"title" => $refine->to()
+			->string()
+			->hasMinLength(1)
+		),
+		"description" => $refine->to()
+			->string()
+	])
+	->andThen()
+	->toNew(toNew(\ilObjectData::class))
+```
+
+We decided against such an interface for the moment. Although fluent interfaces
+often provide a better readability, the implementation of such an interface is
+cumbersome, even more so when a huge amount of moving parts and combinations of
+them is involved. The objects created by the factory of `Refinery` would have a
+double role, which is performing actual transformation and checking constraints
+and creating new transformations at the same time. The latter would require the
+transformations to know about the factories themselves and thus, transitively,
+about all their dependencies. While a simple object structure can easily be
+inspected via `var_dump`, `print_r` or some debugger, structures that contain
+huge dependencies are confusing and hard to graps. Since we consider it crucial
+to review and understand what is going on when processing user provided input,
+we thus decided against a fluent interface. It would, however, be possible to
+build such an interface over the primitives outlined above which would be a
+functional equivalent. To gain a nice API we instead suggest to look for places
+that would benefit from syntactic sugar, as well as for recommondations for
+pleasing usage patterns. For the same reason we consider the factory dependencies
+in a fluent-interface case to be bad, we recommend to factor out the actual
+i18n from the constraints completely and instead provide the functionality
+seperately (but in the same library) to be used by the consumers of the `Refinery`-
+library.
+
+
+### A Pattern to Make Developers Remember
+
+As already outlined in the [Evaluation section](#evaluation) of this paper, there
+is pattern that allows us to make developers remember to check constraints and
+apply transformations when retrieving a value supplied by a user. Instead of
+simply handing the value to the developer and trust that she won't forget to check
+it, we instead only hand out the value transformed according to some `Transformation`
+the developer supplied. The archetype of that interface is:
+
+```php
+/**
+ * Get some value according to the supplied transformation.
+ *
+ * @return mixed
+ */
+function getValue(\ILIAS\Refinery\Transformation $trafo);
+```
+
+For a wrapper around `$_GET` this would then be used as such:
+
+```php
+$refine = new ILIAS\Refinery\Factory(/* ... */);
+
+$id = $get_wrapper->get("id", $refine->to()->int());
+list($current_page, $page_size) = $get_wrapper->get($refine->selection([
+	"current_page" => $refine->inSeries(
+		$refine->to()->int(),
+		$refine->int()->hasMin(0)
+		$refine->int()->hasMax(10)
+	),
+	"page_size" => $refine->inSeries(
+		$refine->to()->int(),
+		$refine->int()->hasMin(0)
+	)
+]));
+```
+
+This already closely resembles a [previous example from Leifos](https://github.com/leifos-gmbh/ILIAS/blob/cc2c2243d6a1a73aad032d94c7c3ae2d55fb23fc/src/Filter/README.md#input-filters).
+By implementing `ArrayAccess` on the `$get_wrapper` appriately, we could create
+an even simpler interface on top of this base:
+
+```php
+$id = $get_wrapper["id"]->int();
+```
+
+The second use case from the example above, fetching multiple data at the same
+time, could be simplified by internally calling `selection` and by interpreting
+an array of transformations as series in `selection`:
+
+```php
+$r = new ILIAS\Refinery\Factory(/* ... */);
+
+list($current_page, $page_size) = $get_wrapper->get([
+	"current_page" => [$r->to()->int(), $r->int()->hasMin(0)]
+	"page_size" => [$r->to()->int(), $r->int()->hasMin(0)]
+]);
+```
+
+We propose that this pattern is implemented as follows to make some of the use cases
+outlined above and in the example from Leifos possible:
+
+* The `HTTP`-Library should implement `query`, `post` and `cookie` as a wrapper
+  around the appropriate functions of the PSR-7 `ServerRequestInterface`.
+* The `ilDataSetImporter` should pass a callable `$retrieve` that implements the
+  archetypical `getValue`-interface outlined above to `DataSet::importRecord`
+  instead of directly passing the data from the XML directly.
+
+The pattern could equally be applied to other inputs can be represented as arrays,
+e.g. the session or settings. The pattern could be expanded to the database too,
+e.g. turn a row into an object. Instead of having an `ilDataSetImportParser` that
+performs the parsing and then passes the data to the `importRecord`-function,
+the pattern could be implemented over a DOM-parser of XML.
+
+To enforce the usage of the two proposed changes, we recommend to introduce a
+dicto rule that forbids the usage of `$_GET`, `$_POST` and `$_COOKIE` and the
+usage of `ILIAS\HTTP\GlobalHttpState::request`, with appropriate exceptions. The
+change in `ilDataSetImporter` will be breaking and thus does not need a dicto rule.
+
 
 #### Input UI-Framework
 
 * Remove `strip_tags` in the `Text Field` and `Textarea Field` once wrappers around
 the primitive string and proper output escaping is in place.
 * Build inputs that allow for some formatting like bold, italic, enumerations, ...
-
-#### Validation
-
-* Allow datastructures that protect their own integrity to work hook into the
-constraints via Exceptions.
-
-#### Transformation
-
-* Add transformation to build an object from some data.
-
-#### Services/DataSet
 
 #### Webservices
 
