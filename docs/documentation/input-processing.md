@@ -1207,14 +1207,152 @@ like we need for constructors of datastructures.
 
 We furthermore propose to unify the two concepts on a library level as well and
 propose `Refinery` as name for the new library. The factory for its structures
-should then be organized as such:
+should then be organized as such, where the different groups are explained in
+the following sections:
 
-TODO
+- **to**: Combined validations and transformations for primitive datatypes that
+  establish a baseline for further constraints and more complex transformations
+	- **string**
+	- **int**
+	- **float**
+	- **bool**
+	- **listOf** - with one `Transformation`-parameter that defines the content
+	- **dictOf** - with one `Transformation`-parameter that defines the content
+	- **tupleOf** - with an arbitrary amount of `Transformation` parameters that
+	  define content
+	- **recordOf** - with a dict of `Transformations` as parameters that define
+	  the content for the indizes
+- **kindlyTo** - Offers the same transformations like **to** but will be more
+  forgiving regarding the input.
+- **toNew** - create a user defined datastructure
+- **toData** - create a structure from data
+- **identity** - does not check anything and returns the value as provided
+- **inSeries** - takes an array of transformations and performs them one after
+  another on the result of the previous transformation
+- **inParallel** - takes an array of transformations and performs each on the
+  input value to form a tuple of the results
+- **allOf** - takes an array of constraints and checks all of them, where the
+  errors discovered in that process will be collected
+- **byTrying** - takes an array of transformations and returns the result of the
+  first successfull one
+- **optional** - accepts values according to a provided transformation or null
+- **selection** - takes an array of transformation and tries to pull values from
+  a provided array according to it
+- **number** - contains constraints and transformations on numbers
+	- **isGreaterThan**
+	- **isLessThan**
+	- *various other constraints on numbers*
+- **string** - constains constraints and transformations on string
+	- **hasMinLength**
+	- **hasMaxLength**
+	- **fitsRegexp**
+	- **splitAt**
+	- **isOneOf** - to only allow strings that are in a certain set
+	- **asJSON** - decodes a json-string to an array
+	- *various other constraints on strings*
+- **array** - contains contraints and transformations on arrays
+	- **map** - apply another transformation to each element
+	- **flatten** - turn a deeply nested array into a flat array, depth-first
+	- **toJSON** - encodes the array to a json-string
+- **customTransformation**
+- **customConstraint**
 
-To allow constructors of datastructures to throw exceptions that can be picked
-up by the `Validation`-mechanism, we propose to introduce a new type of exception
-that resembles the interface for i18n that is passed to the closure provided via
-`Constraint::withProblemBuilder`:
+To deal with nested data we need a way to define how to process lists of values,
+dictionaries of values, records and tuples. We make a distinction here that is
+common in many programming languages and data formats, but not present in PHP.
+A list is understood as a sequence of similar values with a variable length. A
+dict is a set of similar values indexed by a string key. A tuple is a sequence
+with a fixed length and a defined shape for the values in each place, where the
+shape may differ among places. A record then is a tuple where the places are
+indexed by string key. All these different shapes are implemented together in the
+PHP `array`-type, where lists are sometime notated as `SomeType[]` or `array<SomeType>`
+and dicts as `array<string,SomeType>` in docstrings. There seems to be no common
+notation for tuples and records, however.
+
+The first reason to make this distinction for input processing is, that it indeed
+also exists in at least some of the source formats in which data is provided. JSON
+e.g. at least knows the difference between a list and a dictionary, although it
+does not know about tuples or records. The second reason to introduce the distinction
+is that it makes it easier to talk about constraints and transformations, since
+most code will indeed use some PHP-array in one of the ways defined above and does
+not expect to be dealing with some arbitrarily shaped `array`.
+
+To simply check and cleanup provided data to some desired target structure, implemented
+as `array` and other primitive types of PHP, the factory of the `Refinery`-library
+will provide a group called `to` that allows to define such primitive shapes. We
+propose that these transformations all work in a strict way. This would mean, for
+example, that:
+
+* `string()` will only accept real strings and not attempt to transform something
+into a string but throw instead.
+* `tupleOf(int(), int())` will only allow arrays that contain exactly two integers
+and not attempt to shorten an array with three integers or cast a float to an int.
+
+This will allow developers to express strict requirements on data and get informed
+if the data provided by some user did not match the data. This will allow to detect
+problems, bugs or signs of tampering for cases where we indeed know exactly which
+shape the data needs to have that reaches the system, e.g. when we are dealing
+with asynchronous requests from the GUI.
+
+To accomodate cases in which [Postels Law of robustness](https://en.wikipedia.org/wiki/Robustness_principle)
+applies, e.g. when dealing with an interface to another machine, we provide the
+section `kindlyTo` on the factory. It will provide the same transformations then
+`to` but with a more forgiving implementation, e.g.:
+
+* `string()` will accept reals strings and transform `ints` or `floats` or entities
+that implement `__toString` to a string.
+* `tupleOf(int(), int())` will accept [1,2] but also [1,2, "foo"], while the latter
+is transformed to [1,2] in th process.
+
+Note that there is a sweet spot for this forgiveness, since the transformations
+should not attempt to stipulate too much about the required transformation. It
+would for example be sensible to transform an int to a float, but not so to
+transform a float to an int. While the former leaves the value virtually unchanged,
+the latter would need to take a decision whether to take the floor, the ceiling,
+round the provided number or simply leave it undefined what happens. This decision
+cannot be made sensibly by the transformation. This would be similar for `string()`.
+It seems to be sensible to transform `0` to `"0"` or an object that explicitely
+comes with the possibility to be transformed to a string (i.e. `__toString`). Not
+so for an `array` that will just be `"Array"` when transformed to string, which has
+nothing to do with the original array content.
+
+Since using primitives is very common in the ILIAS codebase, we cannot expect
+that all components will get rid of primitive obsession soon. The APIs behind
+`to` and `kindlyTo` will still allow a gradual migration to the new mechanisms
+to secure inputs while keeping internal implementations of the compontents
+based on primitives.
+
+To get rid of primitive obsession we then need a way to define how to build
+user-defined datastructures in a chain of transformations and constraints,
+either by factory or by using new. For this purpose we propose to introduce
+a transformation with the following signature:
+
+```php
+/**
+ * Get a builder for a datastructure, either by using a factory or a class-name.
+ *
+ * @param	sting|callable	$what
+ * @return	mixed
+ */
+public function toNew($what);
+```
+
+The already existing transformation `toData` then is a special case of this
+transformation. The transformation could be used as such:
+
+```php
+$class_builder = $trafo->build(MyClass:class);
+$object = $class_builder->transform(["a", "b"]); // = new MyClass("a", "b")
+
+$factory = new MyFactory();
+$factory_builder = $trafo->build([$factory, "structure"]);
+$object = $factory_builder->transform(["a", "b"]); // = $factory->structure("a", "b")
+```
+
+To allow the constructors or factories of datastructures to throw exceptions that
+can be picked up by the `Constraint`-mechanisms, we propose to introduce a new
+type of exception that resembles the interface for i18n that is passed to the
+closure provided via `Constraint::withProblemBuilder`:
 
 ```php
 /***
@@ -1242,6 +1380,228 @@ class ConstraintViolation extends \UnexpectedValueException {
 This will allow for less duplication of checks in the constructors of datastructures
 vs. external constraints applied via subclasses of `Constraint`, as found in the
 forms-showcase.
+
+To mangle the primitives, lists, tuples, dicts and records that are received as
+input to a structure that can be consumed by a build-transformation (which is
+a tuple) we need some facilities that allow to mix and match the structures and
+transformations provided so far.
+
+We start with `inSeries` that simply takes a list of transformations and applies
+the one after the other, each on the value produced by the predecessor:
+
+```php
+$refine = new ILIAS\Refinery\Factory(/* ... */);
+
+$my_trafo = $refine->inSeries(
+	$refine->kindlyTo()->int(),
+	$refine->kindlyTo()->float()
+);
+
+$res = $my_trafo->transform("1");
+
+assert($res === 1.0);
+```
+
+Note that `inSeries` will replace (and extend) the currently implemented `sequential`-
+constraint.
+
+The next facility will have a similar interface to `inSeries` but will apply each
+transformation to the initially provided value and output the results as a tuple:
+
+```php
+$refine = new ILIAS\Refinery\Factory(/* ... */);
+
+$my_trafo = $refine->inParallel(
+	$refine->kindlyTo()->string(),
+	$refine->kindlyTo()->float()
+);
+
+$res = $my_trafo->transform(1);
+
+assert($res === ["1", 1.0]);
+```
+
+Note that this is not the same as the currently implemented `parallel`-constraint,
+since this constraint adds the errors but only returns one value. This constraint
+will be renamed to `allOf` instead.
+
+To be able to deal with situations where some data might be matching this or that
+constraints or structure, we provide the `try`-combinator:
+
+```php
+$refine = new ILIAS\Refinery\Factory(/* ... */);
+
+$my_trafo = $refine->byTrying(
+	$refine->to()->string(),
+	$refine->to()->int()
+);
+
+assert($my_trafo->transform("foo") === "foo");
+assert($my_trafo->transform(1) === 1);
+
+$my_trafo->transform(1.0); // will throw
+```
+
+The `optional`-transformation is a special case of that transformation that accepts
+null or a value according to a transformation:
+
+```php
+$refine = new ILIAS\Refinery\Factory(/* ... */);
+
+$my_trafo = $refine->optional($refine->to()->int());
+
+assert($my_trafo->transform(null) === null);
+assert($my_trafo->transform(1) === 1);
+
+$my_trafo->transform(1.0); // will throw
+```
+
+To pull values from some array we provide the `selection` transformation. It takes
+an array of transformations as parameter and then selects values from a provided
+array containing data with the given transformation to yield a tuple:
+
+```php
+$refine = new ILIAS\Refinery\Factory(/* ... */);
+
+$my_trafo = $refine->selection([
+	"an_int" => $refine->to()->int(),
+	"a_string" => $refine->to()->string()
+]);
+
+$values1 = ["a_string" => "foo", "an_int" => 0];
+$values2 = ["an_int" => 0, "a_string" => "foo"];
+
+$expected = [0, "foo"];
+
+assert($my_trafo->transform($values1) === $expected);
+assert($my_trafo->transform($values2) === $expected);
+```
+
+Note that the order of fields in the original data does not matter and the created
+tuple is always ordered according to the array given as parameter to `selection`.
+The same interface works for transforming tuples as well by just providing integers
+instead of strings as keys. The `selection`-transformation is kind, i.e. it does
+not expect the exact keys to be available in the provided data but will accept
+larger arrays. The transformations works together with `optional` to allow for
+optional entries in the data:
+
+```php
+$refine = new ILIAS\Refinery\Factory(/* ... */);
+
+$my_trafo = $refine->selection([
+	"an_int" => $refine->to()->int(),
+	"a_string" => $refine->optional($refine->to()->string())
+]);
+
+$values1 = ["an_int" => 0];
+
+$expected = [0, null];
+
+assert($my_trafo->transform($values) === $expected);
+```
+
+Moreover, the `Refinery`-library should provide common constraints and transformations,
+grouped according to their source-type, as required and methods to create a custom
+constraint and transformation. If common usage patterns of the basic building blocks
+emerge, they could very well get their own constructor on the factory to be available
+more simple. Also there might be other forms of syntactic sugar that could be poured
+over the basic building blocks to make the usage nicer.
+
+The example from the showcase above than could look like this:
+
+```php
+class ilObjectData {
+	/**
+	 * @var string
+	 */
+	protected $title;
+
+	/**
+	 * @var string
+	 */
+	protected $description;
+
+	public function __construct(string $title, string $description) {
+		// Enforce policy that titles need to contain at least one character.
+		if (strlen($title) == 0) {
+			throw new \InvalidArgumentException(
+				"Title needs to have at least one character");
+		}
+		$this->title = $title;
+		$this->description = $description;
+	}
+}
+
+// ... in some class:
+
+public function getObjectDataSection(string $title, string $description) {
+	$ff = $this->input_factory->field();
+	$refine = $this->refinery;
+	$txt = function($id) { return $this->lng->txt($id); };
+
+	return $ff->section(
+		[ $this
+			->text($txt("title")
+			->withValue($title)
+			->withRequired(true)
+		, $this
+			->textarea($txt("description"))
+			->withValue($description)
+		],
+		$txt("object_data"),
+		""
+	)->withAdditionalTransformation($refine->toNew(\ilObjectData::class));
+}
+```
+
+Creating `ilObjectData` from a JSON-string than would look like this:
+
+```php
+$refine = new ILIAS\Refinery\Factory(/* ... */);
+
+$object_data_from_array = $refine->inSeries(
+	$refine->selection([
+		"title" => $refine->inSeries(
+			$refine->to()->string(),
+			$refine->string()->hasMinLength(1)
+		),
+		"description" => $refine->to()->string()
+	]),
+	$refine->toNew(\ilObjectData::class)
+);
+
+$object_data_from_json = $refine->inSeries(
+	$refine->asJSON(),
+	$object_data_from_array
+);
+```
+
+The transformations build in this way are reusable, so if we for example had a
+data structure that hold some information about a course, which would be the raw
+object data and the start and enddate for this example, this could be created
+from a JSON-string as such:
+
+```php
+$datetime_from_string = $refine->inSeries(
+	$refine->to()->string(),
+	$refine->string()->fitsRegexp("%\d\d\d\d-\d\d-\d\d%"),
+	$refine->toNew(DateTime::class);
+);
+
+$course_data_from_array = $refine->inSeries(
+	$refine->inParallel(
+		$object_data_from_array,
+		$refine->selection("start" => $datetime_from_string),
+		$refine->selection("end" => $refine->optional($datetime_from_string))
+	),
+	$refine->toCustom(\ilCourseData::class)
+);
+
+$course_data_from_json = $refine->inSeries(
+	$refine->asJSON(),
+	$course_data_from_array
+);
+```
 
 
 ### Improvements of Existing Components
