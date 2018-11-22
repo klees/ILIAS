@@ -3,11 +3,11 @@
 The inspection and processing of user input is of crucial importance for the
 security of a software system. Every input to the system may become a possible
 attack vector and compromise security qualities of the software when carelessly
-rocessed. Data propagating into the system thus must be inspected and, in case
+processed. Data propagating into the system thus must be inspected and, in case
 of doubt, be discarded from further processing as early as possible.
 
-This document attempts to show the current state of the art of input processing
-in ILIAS and outline a way to improve that processing by proposing changes
+This document attempts to show the current state of art of input processing
+in ILIAS and outlines a way to improve that processing by proposing changes
 regarding code as well as processes. The document was created on request of
 and under involvement of the Technical Board of the ILIAS-Society.
 
@@ -67,7 +67,7 @@ class ilSomeService {
 
 The GUI-class retreives and checks the input provided by the user via query-
 params in `$_GET`. It complains when the input doesn't match some criteria. It
-the hands the data off to some service that does the actual work. When the GUI
+hands the data over to some service that does the actual work. When the GUI
 and the service where created, this design is perfectly secure regarding the
 input parameter. A practical example might be some service that needs a filename
 as input parameter via get an then does some operation on the file, e.g.
@@ -102,7 +102,7 @@ code that does not clearly communicate if input is inspected or not.
 
 There are different measures to treat this problem. Documentation of the service
 may be required, that outlines if and how input is checked. But then the new task
-of taking care of the documentation is introduced and the documentation can not
+of taking care of the documentation is introduced and the documentation cannot
 be checked by automatic procedures and thus must be read and understood by every
 developer using the service. We might introduce some guidelines that say where
 and how user input needs to be validated. But a guideline is similar to documentation,
@@ -113,8 +113,8 @@ point where the checks need to take place.
 
 These solutions all miss a crucial problem contained in the code above. A general
 duty when programming is to give meaning to anonymous sequences of bits and bytes
-contained in our computers memories. This does not end at primitive datatypes
-like `string` and `integer`, PHP offers more tools to attach meaning and sense
+contained in our computers' memories. This does not end at primitive datatypes
+like `string` and `integer` - PHP offers more tools to attach meaning and sense
 to data that at the same time serve as a documentation for developers.
 
 Consider the GUI and service were implemented like this to begin with:
@@ -159,8 +159,8 @@ class ilSomeService {
 }
 ```
 
-The fact, that the parameter to the service needs to be validated is communicated,
-and also enforced, by the fact that the `doWork`-method takes a typed parameter.
+The fact, that the parameter for the service needs to be validated, is communicated
+and also enforced by the fact that the `doWork`-method takes a typed parameter.
 The user can only possess such a value when he has a string that passes the check in
 the constructor. In fact, the existence of a value of type ParamType proves that
 the check was performed (at least in a setting where we regard "sane" usages of PHP
@@ -205,20 +205,20 @@ cannot possibly know about the circumstances in which these values will be used.
 
 However, every future API to retrieve values from `$_GET` and `$_POST` will have
 to compete with the simple superglobal API. It is indeed possible to deprecate
-the direct usage of `$_GET` and `$_POST` via Dicto, but this won't help when
-developers complain about some approach being hard to use or understand. It is
-of course hard to compete with the superglobals regarding simplicity. Thus every
-new API must provide benefits in other areas. It is unlikely that this can
-only be found in security, though, as security seldomly is a core concern when
+the direct usage of `$_GET` and `$_POST` via dicto, but this won't help when 
+developers complain about some approach being hard to use or understand. 
+It is of course hard to compete with the superglobals regarding simplicity. 
+Thus every new API must provide benefits in other areas. It is unlikely that this 
+can only be found in security, though, as security seldomly is a core concern when
 writing software.
 
 The introduction of PSR-7 with its interfaces to HTTP-messages provides a
 promising impression where these benefits might be. This API provides easy to
-read and to remember methods on the message objects that allow to read
+read and to remember methods on the message objects that allow reading
 information from the request. The HTTP-messages are immutable and suggest to
 be passed into the services that consume them due to their value appearance,
 instead of beeing summoned from the void via a global. This has implications for
-the general architecture of the application as well as for the its testability.
+the general architecture of the application as well as for its testability.
 
 ILIAS implements PSR-7 since 5.3, at least in some parts of the application.
 This suggests, that this implementation needs to be the base for secure input
@@ -251,9 +251,9 @@ reports to the community. Other approaches that are common in environments that
 frequently have higher security requirements as an LMS, like pen-tests, systematic
 training and instruction of developers, risk analysis, automated or manual code
 reviews, are not implemented in the general developement process of ILIAS. This
-on the one hand means that there certainly are low hangy fruits to be picked
-regarding security. On the other hand it again shows, that technical approaches
-most certainly won't be enought to raise the general level of security. Even if
+on the one hand means that there certainly are low hanging fruits to be picked
+regarding security. On the other hand it again shows that technical approaches
+most certainly won't be enough to raise the general level of security. Even if
 considering social implications, like we attempt to do in this paper, the
 improvement of the security of input processing won't be enough in general and
 will have a hard stand if not backed by other means. There are, however, measures
@@ -268,17 +268,17 @@ implementing more hollistic approaches to security.
 ### Feedback when Rejecting Input
 
 The circumstances in which the system receives input have a huge variety regarding
-their sources. There are forms that are operated by users, that need to be informed
-regarding the success or failure of the desired input. There are forms of input
+their sources. There are forms that are operated by users, who need to be informed
+about success or failure of the desired input. There are types of input
 that are very technical in their nature, like reading data from the database or
 XML-import files, where machines are talking to other machines along a more or
-less strictly defined interface. There are forms of input, that seem to be machine-
+less strictly defined interface. There are forms of input that seem to be machine-
 to-machine like the former, but where we in fact don't really know if and how
 humans that need feedback are involved, e.g. the SOAP-Interface or JSON-over-HTTP-
 interfaces.
 
 The requirements regarding the mere filtering of the data that reach the system
-are very similar in all these cases: We need to make sure that only data maching
+are very similar in all these cases: We need to make sure that only data matching
 certain criteria in shape and content may pass the boundary of the system and be
 subject to further processing. Data should be scrutinized as closely and early
 as possible. The requirements regarding feedback to the other side of the
@@ -289,7 +289,7 @@ system will try to give her feedback in the most helpful and detailed form as
 possible. Reading some data from the database seems to require no feedback to a
 user at all, as every missformed data indicates some deeper problem that most
 certainly cannot be solved at the interface to the database itself. A malformed
-XML-file in an import might hint at incompatibel versions or objects regarding the
+XML-file in an import might hint at incompatible versions or objects regarding the
 import, as well as at some attempt to tamper with an import file and use it as a
 vector to degrade security of the system. A user importing the file might require
 the feedback "incompatible version", but less likely seems to be interested in
@@ -302,10 +302,10 @@ Thus, the question how, where and which feedback is given as a reponse to a
 malformed input is of interest when designing an API to secure input. It must be
 possible for the consumers of the API to give detailed feedback to human users,
 as well as discarding and hiding that feedback completely when the nature of
-the interface to the system makes this appropriate. To be able to detect tempering
+the interface to the system makes this appropriate. To be able to detect tampering
 we suggest to address the logging of failed input attempts in the future. As this
 paper tries to lay the ground for securing the input processing (and not the
-detection of attempts to temper with the system), the logging-topic is considered
+detection of attempts to tamper with the system), the logging-topic is considered
 to be out of scope for the rest of the paper.
 
 
@@ -331,10 +331,9 @@ deeply into the system, cause subsequent errors or make it hard to debug the
 root cause of an exception or error. In the SOAP-call, for example, a missing
 "target"-parameter might be interpreted as `null`, be written as `0` into the
 database before the actual error happens and later on cause all kind of havoc
-when read from the database again. On the other hand data that  propagates into
-the system, creates unexpected effects and possibly generates helpful output
-for an attacker means that the available surface for every attack is unnecessarily
-large.
+when read from the database again. On the other hand this will create unexpected 
+effects and possibly generates helpful output for an attacker,  meaning that the 
+available surface for an attack is unnecessarily large.
 
 Structural requirements thus need to be checked as early as possible and deeper
 layers in the system need to put requirements on their consumers that data is
@@ -363,19 +362,19 @@ system does for the permissions. Consequently, a policy on some data most possib
 cannot be enforced directly at the boundary of the system but will already
 require some processing of the data that checks the policy.
 
-This makes the picture when and how policies can be enforced to secure input
-processing a lot fuzzier than the this is the case for structural requirements.
+This makes the picture of when and how policies can be enforced to secure input
+processing a lot fuzzier than this is the case for structural requirements.
 It will be cumbersome or even impossible to document policy requirements in the
 PHP type system via classes. It also will be a lot harder to find a framework for
 enforcing policies on data that fits all cases, since policies mostly will arise
-at the business rules of the application of a framework, thus being responsibility
-of the user.
+at the business rules of the application of a framework, thus being the 
+responsibility of the user.
 
-Policies still are indispensable regarding the security of the system. If e.g.
-permission policies can't be enforced this will render the RBAC-system useless
-and hence knock out an essential security feature of the application. We thus
-will try to look how policy enforcing systems may hook into the general input
-processing, but we will not be able to exhaustively examine all requirements
+However, policies still are indispensable regarding the security of the system. 
+If e.g. permission policies can't be enforced, it will render the RBAC-system 
+useless and hence knock out an essential security feature of the application. 
+We thus will try to look how policy enforcing systems may hook into the general 
+input processing, but we will not be able to exhaustively examine all requirements
 from said systems in this paper. We request the maintainers of said systems to
 understand the role of their systems in this regard and work towards sensible
 solutions to secure input processing regarding the nature of the policies their
@@ -384,12 +383,12 @@ systems want to enforce.
 
 ### Declarative vs. Imperative
 
-When enforcing constraints on the inputs to a software system, it is not enough,
+When enforcing constraints on the inputs to a software system, it is not enough
 that the desired constraints are, in fact, enforced. It is also important that
 other people (e.g. developers, reviewers, even the developer herself at a later
-point in time) can understand and scrutinize the constraints in place. This allow
-to check, if constraints are sufficient and up to date, as well as to understand
-which data is allowed to passed the boundary of the system and which data is
+point in time) can understand and scrutinize the constraints in place. This allows
+to check if constraints are sufficient and up to date, as well as to understand
+which data is allowed to pass the boundary of the system and which data is
 discarded.
 
 Code written in an imperative style focusses on *how* a problem is solved, while
@@ -408,10 +407,10 @@ that shows the information essential to the problem with little boilerplate.
 To express the constraints on inputs to the system, a declarative approach or
 EDSL is the right choice, since it allows the developer to focus on the task
 of choosing his constraints on the input without being bothered by the question
-how a check may be conducted. For readers of her code, a well crafted set of
+of how a check may be conducted. For readers of her code, a well crafted set of
 tools to express constraints will simplify to understand which data should be
 discarded and why. The imperative part, how the checks are performed, then can
-moved to a location common for all components and be put under extra scrutiny.
+be moved to a location common for all components and be put under extra scrutiny.
 This will free developers as well as reviewers of the question if constraints
 actually work as desired.
 
@@ -420,8 +419,8 @@ actually work as desired.
 
 ### Performance
 
-Checking inputs early and thorough will always require more computational
-ressources then letting the data pass unscrutinized. However, ILIAS is not a
+Checking inputs early and thoroughly will always require more computational
+ressources than letting the data pass unscrutinized. However, ILIAS is not a
 system that needs to process huge amounts of input in a time critical environment.
 For that reason, performance will be considered a non-issue throughout this paper.
 
@@ -442,19 +441,19 @@ of the validation by (e.g.):
 "Escaping" is the procedure to prepare some data to be outputted in a certain context.
 It is a measure to allow another system to correctly interpret the data in the way
 our system intends it to be interpreted. This has security implications in some
-contexts, since incorrect interpretation of some user provided data will lead to
+contexts, since incorrect interpretation of user-provided data may lead to
 a degraded security in some subsystem. Widely known vectors that use missing or
 incorrect escaping are SQL-injection and Cross-Side-Scripting. The famously and
 widely used `ilDB::quote`-method is an example for such a procedure that defends
 the database against injections of SQL.
 
-Escaping thus is a question of the context in which data is outputted from the
-system and thus on the exact other end of the data processing the system performs.
-When data is inputted to the system it certainly in general ain't possible to
-determine the context to which the data will be outputted later on. The correct
-means of escaping thus cannot be determined at that point as well. Escaping thus
-is a problem that needs to be tackled at the various output interfaces of the
-system.
+Escaping is a question of the context in which data is outputted from the system 
+and thus on the exact other end of the data processing the system performs.
+When data is inputted to the system, it certainly in general is not possible to
+determine the context in which the data will be outputted later on. The correct
+means of escaping thus cannot be determined at that point. That means that 
+escaping is a problem that needs to be tackled at the various output interfaces 
+of the system.
 
 
 ### Sanitizing
@@ -519,11 +518,11 @@ to help developers, the methods on the objects are easier to find and document
 than keys in some array. The off-the-shelf types in the library can help developers
 to save work.
 
-A precondition for the success of the library will be, that it contains some
+A precondition for the success of the library is that it contains some
 interesting types and that it is known to developers. Besides the commonly used
-types captured in the library, there still will be a lot of datastructures that
+types captured in the library, there will still be a lot of datastructures that
 belong to a certain component and not into a common library. For these types
-similar strategies than these showcased in the [Data-library](../../src/Data)
+similar strategies than those showcased in the [Data-library](../../src/Data)
 will need to be deployed by the responsible maintainers.
 
 These strategies are:
@@ -534,8 +533,8 @@ effectiveness. This will help security as well as correctness and understandabil
 * The richer datastructures should protect their structural integrity via a
 "correctness by construction"-approach. This means, that structural constraints
 should be enforced in the constructor and by all methods to change the datastructure,
-be it setters or mutators. Structural integrity needs to be enforced by the
-datatype to make invalid data unexpressable.
+be it setters or mutators. **Structural integrity needs to be enforced by the
+datatype to make invalid data unexpressable.**
 
 
 ### Transformation
@@ -573,7 +572,7 @@ the [Validation-library](../../src/Validation) also attempts to provide a set of
 standard constraints and facilities to compose complex constraints from simpler
 ones.
 
-Currently the library provides 14 prefactored constraints and one constrain
+Currently the library provides 14 prefactored constraints and one constraint
 that allows to create custom constraints via closures. Here we certainly
 require additions to the currently available constraints as well as a better
 internal structure that e.g. groups the constraints by the type they are acting
@@ -602,18 +601,18 @@ name suggests, it does not only attempt to strip slashes from some string but
 also attempts to remove html-tags, where the user can define which tags will
 remain in the input. PHP's standard `stripslashes` will only be called if the
 ini-setting `magic_quotes_gpc` is defined, which is deprecated by PHP and thus
-most likely won't be present. `stripslashes` thus most likely will not be called.
+most likely won't be present - `stripslashes` most likely will not be called.
 
-Although `ilUtil::stripSlashes` is used on input, it workings suggest that it is
+Although `ilUtil::stripSlashes` is used on input, its workings suggest that it is
 actually a device that removes data according to some output context (html) which
 means that it is a form of escaping. This also shows in the fact, that it does
 not remove data that would be dangerous in other contexts, e.g. SQL for databases
 or `"` for json. Also, data treated with `ilUtil::stripSlashes` won't work in
 an attribute context of html, since `"` is kept.
 
-The problem that `ilUtil::stripSlashes` currently seams to tackle mostly is that
-in some locations users want to use some html-markup in their input, but the
-system needs to ensure, that not all html-markup is used to protect from XSS.
+The foremost problem that `ilUtil::stripSlashes` currently seams to tackle is 
+that in some locations users want to use html-markup in their input, but the
+system needs to ensure that the html-markup is protected from XSS.
 We suggest to solve that problem by introducing a proper input field in the
 UI-framework and maybe use markdown for the requirements that are currently
 fulfilled via markup. On the other hand we propose to introduce a proper output
@@ -623,18 +622,18 @@ content more explicit, e.g. `HTMLString` for strings that contain HTML-markup or
 `AlphaNumericString` for strings that contain alphanumeric characters only.
 The new datatypes will be crucial to allow new inputs and escaping to work
 together, as they will tag the data on the way between input and output and will
-allow proper decisions on how data needs to be trated when escaping it. A very
-similar problem already emerged in the Mail-Service, where the service needs to
-work with raw `string`s without really knowing if they need to be escaped for
-HTML or not. We thus suggest to phase out the use of `ilUtil::stripSlashes`.
+allow proper decisions on how data needs to be trated when escaping it. 
+A very similar problem already emerged in the Mail-Service, where the service 
+needs to work with raw `string`s without really knowing if they need to be escaped 
+for HTML or not. We thus suggest to phase out the use of `ilUtil::stripSlashes`.
 
 `ilInitialisation::recusivelyRemoveUnsafeCharacters` is called in the initialisation-
 process of ILIAS to remove HTML-tags and some single characters that are deemed
 unsafe from `$_GET`. Since the output context is not known the situation is similar
 `ilUtil::stripSlashes`, still `ilInitialisation::recusivelyRemoveUnsafeCharacters`
-seems to cover a broader range of output as it removed `"` and `'` as well. We
-propose a similar approach than for `ilUtil::stripSlashes` by introducing proper
-datatypes to capture the use of parameters in  `$_GET`. We suspect this uses to
+seems to cover a broader range of output as it removes `"` and `'` as well. We
+propose a similar approach as for `ilUtil::stripSlashes` by introducing proper
+datatypes to capture the use of parameters in `$_GET`. We suspect this uses to
 be very narrow, mostly ids, alphanumerics and the control path. It should be
 simple to device proper datatypes for these usecases. To phase out the use of
 `ilInitialisation::recusivelyRemoveUnsafeCharacters` we will additionally have
@@ -643,19 +642,20 @@ to provide a proper method to get values from `$_GET` as outlined in [API-Design
 
 ## Showcase: Input via Forms in the UI-Framework
 
-The libraries outline in the [State of the Art](#state-of-the-art) have been build
+The libraries outlined in [State of the Art](#state-of-the-art) have been build
 to implement input via forms in the UI-Framework. We thus want to use the form
 input in the UI-Framework as a showcase for the libraries and explain their
 cooperation with regards to the principles outlined in the [Core Considerations](#core-consideration).
-On the other hand, the current state of the form inputs might already hint at
-some potential for future improvements in the libraries an in general. The code
-presented in the following was discussed in [this PR](https://github.com/ILIAS-eLearning/ILIAS/pull/1189)
+On the other hand, the current state of the form-inputs might already hint at
+some potential for future improvements in the libraries as well as in general. 
+The code presented in the following was discussed in [this PR](https://github.com/ILIAS-eLearning/ILIAS/pull/1189)
 and is now [part of the ILIAS-core](https://github.com/ILIAS-eLearning/ILIAS/blob/trunk/Modules/StudyProgramme/classes/class.ilObjStudyProgrammeSettingsGUI.php#L159).
 Since we want to show case how input data can be secured here, we refer to the
 explanation of the [Inputs in the UI-Framework](https://github.com/ILIAS-eLearning/ILIAS/tree/trunk/src/UI/Component/Inputi/README.md)
 for further explanation regarding visual aspects of the form.
 
-We first will have a look into [`ilObjStudyProgrammeSettingsGUI::update`](https://github.com/ILIAS-eLearning/ILIAS/blob/trunk/Modules/StudyProgramme/classes/class.ilObjStudyProgrammeSettingsGUI.php#L159) to get a general idea of the structure of the processing. The example
+We first will have a look into [`ilObjStudyProgrammeSettingsGUI::update`](https://github.com/ILIAS-eLearning/ILIAS/blob/trunk/Modules/StudyProgramme/classes/class.ilObjStudyProgrammeSettingsGUI.php#L159) 
+to get a general idea of the structure of the processing. The example
 is shortened a little to highlight the essentials, while comments are added
 for explanation:
 
@@ -678,7 +678,7 @@ $form = $this
 $content = $form->getData();
 
 // If the input of the user did not fit the expected structure and policies, we won't
-// have been able to retreive any data and hence can't process anything.
+// be able to retreive any data and hence cannot process anything.
 $update_possible = !is_null($content);
 if ($update_possible) {
 	// perform update process
@@ -757,7 +757,7 @@ possibly even for people that don't know ILIAS or PHP in general very well.
 * The syntax for the declaration of the form uses techniques well known for users
 of the UI-Framework, like named factories, immutable objects and easy composition
 of larger structures from smaller parts. The mechanismn to process the input
-was created with care to fit these techniques  and maintain their properties. The
+was created with care to fit these techniques and maintain their properties. The
 input processing is weaved naturally into the definition of the visuals.
 
 This all amounts to an API-design that encourages the user to properly process
@@ -770,7 +770,7 @@ abstraction. This enhances composability and disencourages incorrect procedures
 at the same time.
 
 The subject [Structure vs. Policy](#structure-vs-policy) needs to get some extra
-attention since it is only present in this example very implicitely. The form
+attention since it is only present very implicitely in this example. The form
 only declares a few constraints in a visible manner. First note, that `withRequired`
 and `numeric` in fact are constraints. While `numeric` is a structural constraint
 (only ints or floats are allowed), `withRequired` may be viewed as a policy, as
@@ -815,7 +815,7 @@ thus be removed once the according problems for `ilUtil::stripSlashes` are solve
 The advice to define datastructures that enforce their structural constraints
 by construction (see [Data](#data)) also is not implemented in the given example,
 as the data is retrieved from the form as an array. Two show how this might look
-like, we might imaging a data structure that carries some basic data for every
+like, we might imagine a data structure that carries some basic data for every
 `ilObject`:
 
 ```php
@@ -887,7 +887,7 @@ into the mechanisms of the [Validation-library](../../src/Validation) without
 duplicating the check.
 
 The processing of user input via forms in the UI-Framework by using the libraries
-that where created thus implements the requirements outlines in the [Core
+that where created thus implements the requirements outlined in the [Core
 Considerations](#core-considerations) as such:
 
 * It allows to tackle primitive obsession by considering the transformation of data
@@ -901,8 +901,8 @@ compete with the `$_GET`- and `$_POST`-APIs in simplicity, but still offers
 compelling advantages with a pleasant surface.
 * The new API can be introduced gradually and will work besides (but not with!)
 the existing ilPropertyFormGUI. As the [PR for the Study Programme](https://github.com/ILIAS-eLearning/ILIAS/pull/1189)
-shows, it is possible to use the new API with only minimal adjustments to rest of
-the component.
+shows, it is possible to use the new API with only minimal adjustments to the rest 
+of the component.
 * The API can express structural constraints as well as policy while being able
 to give feedback to the user of the form.
 
@@ -911,9 +911,9 @@ to give feedback to the user of the form.
 
 In the following we will evaluate parts of the system currently not subject to
 a systematic approach to security in input processing. We will gather requirements
-and assess, if and how the libraries written for the form input in the UI-Framework
-can be put to use to implement them. In this process we will derive which extensions
-are required for said libraries, as well as find realms that currently are not
+and assess if and how the libraries written for the form input in the UI-Framework
+can be used to implement them. In this process we will derive which extensions
+are required for said libraries as well as find realms that currently are not
 covered by ILIAS libraries or services.
 
 
@@ -925,7 +925,7 @@ objects and some ILIAS services offer possibilities to import and export XML
 files. At the same time, the surface is not only huge but also is deeply rooted
 in ILIAS, since the XML-files are representing ILIAS-objects and their according
 settings and contents and thus allow to set these and trigger or influence
-functionality depending on these.
+functionality depending on them.
 
 Thus there are different possible vectors for an attack via XML-imports:
 
@@ -959,29 +959,29 @@ is the same problem other types of input have, but from a different perspective.
 While OWASP considers this problem from the perspective that stricter validation
 needs to be performed on the XML-document itself, from the perspective of this
 paper, the XML can be considered to be just a deeply nested datastructure with
-unknown content. It thus needs to be scrutinized and constraints regarding
+unknown content. Accordingly, it needs to be scrutinized and constraints regarding
 structure and policies need to be enforced on the data just like this is the
 case for data provided via `$_POST`. This vector thus is exactly in the scope
 of this paper.
 
 The attacks that may arise due to the deeply rooted nature of the import in ILIAS
 are considered to be out of scope of this paper as well. A general framework to
-filter inputs needs to outline how different subsystem may hook into the enforcement
+filter inputs needs to outline how different subsystems may hook into the enforcement
 of constraints but cannot consider all policy requirements, as explained in
 [Policy vs. Structure](#policy-vs-structure).
 
-That leaves one set of requirements to look into a little deeper regarding the
-XML-report: How can we validate and read deeply nested structures to make sure
+That leaves us to look a little deeper into one set of requirements regarding the
+XML-report: How can we read and validate deeply nested structures to make sure
 that the provided data matches the expected constraints?
 
 Currently the XML-parsing at import is mostly handled by classes in `Services\DataSet`
 and extensions of these classes. Although it is necessary to define types for the
 fields a dataset should contain, there is no discernible general check regarding
-this types on the data provided via the XML, although the base classes allow
+these types on the data provided via the XML, although the base classes allow
 derived classes to implement said checks on their own. The import parser in the
-`Services\Dataset` creates arrays according to the provided XML. They support
-different versions of ILIAS, thus need to deal with optional fields in the array.
-The datatypes, that the `DataSet` currently supports are `text`, `integer` and
+`Services\Dataset` creates arrays according to the provided XML. As they support
+different versions of ILIAS, they need to deal with optional fields in the array.
+The datatypes, that the `DataSet` currently supports, are `text`, `integer` and
 `timestamp`.
 
 The requirements for a general service to secure input via XML thus are:
@@ -994,21 +994,21 @@ omitting them.
 
 ### Requirements of SOAP
 
-In ILIAS SOAP is used for internal administration as well as to provide an
+In ILIAS, SOAP is used for internal administration as well as to provide an
 interface to ILIAS for external systems. When used for internal administration,
 the according endpoint can be closed for the outside world and the SOAP-functions
 are used to provide concurrent processes. When used by other systems, the SOAP-
-endpoints need to be opened to the outside world and the provieded functions
+endpoints need to be opened to the outside world and the provided functions
 create a huge and potentially powerful attack surface.
 
 Similar to XML-import, there are different vectors to discuss when looking into
 attack vectors via SOAP:
 
 * There is a [cheat sheet from OWASP](https://www.owasp.org/index.php/Web_Service_Security_Cheat_Sheet)
-that  contains rules that attempt to secure webservices.
+that contains rules attempting to secure webservices.
 * Since SOAP uses XML for its messages, the attack vectors that may apply to XML
 may also apply to SOAP.
-* The data provided users via SOAP needs to be subject to various constraints
+* The data provided by users via SOAP needs to be subject to various constraints
 derived from required structures and policies, as any other input needs to be.
 
 The general rules to secure webservices given on the [OWASP cheat sheet](https://www.owasp.org/index.php/Web_Service_Security_Cheat_Sheet)
@@ -1025,12 +1025,12 @@ to the WSDL. To add complex objects, the ILIAS SOAP-interface uses the import
 via XML under the hood.
 
 The requirements for SOAP thus seem to be rather similar than those for the XML-
-import. We need to able to check if given data complies with some type and we
+import. We need to be able to check if given data complies with some type and we
 need to be able to check policy constraints on the data. We need to be able to
 understand primitive types and arrays of said types, but we do not need to deal
 with deeply nested types.
 
-Also, SOAP shows very well, that currently ILIAS does not have a clear rules
+Also, SOAP shows very well that ILIAS currently does not has clear rules
 where and how inputs need to be scrutinized. Currently the classes providing
 the SOAP-functions seem to call very basic ILIAS-layers (e.g. ilObjectFactory)
 and it is not clear which constraints are enforced by these layers or the
@@ -1071,7 +1071,7 @@ we can find locations that guard the parameter from `$_GET` with typecasts or
 handle them with due diligence, we do not expect all usage locations to be actually
 careful enough to prevent attacks via `$_GET`.
 
-There use cases when using `$_GET` mostly seem to be these:
+The usecases for `$_GET` mostly seem to be these:
 * Passing ids, be it `ref_id`s, `obj_id`s or other internal ids like ids for
 questions. `grep -r "\$_GET" . | grep "_id"` reveals ~2500 locations.
 * Passing commands to be executed by the GUI via `$_GET["cmd"]`.
@@ -1079,7 +1079,7 @@ questions. `grep -r "\$_GET" . | grep "_id"` reveals ~2500 locations.
 to build a view or perform some action via `$_GET["baseClass"]`, `$_GET["cmdClass"]`
 and `$_GET["cmdNode"]`.
 * Passing information regarding the sortation and pagination in the `table_nav`
--Parameter.o
+-Parameter.
 
 The case of `$_GET["cmd"]` is especially interesting. From a consumers perspective,
 the command is retrieved via `ilCtrl::getCmd`. There is no hint that the command
@@ -1095,7 +1095,7 @@ the UI-Framework use as well: instead of accessing `$_GET` directly, the users
 access a component that wraps the access, which gives an opportunity for the
 wrapping component to control the data that the user sees. `ilTable2GUI` has
 enough information to validate the data it reads from `$_GET`, since it is fully
-determine by the controls `ilTable2GUI` adds itself. `ilCtrl` on the other hand
+determined by the controls `ilTable2GUI` adds itself. `ilCtrl` on the other hand
 cannot know which commands a GUI class provides and thus cannot perform the
 validation. The forms in the UI-Framework handle the same situation (not knowing
 which validations need to be performed in the use case at hand) by forcing the
@@ -1103,7 +1103,7 @@ users to add at least some constraints and transformations on the input, thus
 making it impossible to simply forget to scrutinize the input. We expect that
 this principle will work in similar situations as well.
 
-The requirements to process input provided via GET securly thus can be phrased
+The requirements to securly process input provided via GET thus can be phrased
 as such:
 
 * Move as many processing of `$_GET` into closed components and perform as much
@@ -1113,7 +1113,7 @@ that are "closed" in some sense, like `ilTable2GUI` is.
 for cases that are "not closed" in some sense and do not know enough about the
 provided data to scrutinize it thoroughly.
 * Provide a wrapper around `$_GET` according to that pattern to be used by
-the aforementioned components and in cases where an according componente cannot
+the aforementioned components and in cases where an according component cannot
 be provided or is not provided yet.
 
 
@@ -1132,10 +1132,10 @@ mechanisms not mentioned here:
 * Retrieving data from SCORM-Objects.
 
 We expect that these scenarios at least have one general requirement in common
-with the example analyzed so far: In each of the cases we have some boundary
+with the examples analyzed so far: In each of the cases we have some boundary
 of the system that is crossed by primitive data, constructed by ints, floats,
 strings, dictionaries, lists and nothing (or very little) else, possibly nested
-deeply. The task than is to find out, if that data fits some constraints from
+deeply. The task then is to find out, if that data fits some constraints from
 structure or policy and transform it to an appropriate internal datatype quickly
 before it is processed further in the guts of the system.
 
@@ -1143,7 +1143,7 @@ Moreover, we expect that these cases will have an object that can act as a
 representation of that boundary to the user (like `$_GET`, the form in the UI-
 Framework or the `ilDataSet` for XML-Imports) or that it is at least possible
 to create such an object. We then expect it to be possible to either completely
-internalize the validation or use the pattern to force the user to give
+internalize the validation or use a pattern to force the user to give
 constraints and transformations on the data before he may retrieve it.
 
 
@@ -1151,12 +1151,12 @@ constraints and transformations on the data before he may retrieve it.
 
 ### Improve Transformation and Validation
 
-The investigations so far suggest, that the concepts of a `Transformation` and
+The investigations so far suggest that the concepts of a `Transformation` and
 a `Constraint` are similar from the perspective of a data validation process,
-i.e. we need to perform a serious of steps on some given primitive input to check
+i.e. we need to perform a series of steps on some given primitive input to check
 constraints and derive semantically richer structures, while it is not important
-if a given steps actually transforms the data or merely checks some constraint
-and passes the data on when it was successfull. This also shows in the observation
+if a given step actually transforms the data or merely checks some constraint
+and passes the data on if it was successfull. This also shows in the observation
 that we indeed need to be able to incorporate checks into constructors of
 datastructure that can be processed in a way meaningful to humans.
 
@@ -1296,10 +1296,10 @@ with asynchronous requests from the GUI.
 
 To accomodate cases in which [Postels Law of robustness](https://en.wikipedia.org/wiki/Robustness_principle)
 applies, e.g. when dealing with an interface to another machine, we provide the
-section `kindlyTo` on the factory. It will provide the same transformations then
+section `kindlyTo` on the factory. It will provide the same transformations as
 `to` but with a more forgiving implementation, e.g.:
 
-* `string()` will accept reals strings and transform `ints` or `floats` or entities
+* `string()` will accept real strings and transform `ints` or `floats` or entities
 that implement `__toString` to a string.
 * `tupleOf(int(), int())` will accept [1,2] but also [1,2, "foo"], while the latter
 is transformed to [1,2] in th process.
@@ -1319,7 +1319,7 @@ nothing to do with the original array content.
 Since using primitives is very common in the ILIAS codebase, we cannot expect
 that all components will get rid of primitive obsession soon. The APIs behind
 `to` and `kindlyTo` will still allow a gradual migration to the new mechanisms
-to secure inputs while keeping internal implementations of the compontents
+to secure inputs while keeping internal implementations of the components
 based on primitives.
 
 To get rid of primitive obsession we then need a way to define how to build
@@ -1331,7 +1331,7 @@ a transformation with the following signature:
 /**
  * Get a builder for a datastructure, either by using a factory or a class-name.
  *
- * @param	sting|callable	$what
+ * @param	string|callable	$what
  * @return	mixed
  */
 public function toNew($what);
@@ -1387,7 +1387,7 @@ a tuple) we need some facilities that allow to mix and match the structures and
 transformations provided so far.
 
 We start with `inSeries` that simply takes a list of transformations and applies
-the one after the other, each on the value produced by the predecessor:
+one after the other, each on the value produced by the predecessor:
 
 ```php
 $refine = new ILIAS\Refinery\Factory(/* ... */);
@@ -1501,14 +1501,14 @@ assert($my_trafo->transform($values) === $expected);
 ```
 
 Moreover, the `Refinery`-library should provide common constraints and transformations,
-grouped according to their source-type, as required and methods to create a custom
+grouped according to their source-type, as required, and methods to create a custom
 constraint and transformation. If common usage patterns of the basic building blocks
 emerge, they could very well get their own constructor on the factory to be available
 more simple. Also there might be other forms of syntactic sugar that could be poured
 over the basic building blocks to make the usage nicer, e.g. allowing simple lists
 of transformations instead of `inSeries` in appropriate places.
 
-The example from the showcase above than could look like this:
+The example from the showcase above then could look like this:
 
 ```php
 class ilObjectData {
@@ -1578,7 +1578,7 @@ $object_data_from_json = $refine->inSeries(
 ```
 
 The transformations build in this way are reusable, so if we for example had a
-data structure that hold some information about a course, which would be the raw
+data structure that holds some information about a course, which would be the raw
 object data and the start and enddate for this example, this could be created
 from a JSON-string as such:
 
@@ -1632,10 +1632,10 @@ and creating new transformations at the same time. The latter would require the
 transformations to know about the factories themselves and thus, transitively,
 about all their dependencies. While a simple object structure can easily be
 inspected via `var_dump`, `print_r` or some debugger, structures that contain
-huge dependencies are confusing and hard to graps. Since we consider it crucial
+huge dependencies are confusing and hard to grasp. Since we consider it crucial
 to review and understand what is going on when processing user provided input,
-we thus decided against a fluent interface. It would, however, be possible to
-build such an interface over the primitives outlined above which would be a
+we decided against a fluent interface. It would, however, be possible to
+build such an interface over the primitives outlined above, which would be a
 functional equivalent. To gain a nice API we instead suggest to look for places
 that would benefit from syntactic sugar, as well as for recommondations for
 pleasing usage patterns. For the same reason we consider the factory dependencies
@@ -1648,7 +1648,7 @@ library.
 ### A Pattern to Make Developers Remember
 
 As already outlined in the [Evaluation section](#evaluation) of this paper, there
-is pattern that allows us to make developers remember to check constraints and
+is a pattern that allows us to make developers remember to check constraints and
 apply transformations when retrieving a value supplied by a user. Instead of
 simply handing the value to the developer and trust that she won't forget to check
 it, we instead only hand out the value transformed according to some `Transformation`
@@ -1710,9 +1710,9 @@ outlined above and in the example from Leifos possible:
   around the appropriate functions of the PSR-7 `ServerRequestInterface`.
 * The `ilDataSetImporter` should pass a callable `$retrieve` that implements the
   archetypical `getValue`-interface outlined above to `DataSet::importRecord`
-  instead of directly passing the data from the XML directly.
+  instead of directly passing the data from the XML.
 
-The pattern could equally be applied to other inputs can be represented as arrays,
+The pattern could equally be applied to other inputs represented as arrays,
 e.g. the session or settings. The pattern could be expanded to the database too,
 e.g. turn a row into an object. Instead of having an `ilDataSetImportParser` that
 performs the parsing and then passes the data to the `importRecord`-function,
