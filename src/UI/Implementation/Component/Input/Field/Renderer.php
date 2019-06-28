@@ -47,6 +47,8 @@ class Renderer extends AbstractComponentRenderer {
 			$dependant_group_html = $this->renderFieldGroups($component, $default_renderer);
 			$id = $this->bindJavaScript($component);
 			return $this->renderInputFieldWithContext($input_tpl, $component, $id, $dependant_group_html);
+		} elseif ($component instanceof Component\Input\Field\SwitchableGroup) {
+			return $this->renderSwitchableGroupField($component, $default_renderer);
 		} elseif ($component instanceof Component\Input\Field\Tag) {
 			$input_tpl = $this->getTemplate("tpl.tag_input.html", true, true);
 		} elseif ($component instanceof Password) {
@@ -578,6 +580,8 @@ JS;
 			Component\Input\Field\Text::class,
 			Component\Input\Field\Numeric::class,
 			Component\Input\Field\Group::class,
+			Component\Input\Field\OptionalGroup::class,
+			Component\Input\Field\SwitchableGroup::class,
 			Component\Input\Field\Section::class,
 			Component\Input\Field\Checkbox::class,
 			Component\Input\Field\Tag::class,
