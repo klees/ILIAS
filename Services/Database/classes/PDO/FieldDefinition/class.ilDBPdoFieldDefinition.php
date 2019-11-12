@@ -1011,7 +1011,7 @@ abstract class ilDBPdoFieldDefinition {
 		$max_length = $this->getMaxLength();
 		switch ($a_def["type"]) {
 			case self::T_TEXT:
-				if ($a_def["length"] < 1 || $a_def["length"] > $max_length[self::T_TEXT]) {
+				if (!isset($a_def["length"]) || $a_def["length"] < 1 || $a_def["length"] > $max_length[self::T_TEXT]) {
 					if (isset($a_def["length"])) {
 						throw new ilDatabaseException("Invalid length '" . $a_def["length"] . "' for type text." . " Length must be >=1 and <= "
 						                              . $max_length[self::T_TEXT] . ".");
@@ -1026,7 +1026,7 @@ abstract class ilDBPdoFieldDefinition {
 						                              . implode(', ', $max_length[self::T_INTEGER]) . " (bytes).");
 					}
 				}
-				if ($a_def["unsigned"]) {
+				if ($a_def["unsigned"] ?? null) {
 					throw new ilDatabaseException("Unsigned attribut must not be true for type integer.");
 				}
 				break;
@@ -1388,7 +1388,8 @@ abstract class ilDBPdoFieldDefinition {
 					$field['default'] = $valid_default_values[$field['type']];
 				}
 				if ($field['default'] === ''
-				    && ($db->options['portability'] & 32)
+				    && isset($db->options["portability"])
+					&& ($db->options['portability'] & 32)
 				) {
 					$field['default'] = ' ';
 				}
@@ -1400,7 +1401,7 @@ abstract class ilDBPdoFieldDefinition {
 
 		$notnull = empty($field['notnull']) ? '' : ' NOT NULL';
 		// alex patch 28 Nov 2011 start
-		if ($field['notnull'] === false) {
+		if (isset($field["notnull"]) && $field['notnull'] === false) {
 			$notnull = " NULL";
 		}
 		// alex patch 28 Nov 2011 end
