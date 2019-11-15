@@ -2,69 +2,40 @@
 
 use ILIAS\Setup;
 
-class ilCtrlStructureStoredObjective implements Setup\Objective
+class ilCtrlStructureStoredObjective extends Setup\BuildArtifactObjective
 {
-	const TABLE_CLASSFILES = "ctrl_classfile";
-	const TABLE_CALLS = "ctrl_calls";
+	//const TABLE_CLASSFILES = "ctrl_classfile";
+	//const TABLE_CALLS = "ctrl_calls";
+
+	const DATA_FILE = "data/ctrlstructure.php";
 
 	/**
 	 * @var ilCtrlStructureReader
 	 */
 	protected $ctrl_reader;
 
+	/**
+	 * @var string
+	 */
+	protected $data_path;
+
 	public function __construct(\ilCtrlStructureReader $ctrl_reader)
 	{
 		$this->ctrl_reader = $ctrl_reader;
+		$this->data_path = './' .self::DATA_FILE;
+
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getHash(): string
+	public function getArtifactPath() : string
 	{
-		return hash("sha256", self::class);
+		return $this->data_path;
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function getLabel(): string
+	public function build() : Setup\Artifact
 	{
-		return "ilCtrl-structure is read and stored.";
+		$this->ctrl_reader->readStructure(true, './');
+		$structure = $this->ctrl_reader->getEntries();
+		return new Setup\ArrayArtifact($structure);
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function isNotable(): bool
-	{
-		return true;
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function getPreconditions(Setup\Environment $environment): array
-	{
-		$config = $environment->getConfigFor('database');
-		return [
-			new \ilDatabaseExistsObjective($config)
-		];
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function achieve(Setup\Environment $environment): Setup\Environment
-	{
-		$db = $environment->getResource(Setup\Environment::RESOURCE_DATABASE);
-		if (! $db) {
-			throw new \UnachievableException("Need DB to store control-structure");
-		}
-
-		$reader = $this->ctrl_reader->withDB($db);
-		$reader->executed = false;
-		$reader->readStructure(true, ".");
-		return $environment;
-	}
 }

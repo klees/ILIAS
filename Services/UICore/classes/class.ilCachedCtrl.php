@@ -109,15 +109,22 @@ class ilCachedCtrl {
 		while ($rec = $ilDB->fetchAssoc($set)) {
 			$this->service_classes[$rec['lower_class']] = $rec;
 		}
-		$set = $ilDB->query('SELECT * FROM ctrl_calls');
-		while ($rec = $ilDB->fetchAssoc($set)) {
-			$this->ctrl_calls[$rec['parent']][] = $rec;
-		}
-		$set = $ilDB->query('SELECT * FROM ctrl_classfile');
-		while ($rec = $ilDB->fetchAssoc($set)) {
+
+		$structure = $this->readFromFile();
+		$this->ctrl_calls = $structure['calls'];
+		$this->ctrl_classfile_parent = $structure['classfile'];
+		foreach ($this->ctrl_classfile_parent as $k=>$rec) {
 			$this->ctrl_classfile[$rec['cid']] = $rec;
-			$this->ctrl_classfile_parent[$rec['class']] = $rec;
 		}
+	}
+
+	protected function readFromFile()
+	{
+		$path = dirname(__FILE__)
+			.'/../../../'
+			.ilCtrlStructureStoredObjective::DATA_FILE;
+		$structure = require($path);
+		return $structure;
 	}
 
 

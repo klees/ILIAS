@@ -44,7 +44,7 @@ class ilUICoreSetupAgent implements Setup\Agent
 	 */
 	public function getInstallObjective(Setup\Config $config = null): Setup\Objective
 	{
-		return new \ilCtrlStructureStoredObjective($this->ctrl_reader);
+		return new Setup\NullObjective();
 	}
 
 	/**
@@ -52,6 +52,7 @@ class ilUICoreSetupAgent implements Setup\Agent
 	 */
 	public function getUpdateObjective(Setup\Config $config = null): Setup\Objective
 	{
+		return new Setup\NullObjective();
 		return new \ilCtrlStructureStoredObjective($this->ctrl_reader);
 	}
 
@@ -60,6 +61,8 @@ class ilUICoreSetupAgent implements Setup\Agent
 	 */
 	public function getBuildArtifactObjective(): Setup\Objective
 	{
-		return new Setup\NullObjective();
+		return new \ilCtrlStructureStoredObjective(
+			$this->ctrl_reader
+		);
 	}
 }

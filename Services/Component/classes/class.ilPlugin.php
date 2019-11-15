@@ -1013,9 +1013,10 @@ abstract class ilPlugin
                 " AND name = " . $ilDB->quote($this->getPluginName(), "text");
             $ilDB->manipulate($q);
 
+/*
             $ilDB->manipulateF('DELETE FROM ctrl_classfile WHERE comp_prefix=%s', [ilDBConstants::T_TEXT], [$this->getPrefix()]);
             $ilDB->manipulateF('DELETE FROM ctrl_calls WHERE comp_prefix=%s', [ilDBConstants::T_TEXT], [$this->getPrefix()]);
-
+*/
             $this->afterUninstall();
 
             ilCachedComponentData::flush();
@@ -1060,15 +1061,15 @@ abstract class ilPlugin
         }
 
         // load control structure
-        include_once("./setup/classes/class.ilCtrlStructureReader.php");
         $structure_reader = new ilCtrlStructureReader();
-        $structure_reader->readStructure(true, "./" . $this->getDirectory(), $this->getPrefix(),
-            $this->getDirectory());
 
-        // add config gui to the ctrl calls
-        $ilCtrl->insertCtrlCalls(
-            "ilobjcomponentsettingsgui", ilPlugin::getConfigureClassName(["name" => $this->getPluginName()]),
-            $this->getPrefix()
+        $config_gui_name = ilPlugin::getConfigureClassName(["name" => $this->getPluginName()]);
+        $structure_reader->readAndAppend(
+            "./" .$this->getDirectory(),
+            $this->getPrefix(),
+            $this->getDirectory(),
+            $config_gui_name,
+            $ilCtrl
         );
 
         $this->readEventListening();
