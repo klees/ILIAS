@@ -15807,7 +15807,7 @@ prg#:#vq_period_info#:#Days until qualification will expire after achivement
 prg#:#vq_date_info#:#Qualification expires at fixed date
 prg#:#restart_information#:#Information regarding automatic restart upon pending qualification expiration
 prg#:#restart_period_info#:#Days before qualification expiration to restart qualification
-prg#:#access_ctr_by_orgu_position#:#Access conrol according to Organisational Unit Positions
+prg#:#access_ctr_by_orgu_position#:#Access control according to Organisational Unit Positions
 prg#:#could_not_add_users_no_permissons#:#Could not assign %d Users due to lacking permissions.
 prg#:#not_a_valid_cat_id#:#%s is not a valid ref-id of a category.
 prg#:#prg_mail_permanent_link#:#Click on the following link to find all of the information you need regarding the study programm:
@@ -15821,3 +15821,9 @@ prg#:#prg_user_not_restarted_time_input_info#:#Reminder Mail Reminds the user x 
 prg#:#prg_processing_ends_no_success#:#Reminder mail failing
 prg#:#prg_processing_ends_no_success_info#:#Reminds the user x days before the program expires that he is at risk of failing.
 prg#:#prg_cron_job_configuration#:#Configuration automatic Mails
+prg#:#prg_multi_change_deadline#:#Change deadline
+prg#:#prg_multi_change_expire_date#:#Change expire date
+prg#:#update_expire_date#:#Successfuly update expire date.
+prg#:#update_deadline#:#Successfuly update deadline.
+prg#:#error_updating_expire_date#:#Error during updating expire date.
+prg#:#error_updating_deadline#:#Error during updating deadline.

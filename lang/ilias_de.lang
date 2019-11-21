@@ -15837,3 +15837,9 @@ prg#:#prg_user_not_restarted_time_input#:#Erinnerungsmail Neustart
 prg#:#prg_user_not_restarted_time_input_info#:#Erinnert den Benutzer x Tage vor der invalidierung, dass er das Programm neu starten muss.
 prg#:#prg_processing_ends_no_success#:#Erinnerungsmail Fehlschlag
 prg#:#prg_processing_ends_no_success_info#:#Erinnert den Benutzer x Tage vor Ablauf des Programms, dass er gefährdet ist nicht zu bestehen.
+prg#:#prg_multi_change_deadline#:#Stichtag anpassen
+prg#:#prg_multi_change_expire_date#:#Ablauf Qualifikation anpassen
+prg#:#prg_update_expire_date#:#Ablauf Qualifikation erfolgreich aktualisiert.
+prg#:#update_deadline#:#Stichtag erfolgreich aktualisiert.
+prg#:#error_updating_expire_date#:#Ein Fehler ist während der Aktualisierung von 'Ablauf Qualifikation' aufgetreten.
+prg#:#error_updating_deadline#:#Ein Fehler ist während der Aktualisierung von 'Stichtag' aufgetreten.
