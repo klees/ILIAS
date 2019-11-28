@@ -1,6 +1,9 @@
-<?php declare(strict_types = 1);
+<?php
 
 /* Copyright (c) 2015 Richard Klees <richard.klees@concepts-and-training.de> Extended GPL, see docs/LICENSE */
+/* Copyright (c) 2019 Stefan Hecken <stefan.hecken@concepts-and-training.de> Extended GPL, see docs/LICENSE */
+
+declare(strict_types = 1);
 
 /**
  * Class ilStudyProgramme
@@ -110,7 +113,7 @@ class ilStudyProgrammeSettings{
 
 	/**
 	 * The date, before which a user has to finish the prg, before he/she automaticaly fails.
-	 * @var int | DateTime
+	 * @var DateTime | null
 	 */
 	protected $deadline_date = null;
 
@@ -138,6 +141,16 @@ class ilStudyProgrammeSettings{
 	 * @var bool
 	 */
 	protected $access_ctrl_positions;
+
+	/**
+	 * @var int | null
+	 */
+	protected $reminder_not_restarted_by_user_days;
+
+	/**
+	 * @var int | null
+	 */
+	protected $processing_ends_not_successful_days;
 
 	public function __construct(int $a_id)
 	{
@@ -416,6 +429,30 @@ class ilStudyProgrammeSettings{
 	{
 		return $this->access_ctrl_positions;
 	}
-}
 
-?>
+	public function setReminderNotRestartedByUserDays(int $days = null) : void
+	{
+		$this->reminder_not_restarted_by_user_days = $days;
+	}
+
+	/**
+	 * @return int | null
+	 */
+	public function getReminderNotRestartedByUserDays()
+	{
+		return $this->reminder_not_restarted_by_user_days;
+	}
+
+	public function setProcessingEndsNotSuccessfulDays(int $days = null) : void
+	{
+		$this->processing_ends_not_successful_days = $days;
+	}
+
+	/**
+	 * @return int | null
+	 */
+	public function getProcessingEndsNotSuccessfulDays()
+	{
+		return $this->processing_ends_not_successful_days;
+	}
+}
