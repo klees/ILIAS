@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace ILIAS\Refinery\KindlyTo;
 
-use ILIAS\Refinery\Transformation\StringTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\Transformation;
 
 /**
@@ -22,6 +22,19 @@ use ILIAS\Refinery\Transformation;
  */
 class Group
 {
+    /**
+     * @var \ILIAS\Data\Factory
+     */
+    private $dataFactory;
+
+    /**
+     * @param \ILIAS\Data\Factory $dataFactory
+     */
+    public function __construct(\ILIAS\Data\Factory $dataFactory)
+    {
+        $this->dataFactory = $dataFactory;
+    }
+
     /**
      * Get a kind transformation to an `int`.
      *
@@ -42,6 +55,7 @@ class Group
      *
      * All other data will be discarded.
      */
+
     public function int() : Transformation
     {
         throw new \LogicException("Not implemented yet.");
