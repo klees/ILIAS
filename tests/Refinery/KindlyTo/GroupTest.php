@@ -5,7 +5,7 @@
  * @author Luka Stocker <lstocker@concepts-and-training.de>
  */
 
-namespace ILIAS\Refinery\KindlyTo;
+namespace ILIAS\Tests\Refinery\KindlyTo;
 
 use ILIAS\Data\Alphanumeric;
 use ILIAS\Refinery\KindlyTo\Group;
