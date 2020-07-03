@@ -17,7 +17,22 @@ use ILIAS\Tests\Refinery\TestCase;
 /**
  * Test transformations in this Group
  */
-class StringTransformationTest extends TestCase
+const StringVal = 'hello';
+const IntVal = 300;
+const NegativeIntVal = -300;
+const ZeroIntVal = 0;
+const PositiveBool = true;
+const NegativeBool = false;
+const FloatVal = 20.5;
+const StringTransformed = 'hello';
+const IntTransformed = '300';
+const NegativeIntTransformed = '-300';
+const ZeroIntTransformed = '0';
+const PositiveBoolTransformed = 'true';
+const NegativeBoolTransformed = 'false';
+const FloatValTransformed = '20.5';
+
+class KindlyToStringTransformationTest extends TestCase
 {
     /**
      * @var StringTransformation
@@ -31,86 +46,50 @@ class StringTransformationTest extends TestCase
 
     public function testStringToStringTransformation()
     {
-        $transformedValue = $this->transformation->transform('hello');
+        $transformedValue = $this->transformation->transform(StringVal);
 
-        $this->assertEquals('hello', $transformedValue);
+        $this->assertEquals(StringTransformed, $transformedValue);
     }
 
     public function testIntegerToStringTransformation()
     {
-        $this->expectNotToPerformAssertions();
+        $transformedValue = $this->transformation->transform(IntVal);
 
-        try {
-            $transformedValue = $this->transformation->transform(300);
-        } catch (ConstraintViolationException $exception) {
-            return;
-        }
-
-        $this->fail();
+        $this->assertEquals(IntTransformed, $transformedValue);
     }
 
     public function testNegativeIntegerToStringTransformation()
     {
-        $this->expectNotToPerformAssertions();
+        $transformedValue = $this->transformation->transform(NegativeIntVal);
 
-        try        {
-            $transformedValue = $this->transformation->transform(-300);
-        } catch (ConstraintViolationException $exception) {
-            return;
-        }
-
-        $this->assertEquals('-300', $transformedValue);
+        $this->assertEquals(NegativeIntTransformed, $transformedValue);
     }
 
     public function testZeroIntegerToStringTransformation()
     {
-        $this->expectNotToPerformAssertions();
+        $transformedValue = $this->transformation->transform(ZeroIntVal);
 
-        try {
-            $transformedValue = $this->transformation->transform(0);
-        } catch (ConstraintViolationException $exception) {
-            return;
-        }
-
-        $this->fail();
+        $this->assertEquals(ZeroIntTransformed, $transformedValue);
     }
 
     public function testPositiveBooleanToStringTransformation()
     {
-        $this->expectNotToPerformAssertions();
+        $transformedValue = $this->transformation->transform(PositiveBool);
 
-        try {
-            $transformedValue = $this->transformation->transform(true);
-        } catch (ConstraintViolationException $exception) {
-            return;
-        }
-
-        $this->fail();
+        $this->assertEquals(PositiveBoolTransformed, $transformedValue);
     }
 
     public function testNegativeBooleanToStringTransformation()
     {
-        $this->expectNotToPerformAssertions();
+        $transformedValue = $this->transformation->transform(NegativeBool);
 
-        try {
-            $transformedValue = $this->transformation->transform(false);
-        } catch (ConstraintViolationException $exception) {
-            return;
-        }
-
-        $this->fail();
+        $this->assertEquals(NegativeBoolTransformed, $transformedValue);
     }
 
     public function testFloatToStringTransformation()
     {
-        $this->expectNotToPerformAssertions();
+        $transformedValue = $this->transformation->transform(FloatVal);
 
-        try {
-            $transformedValue = $this->transformation->transform(20.5);
-        } catch (ConstraintViolationException $exception) {
-            return;
-        }
-
-        $this->fail();
+        $this->assertEquals(FloatValTransformed, $transformedValue);
     }
 }

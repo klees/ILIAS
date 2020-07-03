@@ -7,7 +7,6 @@
 
 namespace ILIAS\Tests\Refinery\KindlyTo;
 
-use ILIAS\Data\Alphanumeric;
 use ILIAS\Refinery\KindlyTo\Group;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Tests\Refinery\TestCase;
@@ -30,6 +29,6 @@ class GroupTest extends TestCase
     {
         $transformation = $this->basicGroup->string();
 
-        $this->assertInstanceOf(StringTransformation::class, $transformation);
+        $this->assertInstanceOf(KindlyToStringTransformation::class, $transformation);
     }
 }
