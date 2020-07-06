@@ -11,8 +11,16 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
-class StringTransformation implements Transformation
+abstract class StringTransformation implements Transformation
 {
+    public function transform($from)
+    {
 
+    }
+
+    public function __invoke($from)
+    {
+        // TODO: Implement __invoke() method.
+    }
 }
 
