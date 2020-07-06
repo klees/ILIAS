@@ -31,7 +31,7 @@ const FloatValTransformed = '20.5';
 /**
  * Test transformations in this Group
  */
-class KindlyToStringTransformationTest extends TestCase
+abstract class KindlyToStringTransformationTest extends TestCase
 {
     /**
      * @var StringTransformation
