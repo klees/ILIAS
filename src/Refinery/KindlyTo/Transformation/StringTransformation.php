@@ -46,6 +46,7 @@ class StringTransformation implements Transformation
 
     public function __toString($form)
     {
+        $form = $this->toString($form);
         return (string) $form;
     }
 
