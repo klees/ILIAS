@@ -12,6 +12,13 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
+const BoolTrue = true;
+const BoolFalse = false;
+const BoolTrueNumber = 1;
+const BoolFalseNumber = 0;
+const BoolTrueString = 'true';
+const BoolFalseString = 'false';
+
 class StringTransformation implements Transformation
 {
     use DeriveApplyToFromTransform;
@@ -27,20 +34,25 @@ class StringTransformation implements Transformation
         {
             return $from;
         }
-        elseif (true === is_bool($from))
+        elseif (true === is_bool($from) || $from === BoolTrueNumber || $from === BoolFalseNumber)
         {
-            $from = (boolval($from) ? 'true' : 'false');
-            $from = strval($from);
-            return $from;
-        }
-        else
-        {
-            if (false === is_string($from)) {
-                throw new ConstraintViolationException(
-                    'The value could not be transformed into a string',
-                    'not_string'
-                );
+            if($from === BoolTrue || $from === BoolTrueNumber)
+            {
+                $from = strval(BoolTrueString);
+                return $from;
             }
+            elseif($from === BoolFalse || $from === BoolFalseNumber)
+            {
+                $from = strval(BoolFalseString);
+                return $from;
+            }
+        }
+        elseif (false === is_string($from))
+        {
+            throw new ConstraintViolationException(
+                'The value could not be transformed into a string',
+        'not_string'
+                );
         }
     }
 
