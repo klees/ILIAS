@@ -90,12 +90,4 @@ class KindlyToStringTransformationTest extends TestCase
 
         $this->assertEquals(FloatValTransformed, $transformedValue);
     }
-    public function testStringToStringApply()
-    {
-        $resultObject = new Result\Ok(StringVal);
-
-        $transformedObject = $this->transformation->applyTo($resultObject);
-
-        $this->assertEquals(StringVal, $transformedObject->value());
-    }
 }
