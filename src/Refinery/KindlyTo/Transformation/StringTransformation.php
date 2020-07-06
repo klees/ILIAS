@@ -7,15 +7,21 @@
 
 namespace ILIAS\Refinery\KindlyTo\Transformation;
 
+use ILIAS\Data\Result;
 use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
-abstract class StringTransformation implements Transformation
+class StringTransformation implements Transformation
 {
     public function transform($from)
     {
 
+    }
+
+    public function applyTo(Result $data): Result
+    {
+        // TODO: Implement applyTo() method.
     }
 
     public function __invoke($from)
