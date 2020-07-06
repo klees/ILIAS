@@ -10,13 +10,14 @@ namespace ILIAS\Refinery\KindlyTo\Transformation;
 use ILIAS\Data\Result;
 use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
-use ILIAS\Refinery\ConstraintViolationException;
 
 class StringTransformation implements Transformation
 {
+    use DeriveApplyToFromTransform;
+
     public function transform($from)
     {
-        if(true === is_int($from) || true === is_bool($from) || true === is_float($from) || true === is_double($from))
+        if(true === is_int($from) || true === is_float($from) || true === is_double($from))
         {
             $from = strval($from);
             return $from;
@@ -25,11 +26,15 @@ class StringTransformation implements Transformation
         {
             return $from;
         }
+        elseif (true === is_bool($from))
+        {
+            $from = (boolval($from) ? 'true' : 'false');
+            return $from;
+        }
         else
         {
-            return (string)$from;
+            return (string) $from;
         }
-
     }
 
     public function applyTo(Result $data): Result
