@@ -9,6 +9,7 @@ namespace ILIAS\Tests\Refinery\KindlyTo;
 
 use ILIAS\Refinery\KindlyTo\Group;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once('./libs/composer/vendor/autoload.php');
@@ -30,5 +31,12 @@ class GroupTest extends TestCase
         $transformation = $this->basicGroup->string();
 
         $this->assertInstanceOf(StringTransformation::class, $transformation);
+    }
+
+    public function testIsBooleanTransformationInstance()
+    {
+        $transformation = $this->basicGroup->bool();
+
+        $this->assertInstanceOf(BooleanTransformation::class, $transformation);
     }
 }
