@@ -16,12 +16,12 @@ class StringTransformation implements Transformation
 {
     public function transform($from)
     {
-        if (false === is_string($from)) {
+        /** if (false === is_string($from)) {
             throw new ConstraintViolationException(
                 'The value MUST be of type string',
                 'not_string'
             );
-        }
+        }*/
         return (string) $from;
     }
 
