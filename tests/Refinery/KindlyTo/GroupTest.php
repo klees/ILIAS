@@ -29,6 +29,6 @@ class GroupTest extends TestCase
     {
         $transformation = $this->basicGroup->string();
 
-        $this->assertInstanceOf(KindlyToStringTransformation::class, $transformation);
+        $this->assertInstanceOf(StringTransformation::class, $transformation);
     }
 }
