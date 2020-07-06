@@ -31,7 +31,7 @@ const FloatValTransformed = '20.5';
 /**
  * Test transformations in this Group
  */
-abstract class KindlyToStringTransformationTest extends TestCase
+class KindlyToStringTransformationTest extends TestCase
 {
     /**
      * @var StringTransformation
@@ -91,4 +91,14 @@ abstract class KindlyToStringTransformationTest extends TestCase
 
         $this->assertEquals(FloatValTransformed, $transformedValue);
     }
+
+    public function testStringToApply()
+    {
+        $resultObject = new Result\Ok(StringTransformed);
+
+        $transformedObject = $this->transformation->applyTo($resultObject);
+
+        $this->assertEquals(StringTransformed, $transformedObject->value());
+    }
+
 }
