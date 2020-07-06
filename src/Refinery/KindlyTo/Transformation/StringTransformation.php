@@ -29,6 +29,7 @@ class StringTransformation implements Transformation
         elseif (true === is_bool($from))
         {
             $from = (boolval($from) ? 'true' : 'false');
+            $from = strval($from);
             return $from;
         }
         else

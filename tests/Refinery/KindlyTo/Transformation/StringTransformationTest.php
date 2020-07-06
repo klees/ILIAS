@@ -23,8 +23,8 @@ const FloatVal = 20.5;
 const IntTransformed = '300';
 const NegativeIntTransformed = '-300';
 const ZeroIntTransformed = '0';
-const PositiveBoolTransformed = '1';
-const NegativeBoolTransformed = '';
+const PositiveBoolTransformed = 'true';
+const NegativeBoolTransformed = 'false';
 const FloatValTransformed = '20.5';
 
 /**
