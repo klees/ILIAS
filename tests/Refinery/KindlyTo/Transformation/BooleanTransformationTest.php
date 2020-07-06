@@ -13,12 +13,12 @@ use ILIAS\Data\Result;
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
-const PosBoolean = "true";
-const NegBoolean = "false";
+const PosBoolean = 'true';
+const NegBoolean = 'false';
 const PosBooleanNumber = 1;
 const NegBooleanNumber = 0;
-const PosBooleanNumberString = "1";
-const NegBooleanNumberString = "0";
+const PosBooleanNumberString = '1';
+const NegBooleanNumberString = '0';
 const TransformedPosBoolean = true;
 const TransformedNegBoolean = false;
 
@@ -68,6 +68,6 @@ class BooleanTransformationTest extends TestCase
             $transformedValue = $this->transformation->transform(NegBooleanNumberString);
 
             $this->assertEquals(TransformedNegBoolean, $transformedValue);
-       
+
     }
 }
