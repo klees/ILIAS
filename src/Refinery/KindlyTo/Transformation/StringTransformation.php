@@ -44,10 +44,10 @@ class StringTransformation implements Transformation
         }
     }
 
-    public function __toString($form)
+    public function __toString($from)
     {
-        $form = $this->toString($form);
-        return (string) $form;
+        return (string) $from;
+
     }
 
     public function applyTo(Result $data): Result
