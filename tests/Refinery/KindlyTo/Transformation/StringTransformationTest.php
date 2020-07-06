@@ -5,7 +5,7 @@
  * @author Luka Stocker <lstocker@concepts-and-training.de>
  */
 
-namespace ILIAS\Tests\Refinery\To\Transformation;
+namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
 require_once('./libs/composer/vendor/autoload.php');
 
