@@ -12,10 +12,43 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
+const BoolTrueString = 'true';
+const BoolFalseString = 'false';
+const BoolTrueNumber = 1;
+const BoolFalseNumber = 0;
+const BoolTrueNumberString = '1';
+const BoolFalseNumberString = '0';
+
 class BooleanTransformation implements Transformation
 {
     use DeriveApplyToFromTransform;
 
+    public function transform($from)
+    {
+        if($from === BoolTrueNumber || $from === BoolTrueNumberString || $from === (strcasecmp(BoolTrueString, $from) === 0))
+        {
+            $from = true;
+            return $from;
+        }
+        elseif($from === BoolFalseNumber || $from === BoolFalseNumberString || $from === (strcasecmp(BoolFalseString, $from) === 0))
+        {
+            $from = false;
+            return $from;
+        }
+        else {
+            throw new ConstraintViolationException(
+                'The value could not be transformed into boolean.',
+                'not_boolean'
+            );
+        }
 
+    }
+    public function applyTo(Result $data): Result
+    {
+    }
 
+    public function __invoke($from)
+    {
+        return $this->transform($from);
+    }
 }
