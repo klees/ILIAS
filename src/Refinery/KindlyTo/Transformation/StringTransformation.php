@@ -10,6 +10,7 @@ namespace ILIAS\Refinery\KindlyTo\Transformation;
 use ILIAS\Data\Result;
 use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
+use ILIAS\Refinery\ConstraintViolationException;
 
 class StringTransformation implements Transformation
 {
@@ -34,8 +35,18 @@ class StringTransformation implements Transformation
         }
         else
         {
-            return (string) $from;
+            if (false === is_string($from)) {
+                throw new ConstraintViolationException(
+                    'The value could not be transformed into a string',
+                    'not_string'
+                );
+            }
         }
+    }
+
+    public function __toString($form)
+    {
+        return (string) $form;
     }
 
     public function applyTo(Result $data): Result
