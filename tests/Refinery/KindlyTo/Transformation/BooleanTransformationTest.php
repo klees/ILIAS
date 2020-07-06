@@ -44,13 +44,13 @@ class BooleanTransformationTest extends TestCase
 
             $this->assertEquals(TransformedPosBoolean, $transformedValue);
 
-            /**  $transformedValue $transformedValue = $this->transformation->transform(PosBooleanNumber);
+            $transformedValue $transformedValue = $this->transformation->transform(PosBooleanNumber);
 
             $this->assertEquals(TransformedPosBoolean, $transformedValue);
 
             $transformedValue = $this->transformation->transform(PosBooleanNumberString);
 
-            $this->assertEquals(TransformedPosBoolean, $transformedValue);*/
+            $this->assertEquals(TransformedPosBoolean, $transformedValue);
 
     }
 
@@ -61,13 +61,13 @@ class BooleanTransformationTest extends TestCase
 
             $this->assertEquals(TransformedNegBoolean, $transformedValue);
 
-            /**  $transformedValue = $this->transformation->transform(NegBooleanNumber);
+            $transformedValue = $this->transformation->transform(NegBooleanNumber);
 
             $this->assertEquals(TransformedNegBoolean, $transformedValue);
 
             $transformedValue = $this->transformation->transform(NegBooleanNumberString);
 
-            $this->assertEquals(TransformedNegBoolean, $transformedValue);*/
+            $this->assertEquals(TransformedNegBoolean, $transformedValue);
 
     }
 }
