@@ -16,7 +16,13 @@ class StringTransformation implements Transformation
 {
     public function transform($from)
     {
-
+        if (false === is_string($from)) {
+            throw new ConstraintViolationException(
+                'The value MUST be of type string',
+                'not_string'
+            );
+        }
+        return (string) $from;
     }
 
     public function applyTo(Result $data): Result
@@ -26,7 +32,7 @@ class StringTransformation implements Transformation
 
     public function __invoke($from)
     {
-        // TODO: Implement __invoke() method.
+        return $this->transform($from);
     }
 }
 
