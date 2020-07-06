@@ -140,9 +140,9 @@ class Group
      * seem to introduce more problems than they solve, so we decided to not be
      * very liberal here.
      */
-    public function bool() : Transformation
+    public function bool() : BooleanTransformation
     {
-        throw new \LogicException("Not implemented yet.");
+        return new BooleanTransformation();
     }
 
     /**
