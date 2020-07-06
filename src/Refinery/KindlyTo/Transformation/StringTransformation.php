@@ -19,25 +19,21 @@ class StringTransformation implements Transformation
         if(true === is_int($from) || true === is_bool($from) || true === is_float($from) || true === is_double($from))
         {
             $from = strval($from);
-            return (string) $from;
+            return $from;
         }
         elseif (true === is_string($from))
         {
-            return (string) $from;
+            return $from;
         }
-        elseif (false === is_string($from))
+        else
         {
-            throw new ConstraintViolationException(
-                'The value MUST be of type string',
-                'not_string'
-            );
+            return (string)$from;
         }
 
     }
 
     public function applyTo(Result $data): Result
     {
-
     }
 
     public function __invoke($from)
