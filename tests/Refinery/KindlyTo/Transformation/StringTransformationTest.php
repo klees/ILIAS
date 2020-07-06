@@ -11,12 +11,8 @@ require_once('./libs/composer/vendor/autoload.php');
 
 use ILIAS\Data\Result;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
-use ILIAS\Refinery\ConstraintViolationException;
 use ILIAS\Tests\Refinery\TestCase;
 
-/**
- * Test transformations in this Group
- */
 const StringVal = 'hello';
 const IntVal = 300;
 const NegativeIntVal = -300;
@@ -32,6 +28,9 @@ const PositiveBoolTransformed = 'true';
 const NegativeBoolTransformed = 'false';
 const FloatValTransformed = '20.5';
 
+/**
+ * Test transformations in this Group
+ */
 class KindlyToStringTransformationTest extends TestCase
 {
     /**
