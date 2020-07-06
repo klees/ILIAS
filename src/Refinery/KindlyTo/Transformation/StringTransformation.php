@@ -16,10 +16,14 @@ class StringTransformation implements Transformation
 {
     public function transform($from)
     {
-        if(is_int($from) || is_bool($from) || is_float($from) || is_double($from))
+        if(true === is_int($from) || true === is_bool($from) || true === is_float($from) || true === is_double($from))
         {
             $from = strval($from);
-            return $from;
+            return (string) $from;
+        }
+        elseif (true === is_string($from))
+        {
+            return (string) $from;
         }
         elseif (false === is_string($from))
         {
@@ -28,6 +32,7 @@ class StringTransformation implements Transformation
                 'not_string'
             );
         }
+
     }
 
     public function applyTo(Result $data): Result
