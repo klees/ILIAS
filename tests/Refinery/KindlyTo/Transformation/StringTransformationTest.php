@@ -13,14 +13,13 @@ use ILIAS\Data\Result;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
-const StringVal = 'hello';
+
 const IntVal = 300;
 const NegativeIntVal = -300;
 const ZeroIntVal = 0;
 const PositiveBool = true;
 const NegativeBool = false;
 const FloatVal = 20.5;
-const StringTransformed = 'hello';
 const IntTransformed = '300';
 const NegativeIntTransformed = '-300';
 const ZeroIntTransformed = '0';
@@ -45,9 +44,10 @@ class KindlyToStringTransformationTest extends TestCase
 
     public function testStringToStringTransformation()
     {
-        $transformedValue = $this->transformation->transform(StringVal);
+        $StringVal = 'hello';
+        $transformedValue = $this->transformation->transform($StringVal);
 
-        $this->assertEquals(StringTransformed, $transformedValue);
+        $this->assertEquals($StringVal, $transformedValue);
     }
 
     public function testIntegerToStringTransformation()
