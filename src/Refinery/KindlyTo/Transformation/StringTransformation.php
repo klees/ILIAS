@@ -16,12 +16,23 @@ class StringTransformation implements Transformation
 {
     public function transform($from)
     {
-        return (string) $from;
+        if(is_int($from) || is_bool($from) || is_float($from) || is_double($from))
+        {
+            $from = strval($from);
+            return $from;
+        }
+        elseif (false === is_string($from))
+        {
+            throw new ConstraintViolationException(
+                'The value MUST be of type string',
+                'not_string'
+            );
+        }
     }
 
     public function applyTo(Result $data): Result
     {
-        // TODO: Implement applyTo() method.
+
     }
 
     public function __invoke($from)
