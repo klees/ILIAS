@@ -12,7 +12,7 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
-class BoolToBooleanTransformation implements Transformation
+class BooleanTransformation implements Transformation
 {
     use DeriveApplyToFromTransform;
 
