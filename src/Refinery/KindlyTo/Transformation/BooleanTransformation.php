@@ -25,12 +25,12 @@ class BooleanTransformation implements Transformation
 
     public function transform($from)
     {
-        if($from === BoolTrueNumber || $from === BoolTrueNumberString || $from === (strcasecmp(BoolTrueString, $from) === 0))
+        if($from === BoolTrueNumber || $from === BoolTrueNumberString || $from === BoolTrueString)
         {
             $from = true;
             return $from;
         }
-        elseif($from === BoolFalseNumber || $from === BoolFalseNumberString || $from === (strcasecmp(BoolFalseString, $from) === 0))
+        elseif($from === BoolFalseNumber || $from === BoolFalseNumberString || $from === BoolFalseString)
         {
             $from = false;
             return $from;
