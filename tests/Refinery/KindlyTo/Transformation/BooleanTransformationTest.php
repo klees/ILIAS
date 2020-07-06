@@ -44,7 +44,7 @@ class BooleanTransformationTest extends TestCase
 
             $this->assertEquals(TransformedPosBoolean, $transformedValue);
 
-            $transformedValue $transformedValue = $this->transformation->transform(PosBooleanNumber);
+            $transformedValue = $this->transformation->transform(PosBooleanNumber);
 
             $this->assertEquals(TransformedPosBoolean, $transformedValue);
 
