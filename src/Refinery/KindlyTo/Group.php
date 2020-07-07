@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace ILIAS\Refinery\KindlyTo;
 
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\Transformation;
 use SimpleSAML\TwigConfigurableI18n\Twig\Extensions\Node\Trans;
