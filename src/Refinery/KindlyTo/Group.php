@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace ILIAS\Refinery\KindlyTo;
 
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
-use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;
+/**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\Transformation;
 use SimpleSAML\TwigConfigurableI18n\Twig\Extensions\Node\Trans;
@@ -179,11 +179,9 @@ class Group
      *
      * This supports all data represented as PHP array. Non-arrays will be wrapped
      * in one.
-     *
-     * @param Transformation $transformation
-     * @return DictionaryTransformation
      */
-    public function dictOf(Transformation $transformation) : DictionaryTransformation
+    public function dictOf(Transformation $transformation) : Transformation
+    /**dictOf(Transformation $transformation) : DictionaryTransformation*/
     {
         throw new \LogicException("Not implemented yet.");
         /** return new DictionaryTransformation($transformation); */
