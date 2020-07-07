@@ -33,4 +33,6 @@ class DictionaryTransformationTest extends TestCase
         $this->assertEquals(array(TestName => TestAge), $result);
     }
 
+    /** TBC ... */
+
 }
