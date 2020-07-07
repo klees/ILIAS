@@ -38,7 +38,7 @@ class DateTimeTransformation implements Transformation
     public function transform($from)
     {
 
-        if(DateTime::createFromFormat(DtAtom, $from) !== FALSE)
+        if(DateTime::createFromFormat(DtAtom, strval($from)) !== FALSE)
         {
             $DateImmutable = new \DateTimeImmutable($from, $timezone = NULL);
             return $DateImmutable->format(DtAtom);
