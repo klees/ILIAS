@@ -50,7 +50,7 @@ class DateTimeTransformation implements Transformation
         }
         else
         {
-            throw new \InvalidArgumentException("$from could not be transformed.", 1);
+            /**throw new \InvalidArgumentException("$from could not be transformed.", 1);*/
         }
     }
 
