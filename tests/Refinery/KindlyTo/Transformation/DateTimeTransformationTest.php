@@ -13,6 +13,7 @@ use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use PHPUnit\Framework\TestCase;
 
 const DateExample = '2020-07-06 12:23:05';
+const DateNew = '2020-07-06T12:23:06+0000';
 const UnixDate = '1593993600';
 
 /**
@@ -33,10 +34,11 @@ class DateTimeTransformationTest extends TestCase
 
     public function testDateTimeTransformation()
     {
-        $DateImmutable = new \DateTimeImmutable("2020-07-06T12:23:06+0000");
-        $transformedValue = $this->transformation->transform(DateExample);
+        $original = new \DateTimeImmutable(DateExample);
+        $expected = new \DateTimeImmutable(DateNew);
+        $transformedValue = $this->transformation->transform($original);
 
-        $this->assertEquals($DateImmutable, $transformedValue);
+        $this->assertEquals($expected, $transformedValue);
     }
 
     public function testDateTimeToUnixTimestampTransformation()
