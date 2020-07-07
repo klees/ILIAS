@@ -41,10 +41,10 @@ class GroupTest extends TestCase
         $this->assertInstanceOf(BooleanTransformation::class, $transformation);
     }
 
-    public function testNewDictionaryTransformation()
+    /** public function testNewDictionaryTransformation()
     {
         $transformation = $this->basicGroup->dictOf(new StringTransformation());
 
         $this->assertInstanceOf(DictionaryTransformation::class, $transformation);
-    }
+    }*/
 }
