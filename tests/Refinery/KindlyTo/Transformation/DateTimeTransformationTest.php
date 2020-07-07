@@ -41,8 +41,7 @@ class DateTimeTransformationTest extends TestCase
 
     public function testDateTimeToUnixTimestampTransformation()
     {
-        $date = new \DateTime('DateExample');
-        $transformedValue = $this->transformation->transform($date);
+        $transformedValue = $this->transformation->transform(DateExample);
 
         $this->assertEquals(UnixDate, $transformedValue);
 
