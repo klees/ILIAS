@@ -43,8 +43,7 @@ class DateTimeTransformation implements Transformation
         }
         elseif(true === is_int($from))
         {
-            $date = new DateTime('$from');
-            return date_timestamp_get($date);
+            return $UnixTimestamp = strtotime('$from');
         }
         else
         {
