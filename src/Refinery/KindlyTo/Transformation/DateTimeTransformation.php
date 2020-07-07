@@ -41,7 +41,8 @@ class DateTimeTransformation implements Transformation
         if(true === $ts = $from->format(DtAtom || DtCookie || DtISO8601 || DtRFC822 || DtRFC850 || DtRFC1036 || DtRFC1123 ||
         DtRFC7231 || DtRFC2822 || DtRFC3339 || DtRFC3339ext || DtRSS || DtW3C))
         {
-            return $DateImmutable = new \DateTimeImmutable($from, $timezone =  NULL);
+            $from = strlen($from);
+            return $DateImmutable = new \DateTimeImmutable($from);
         }
         elseif(true === is_int($from))
         {
