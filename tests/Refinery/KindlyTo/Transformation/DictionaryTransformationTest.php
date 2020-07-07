@@ -24,7 +24,7 @@ const TestAge = '49';
 
 class DictionaryTransformationTest extends TestCase
 {
-    public function testDictionaryTransformation()
+    /**public function testDictionaryTransformation()
     {
         $transformation = new DictionaryTransformation(new StringTransformation());
 
@@ -33,6 +33,6 @@ class DictionaryTransformationTest extends TestCase
         $this->assertEquals(array(TestName => TestAge), $result);
     }
 
-    /** TBC ... */
+     TBC ... */
 
 }
