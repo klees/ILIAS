@@ -37,10 +37,10 @@ class DateTimeTransformation implements Transformation
      */
     public function transform($from)
     {
-        //$from = new DateTime();
-        if(true === $ts = $from->format(DtAtom ))
+
+        if(tDateTime::createFromFormat(DtAtom, $from) !== FALSE)
         {
-            $from = strlen($from);
+            
             $DateImmutable = new \DateTimeImmutable($from);
             return $DateImmutable->format(DtAtom);
         }
