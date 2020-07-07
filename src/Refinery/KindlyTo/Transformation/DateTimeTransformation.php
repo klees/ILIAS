@@ -40,8 +40,7 @@ class DateTimeTransformation implements Transformation
 
         if(DateTime::createFromFormat(DtAtom, $from) !== FALSE)
         {
-
-            $DateImmutable = new \DateTimeImmutable($from);
+            $DateImmutable = new \DateTimeImmutable($from, $timezone = NULL);
             return $DateImmutable->format(DtAtom);
         }
         elseif(true === is_int($from))
