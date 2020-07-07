@@ -185,7 +185,8 @@ class Group
      */
     public function dictOf(Transformation $transformation) : DictionaryTransformation
     {
-        return new DictionaryTransformation($transformation);
+        throw new \LogicException("Not implemented yet.");
+        /** return new DictionaryTransformation($transformation); */
     }
 
     /**
