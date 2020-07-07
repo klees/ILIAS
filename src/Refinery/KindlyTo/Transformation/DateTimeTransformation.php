@@ -12,7 +12,7 @@ use Exception;
 use ILIAS\Data\Result;
 use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
-use ILIAS\Refinery\ConstraintViolationException;
+/** use ILIAS\Refinery\ConstraintViolationException; */
 
 const DtAtom = 'Y-m-d\TH:i:sP';
 const DtCookie = 'l, d-M-Y H:i:s T';
@@ -45,14 +45,11 @@ class DateTimeTransformation implements Transformation
         }
         elseif(true === is_int($from))
         {
-            return $UnixTimestamp = strtotime("$from");
+            return $UnixTimestamp = strtotime($from);
         }
         else
         {
-            throw new ConstraintViolationException(
-                'The value could not be transformed into a DateTimeImmutable or Unix Timestamp.',
-                ''
-            );
+            throw new \InvalidArgumentException("$from could not be transformed.", 1);
         }
     }
 
