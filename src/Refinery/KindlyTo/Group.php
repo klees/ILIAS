@@ -159,9 +159,9 @@ class Group
      *
      * All other data will be discarded.
      */
-    public function dateTime(string $changeDateTime) : DateTimeTransformation
+    public function dateTime() : DateTimeTransformation
     {
-        return new DateTimeTransformation($changeDateTime);
+        return new DateTimeTransformation();
     }
 
     /**
