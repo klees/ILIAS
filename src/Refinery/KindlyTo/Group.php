@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /* Copyright (c) 2020 Richard Klees, Extended GPL, see docs/LICENSE */
-
+/* Copyright (c) 2020 Luka Stocker, Extended GPL, see docs/LICENSE */
 
 namespace ILIAS\Refinery\KindlyTo;
 
@@ -10,6 +10,7 @@ use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
 /**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
 use ILIAS\Refinery\Transformation;
 use SimpleSAML\TwigConfigurableI18n\Twig\Extensions\Node\Trans;
@@ -87,9 +88,9 @@ class Group
      *
      * All other data will be discarded.
      */
-    public function float() : Transformation
+    public function float() : FloatTransformation
     {
-        throw new \LogicException("Not implemented yet.");
+        return new FloatTransformation();
     }
 
     /**
