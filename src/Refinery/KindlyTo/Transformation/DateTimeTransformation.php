@@ -7,12 +7,9 @@
 
 namespace ILIAS\Refinery\KindlyTo\Transformation;
 
-use DateTime;
-use Exception;
 use ILIAS\Data\Result;
 use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
-/** use ILIAS\Refinery\ConstraintViolationException; */
 
 const DtAtom = 'Y-m-d\TH:i:sP';
 const RegAtom = '/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})\+([0-9]{2}):([0-9]{2})$/';
@@ -23,23 +20,23 @@ const RegISO8601 = '/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0
 const DtRFC822 = 'D, d M y H:i:s O';
 const RegRFC822 = '/^([A-Za-z]+),\ ([0-9]{2})\ ([A-Z][a-z]+)\ ([0-9]{2})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ \+([0-9]{4})$/';
 const DtRFC850 = 'l, d-M-y H:i:s T';
-const RegRFC850 = '';
+const RegRFC850 = '/^([A-Za-z]+),\ ([0-9]{2})-([A-Z][a-z]+)-([0-9]{4})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ ([A-Za-z]+)\+([0-9]{4})$/';
 const DtRFC1036 = 'D, d M y H:i:s O';
-const RegRFC1036 = '';
+const RegRFC1036 = '/^([A-Za-z]+),\ ([0-9]{2})\ ([A-Z][a-z]+)\ ([0-9]{2})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ \+([0-9]{4})$/';
 const DtRFC1123 = 'D, d M y H:i:s O';
-const RegRFC1123 = '';
+const RegRFC1123 = '/^([A-Za-z]+),\ ([0-9]{2})\ ([A-Z][a-z]+)\ ([0-9]{2})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ \+([0-9]{4})$/';
 const DtRFC7231 = 'D, d M Y H:i:s \G\M\T';
-const RegRFC7231 = '';
+const RegRFC7231 = '/^([A-Za-z]+),\ ([0-9]{2})\ ([A-Za-z]+)\ ([0-9]{4})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ ([A-Za-z]+)$/';
 const DtRFC2822 = 'D, d M Y H:i:s O';
-const RegRFC2822 = '';
+const RegRFC2822 = '/^([A-Za-z]+),\ ([0-9]{2})\ ([A-Z][a-z]+)\ ([0-9]{2})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ \+([0-9]{4})$/';
 const DtRFC3339 = 'Y-m-d\TH:i:sP';
-const RegRFC3339 = '';
+const RegRFC3339 = '/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})\+([0-9]{2}):([0-9]{2})$/';
 const DtRFC3339ext = 'Y-m-d\TH:i:s.vP';
-const RegRFC3339ext = '';
+const RegRFC3339ext = '/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})\.([0-9]{3})\+([0-9]{2}):([0-9]{2})$/';
 const DtRSS = 'D, d M Y H:i:s O';
-const RegRSS = '';
+const RegRSS = '/^([A-Za-z]+),\ ([0-9]{2})\ ([A-Z][a-z]+)\ ([0-9]{2})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ \+([0-9]{4})$/';
 const DtW3C = 'Y-m-d\TH:i:sP';
-const RegW3C = '';
+const RegW3C = '/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})\+([0-9]{2}):([0-9]{2})$/';
 
 class DateTimeTransformation implements Transformation
 {
