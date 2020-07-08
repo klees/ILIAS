@@ -12,6 +12,7 @@ use ILIAS\Refinery\KindlyTo\Group;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
+use ILIAS\Refinery\To\Transformation\IntegerTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once('./libs/composer/vendor/autoload.php');
@@ -47,6 +48,12 @@ class GroupTest extends TestCase
         $transformation = $this->basicGroup->dateTime();
 
         $this->assertInstanceOf(DateTimeTransformation::class, $transformation);
+    }
+    public function testIsIntegerTransformationInterface()
+    {
+        $transformation = $this->basicGroup->int();
+
+        $this->assertInstanceOf(IntegerTransformation::class, $transformation);
     }
 
     /** public function testNewDictionaryTransformation()
