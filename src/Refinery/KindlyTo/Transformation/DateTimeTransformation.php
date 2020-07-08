@@ -16,7 +16,7 @@ use ILIAS\Refinery\Transformation;
 
 const DtAtom = 'Y-m-d\TH:i:sP';
 const DtCookie = 'l, d-M-Y H:i:s T';
-const DtISO8601 = 'Y-m-d';
+const DtISO8601 = 'Y-m-d\TH:i:sO';
 const DtRFC822 = 'D, d M y H:i:s O';
 const DtRFC850 = 'l, d-M-y H:i:s T';
 const DtRFC1036 = 'D, d M y H:i:s O';

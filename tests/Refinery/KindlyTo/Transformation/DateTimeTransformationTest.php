@@ -13,8 +13,8 @@ use DateTime;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use PHPUnit\Framework\TestCase;
 
-const DateOrigin = '2020-07-06';
-const ISO8601 = 'Y-m-d';
+const DateOrigin = '2020-07-06T12:23:05+0000';
+const ISO8601 = 'Y-m-d\TH:i:sO';
 const DateInt = 20200706122305;
 const UnixDate = '1594038185';
 
@@ -36,12 +36,11 @@ class DateTimeTransformationTest extends TestCase
 
     public function testDateTimeTransformation()
     {
-        //$original = DateTime::createFromFormat(ISO8601,DateOrigin);
         $original = new DateTime(DateOrigin);
         $original = $original->format(ISO8601);
         $expected = new \DateTimeImmutable(DateOrigin);
         $expected = $expected->format(ISO8601);
-        //$expected = \DateTimeImmutable::createFromFormat(ISO8601, DateOrigin);
+        
         $transformedValue = $this->transformation->transform($original);
 
         $this->assertEquals($expected, $transformedValue);
