@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 1998-2019 ILIAS open source, Extended GPL, see docs/LICENSE */
+/* Copyright (c) 1998-2020 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 /**
  * @author Luka Stocker <lstocker@concepts-and-training.de>
@@ -50,9 +50,13 @@ class IntegerTransformation implements Transformation
                 }
             }
         }
-        if(true === is_bool($from))
+        if(false === is_bool($from))
         {
-
+            $from = intval($from);
+            return $from;
+        }
+        elseif(true === is_bool($from))
+        {
             $from = intval($from);
             return $from;
         }
