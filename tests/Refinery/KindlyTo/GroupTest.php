@@ -8,11 +8,12 @@
 namespace ILIAS\Tests\Refinery\KindlyTo;
 
 use ILIAS\Refinery\KindlyTo\Group;
-/**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\FloatTransfromation;
+/**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once('./libs/composer/vendor/autoload.php');
@@ -49,11 +50,19 @@ class GroupTest extends TestCase
 
         $this->assertInstanceOf(DateTimeTransformation::class, $transformation);
     }
+    
     public function testIsIntegerTransformationInterface()
     {
         $transformation = $this->basicGroup->int();
 
         $this->assertInstanceOf(IntegerTransformation::class, $transformation);
+    }
+
+    public function testIsFloatTransformationInterface()
+    {
+        $transformation = $this->basicGroup->float();
+
+        $this->assertInstanceOf(FloatTransformation::class, $transformation);
     }
 
     /** public function testNewDictionaryTransformation()
