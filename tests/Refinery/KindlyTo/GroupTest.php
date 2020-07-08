@@ -50,7 +50,7 @@ class GroupTest extends TestCase
 
         $this->assertInstanceOf(DateTimeTransformation::class, $transformation);
     }
-    
+
     public function testIsIntegerTransformationInterface()
     {
         $transformation = $this->basicGroup->int();
