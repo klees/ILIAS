@@ -37,17 +37,19 @@ class DateTimeTransformation implements Transformation
      */
     public function transform($from)
     {
-
-        if(DateTime::createFromFormat(DtAtom, "$from") !== FALSE)
+        if(DateTime::createFromFormat(DtISO8601, "$from") !== FALSE)
         {
             $DateImmutable = new \DateTimeImmutable("$from");
-            return $DateImmutable->format(DtAtom);
+            return $DateImmutable->format(DtISO8601);
         }
         elseif(true === is_int($from))
         {
             return $UnixTimestamp = strtotime($from);
         }
+        else
+        {
 
+        }
     }
 
     /**
