@@ -38,6 +38,7 @@ class DateTimeTransformationTest extends TestCase
     {
         $original = DateTime::createFromFormat(ISO8601,DateOrigin);
         $expected = new \DateTimeImmutable(DateOrigin);
+        $expected = $expected->format(ISO8601);
         //$expected = \DateTimeImmutable::createFromFormat(ISO8601, DateOrigin);
         $transformedValue = $this->transformation->transform($original);
 
