@@ -34,10 +34,11 @@ class DateTimeTransformation implements Transformation
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public function transform($from)
     {
-        //$from = strval($from);
+        $from = strval($from);
         if(DateTime::createFromFormat(DtISO8601, $from) !== FALSE)
         {
             $from = strval($from);
