@@ -18,7 +18,7 @@ const NegBool = false;
 const NegBoolExpected = 0;
 const FloatOriginal = 20.5;
 const FloatExpected = 21;
-const StringOriginal = '49476424234Hello';
+const StringOriginal = '4947642.4234Hello';
 const StringExpected = '4947642';
 
 /**
