@@ -37,7 +37,7 @@ class DateTimeTransformation implements Transformation
      */
     public function transform($from)
     {
-        $from = strval($from);
+        
         if(DateTime::createFromFormat(DtISO8601, $from !== FALSE))
         {
             $from = strval($from);
