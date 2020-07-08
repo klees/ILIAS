@@ -40,7 +40,7 @@ class DateTimeTransformationTest extends TestCase
         $original = $original->format(ISO8601);
         $expected = new \DateTimeImmutable(DateOrigin);
         $expected = $expected->format(ISO8601);
-        
+
         $transformedValue = $this->transformation->transform($original);
 
         $this->assertEquals($expected, $transformedValue);
