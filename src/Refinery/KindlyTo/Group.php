@@ -155,7 +155,8 @@ class Group
      * This supports:
      *   - all formats mentioned in DateTimeInterface, which are probed in a
      *     sensible order
-     *   - integers, which will be interpreted as Unix timestamps.
+     *   - integers, which will be interpreted as Unix timestamps
+     *   - floats, which will be interpreted as Unix timestamps.
      *
      * All other data will be discarded.
      */
