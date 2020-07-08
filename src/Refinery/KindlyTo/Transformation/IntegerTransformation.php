@@ -12,7 +12,7 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
-const RegInt = '\s*(0|(-?[1-9]\d*))\s*';
+const RegInt = '/\s*(0|(-?[1-9]\d*))\s*/';
 
 class IntegerTransformation implements Transformation
 {
