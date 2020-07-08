@@ -38,11 +38,83 @@ class DateTimeTransformation implements Transformation
     public function transform($from)
     {
 
-        if(DateTime::createFromFormat(DtISO8601, $from) !== FALSE)
+        if(DateTime::createFromFormat(DtAtom, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtAtom);
+        }
+        elseif(DateTime::createFromFormat(DtCookie, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtCookie);
+        }
+        elseif(DateTime::createFromFormat(DtISO8601, $from) !== FALSE)
         {
             $from = strval($from);
             $DateImmutable = new \DateTimeImmutable($from);
             return $DateImmutable->format(DtISO8601);
+        }
+        elseif(DateTime::createFromFormat(DtRFC822, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtRFC822);
+        }
+        elseif(DateTime::createFromFormat(DtRFC850, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtRFC850);
+        }
+        elseif(DateTime::createFromFormat(DtRFC1036, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtRFC1036);
+        }
+        elseif(DateTime::createFromFormat(DtRFC1123, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtRFC1123);
+        }
+        elseif(DateTime::createFromFormat(DtRFC7231, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtRFC7231);
+        }
+        elseif(DateTime::createFromFormat(DtRFC2822, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtRFC2822);
+        }
+        elseif(DateTime::createFromFormat(DtRFC3339, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtRFC3339);
+        }
+        elseif(DateTime::createFromFormat(DtRFC3339ext, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtRFC3339ext);
+        }
+        elseif(DateTime::createFromFormat(DtRSS, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtRSS);
+        }
+        elseif(DateTime::createFromFormat(DtW3C, $from) !== FALSE)
+        {
+            $from = strval($from);
+            $DateImmutable = new \DateTimeImmutable($from);
+            return $DateImmutable->format(DtW3C);
         }
         elseif(true === is_int($from))
         {
