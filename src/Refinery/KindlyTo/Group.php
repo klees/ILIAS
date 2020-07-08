@@ -60,9 +60,9 @@ class Group
      * All other data will be discarded.
      */
 
-    public function int() : Transformation
+    public function int() : IntegerTransformation
     {
-        throw new \LogicException("Not implemented yet.");
+        return new IntegerTransformation();
     }
 
     /**
