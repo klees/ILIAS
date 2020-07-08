@@ -50,11 +50,7 @@ class IntegerTransformation implements Transformation
                 }
             }
         }
-        if(false === is_bool($from))
-        {
-            $from = intval($from);
-            return $from;
-        }
+        
         elseif(true === is_bool($from))
         {
             $from = intval($from);
