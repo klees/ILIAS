@@ -65,7 +65,6 @@ class IntegerTransformation implements Transformation
         }
     }
 
-
     public function applyTo(Result $data): Result
     {
     }
