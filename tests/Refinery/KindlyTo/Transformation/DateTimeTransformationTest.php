@@ -34,8 +34,8 @@ class DateTimeTransformationTest extends TestCase
 
     public function testDateTimeTransformation()
     {
-        $original = new \DateTimeImmutable(DateExample);
-        $expected = new \DateTimeImmutable(DateNew);
+        $original = new \DateTimeImmutable('2020-07-06 12:23:05');
+        $expected = new \DateTimeImmutable('2020-07-06T12:23:06+0000');
         $transformedValue = $this->transformation->transform($original);
 
         $this->assertEquals($expected, $transformedValue);
