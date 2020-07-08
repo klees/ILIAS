@@ -12,7 +12,8 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
-const RegInt = '/\s*(0|(-?[1-9]\d*))\s*/';
+const RegInt = '/^\s*(0|(-?[1-9]\d*))\s*$/';
+const RegOctal = '/^0[0-7]+$/';
 
 class IntegerTransformation implements Transformation
 {
@@ -30,19 +31,35 @@ class IntegerTransformation implements Transformation
         {
             if(preg_match(RegInt, $from, $RegMatch))
             {
-                $from = intval($from);
-                return $from;
+                $StrTrue = mb_strtolower("True");
+                $StrFalse = mb_strtolower("False");
+                $StrNull = mb_strtolower("Null");
+                $NoVal = "";
+
+                if(preg_match(RegOctal, $from, $RegMatch) || mb_strtolower($from) === ($StrTrue || $StrFalse || $StrNull || null || $NoVal))
+                {
+                    throw new ConstraintViolationException(
+                        'The value can not be transformed into an integer',
+                        'not_integer'
+                    );
+                }
+                else
+                {
+                    $from = intval($from);
+                    return $from;
+                }
             }
         }
         if(true === is_bool($from))
         {
+
             $from = intval($from);
             return $from;
         }
         else
         {
             throw new ConstraintViolationException(
-                'The value could not be transformed into an integer',
+                'The value can not be transformed into an integer',
                 'not_integer'
             );
         }
