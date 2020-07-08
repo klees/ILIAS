@@ -37,8 +37,8 @@ class DateTimeTransformation implements Transformation
      */
     public function transform($from)
     {
-        
-        if(DateTime::createFromFormat('Y-m-d\TH:i:sP', $from) !== FALSE)
+
+        if(DateTime::createFromFormat('Y-m-d\TH:i:sP', "$from") !== FALSE)
         {
             $DateImmutable = new \DateTimeImmutable($from);
             return $DateImmutable->format(DtAtom);
