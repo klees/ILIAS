@@ -15,7 +15,7 @@ use ILIAS\Tests\Refinery\TestCase;
 const PosBool = true;
 const PosBoolExpected = 1;
 const NegBool = false;
-const NegBoolExpected = NULL;
+const NegBoolExpected = 0;
 const FloatOriginal = 20.5;
 const FloatExpected = 21;
 const StringOriginal = '4947642.4234Hello';
