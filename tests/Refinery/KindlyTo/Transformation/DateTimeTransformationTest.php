@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 const DateExample = '2020-07-06 12:23:05';
 const DateNew = '2020-07-06T12:23:06+0000';
-const UnixDate = '1593993600';
+const UnixDate = '1594038185';
 
 /**
  * Tests for DateTimeImmutable and Unix Timetable transformation
