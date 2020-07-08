@@ -27,7 +27,7 @@ class IntegerTransformation implements Transformation
             $from = intval($from);
             return $from;
         }
-        if(true === is_string($from))
+        elseif(true === is_string($from))
         {
             if(preg_match(RegInt, $from, $RegMatch))
             {
@@ -50,7 +50,6 @@ class IntegerTransformation implements Transformation
                 }
             }
         }
-        
         elseif(true === is_bool($from))
         {
             $from = intval($from);
