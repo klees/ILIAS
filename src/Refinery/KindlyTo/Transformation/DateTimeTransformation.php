@@ -32,7 +32,7 @@ class DateTimeTransformation implements Transformation
 {
     use DeriveApplyToFromTransform;
 
-    /
+    /**
      * @inheritdoc
      */
     public function transform($from)
