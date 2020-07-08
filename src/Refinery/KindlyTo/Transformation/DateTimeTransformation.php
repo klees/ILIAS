@@ -14,9 +14,9 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 /** use ILIAS\Refinery\ConstraintViolationException; */
 
-const DtAtom = "Y-m-d\TH:i:sP";
-const DtCookie = "l, d-M-Y H:i:s T";
-const DtISO8601 = "Y-m-d\TH:i:sO";
+const DtAtom = 'Y-m-d\TH:i:sP';
+const DtCookie = 'l, d-M-Y H:i:s T';
+const DtISO8601 = 'Y-m-d\TH:i:sO';
 const DtRFC822 = 'D, d M y H:i:s O';
 const DtRFC850 = 'l, d-M-y H:i:s T';
 const DtRFC1036 = 'D, d M y H:i:s O';
@@ -34,15 +34,14 @@ class DateTimeTransformation implements Transformation
 
     /**
      * @inheritdoc
-     * @throws Exception
      */
     public function transform($from)
     {
         $from = strval($from);
-        if(DateTime::createFromFormat(DtISO8601, $from) !== FALSE)
+        if(DateTime::createFromFormat(DtISO8601, "$from") !== FALSE)
         {
             $from = strval($from);
-            $DateImmutable = new \DateTimeImmutable($from);
+            $DateImmutable = new \DateTimeImmutable("$from");
             return $DateImmutable->format(DtISO8601);
         }
         elseif(true === is_int($from))
