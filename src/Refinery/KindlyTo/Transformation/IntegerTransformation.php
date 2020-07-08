@@ -21,13 +21,14 @@ class IntegerTransformation implements Transformation
 
     public function transform($from)
     {
+
         if(true === is_float($from))
         {
             $from = round($from);
             $from = intval($from);
             return $from;
         }
-        elseif(true === is_string($from))
+        elseif(true === is_string($from) || $from <= PHP_INT_MAX || $from >= PHP_INT_MIN)
         {
             if(preg_match(RegInt, $from, $RegMatch))
             {
