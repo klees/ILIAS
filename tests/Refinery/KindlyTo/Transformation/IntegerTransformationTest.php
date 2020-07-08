@@ -18,8 +18,8 @@ const NegBool = false;
 const NegBoolExpected = 0;
 const FloatOriginal = 20.5;
 const FloatExpected = 21;
-const StringOriginal = '';
-const StringExpected = '';
+const StringOriginal = '4947642.4234Hello';
+const StringExpected = '4947642.4234';
 
 /**
  * Test transformations in this Group
