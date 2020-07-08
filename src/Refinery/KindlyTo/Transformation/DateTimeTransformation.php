@@ -50,7 +50,7 @@ class DateTimeTransformation implements Transformation
         }
         else
         {
-
+            throw new \InvalidArgumentException("$from can not be transformed into DateTimeImmutable or Unix timestamp.", 1);
         }
 
     }
