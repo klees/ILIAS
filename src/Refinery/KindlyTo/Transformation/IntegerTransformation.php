@@ -30,9 +30,21 @@ class IntegerTransformation implements Transformation
         {
             if(preg_match(RegInt, $from, $RegMatch))
             {
-                $from = floatval($from);
+                $from = intval($from);
                 return $from;
             }
+        }
+        if(true === is_bool($from))
+        {
+            $from = intval($from);
+            return $from;
+        }
+        else
+        {
+            throw new ConstraintViolationException(
+                'The value could not be transformed into an integer',
+                'not_integer'
+            );
         }
     }
 
