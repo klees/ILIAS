@@ -37,10 +37,7 @@ class DateTimeTransformationTest extends TestCase
     public function testDateTimeTransformation()
     {
         $original = DateTime::createFromFormat(ISO8601,DateOrigin);
-        //$original = new \DateTime('2020-07-06T12:23:05+0000');
         $expected = \DateTimeImmutable::createFromFormat(ISO8601, DateOrigin);
-        //$expected = new \DateTimeImmutable(DateOrigin);
-        //$expected = $expected->format(ISO8601);
         $transformedValue = $this->transformation->transform($original);
 
         $this->assertEquals($expected, $transformedValue);
