@@ -13,8 +13,8 @@ use DateTime;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use PHPUnit\Framework\TestCase;
 
-const DateOrigin = '2020-07-06 12:23:05';
-const ISO8601 = 'Y-m-d H:i:s';
+const DateOrigin = '2020-07-06';
+const ISO8601 = 'Y-m-d';
 const DateInt = 20200706122305;
 const UnixDate = '1594038185';
 
