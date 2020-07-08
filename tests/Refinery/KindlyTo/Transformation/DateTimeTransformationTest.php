@@ -38,6 +38,7 @@ class DateTimeTransformationTest extends TestCase
         $original = DateTime::createFromFormat('Y-m-d\TH:i:sO',DateOrigin);
         //$original = new \DateTime('2020-07-06T12:23:05+0000');
         $expected = new \DateTimeImmutable('2020-07-06T12:23:06+0000');
+        $expected = $expected->format('Y-m-d\TH:i:sO');
         $transformedValue = $this->transformation->transform($original);
 
         $this->assertEquals($expected, $transformedValue);
