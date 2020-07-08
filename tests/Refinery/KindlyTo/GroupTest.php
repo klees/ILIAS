@@ -13,7 +13,6 @@ use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
-use ILIAS\Refinery\To\Transformation\IntegerTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once('./libs/composer/vendor/autoload.php');
