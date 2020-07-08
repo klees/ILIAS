@@ -43,7 +43,7 @@ class DateTimeTransformation implements Transformation
             $DateImmutable = new \DateTimeImmutable("$from");
             return $DateImmutable->format(DtAtom);
         }
-        else
+        elseif(true === is_int($from))
         {
             return $UnixTimestamp = strtotime($from);
         }
