@@ -9,11 +9,11 @@ namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
 require_once('./libs/composer/vendor/autoload.php');
 
+use DateTime;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use PHPUnit\Framework\TestCase;
 
-const DateExample = '2020-07-06 12:23:05';
-const DateNew = '2020-07-06T12:23:06+0000';
+const DateOrigin = '2020-07-06T12:23:06+0000';
 const DateInt = 20200706122305;
 const UnixDate = '1594038185';
 
@@ -35,7 +35,8 @@ class DateTimeTransformationTest extends TestCase
 
     public function testDateTimeTransformation()
     {
-        $original = new \DateTimeImmutable('2020-07-06 12:23:05');
+        $original = DateTime::createFromFormat('Y-m-d\TH:i:sO',DateOrigin);
+        //$original = new \DateTime('2020-07-06T12:23:05+0000');
         $expected = new \DateTimeImmutable('2020-07-06T12:23:06+0000');
         $transformedValue = $this->transformation->transform($original);
 
