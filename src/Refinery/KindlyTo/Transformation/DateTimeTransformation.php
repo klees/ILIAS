@@ -20,17 +20,11 @@ use ILIAS\Refinery\Transformation;
  */
 class DateTimeTransformation implements Transformation
 {
-    const Dt_Atom = 'Y-m-d\TH:i:sP';
     const Reg_Atom = '/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})\+([0-9]{2}):([0-9]{2})$/';
-    const Dt_Cookie = 'l, d-M-Y H:i:s T';
     const Reg_Cookie = '/^([A-Za-z]+),\ ([0-9]{2})-([A-Z][a-z]+)-([0-9]{4})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ ([A-Za-z]+)\+([0-9]{4})$/';
-    const Dt_ISO8601 = 'Y-m-d\TH:i:sO';
     const Reg_ISO8601 = '/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})\+([0-9]{4})$/';
-    const Dt_RFC822 = 'D, d M y H:i:s O';
     const Reg_RFC822 = '/^([A-Za-z]+),\ ([0-9]{2})\ ([A-Z][a-z]+)\ ([0-9]{2})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ \+([0-9]{4})$/';
-    const Dt_RFC7231 = 'D, d M Y H:i:s \G\M\T';
     const Reg_RFC7231 = '/^([A-Za-z]+),\ ([0-9]{2})\ ([A-Za-z]+)\ ([0-9]{4})\ ([0-9]{2}):([0-9]{2}):([0-9]{2})\ ([A-Za-z]+)$/';
-    const Dt_RFC3339_ext = 'Y-m-d\TH:i:s.vP';
     const Reg_RFC3339_ext = '/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})\.([0-9]{3})\+([0-9]{2}):([0-9]{2})$/';
 
     use DeriveApplyToFromTransform;
@@ -44,39 +38,33 @@ class DateTimeTransformation implements Transformation
         {
             if(preg_match(self::Reg_Atom, $from, $RegMatch))
             {
-                $from = strval($from);
-                $DateImmutable = new \DateTimeImmutable($from);
-                return $DateImmutable->format(self::Dt_Atom);
+                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM, $from);
+                return $DateImmutable->format(\DateTimeImmutable::ATOM);
             }
             elseif(preg_match(self::Reg_Cookie, $from, $RegMatch))
             {
-                $from = strval($from);
-                $DateImmutable = new \DateTimeImmutable($from);
-                return $DateImmutable->format(self::Dt_Cookie);
+                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::COOKIE, $from);
+                return $DateImmutable->format(\DateTimeImmutable::COOKIE);
             }
             elseif(preg_match(self::Reg_ISO8601,$from,$RegMatch))
             {
-                $from = strval($from);
-                $DateImmutable = new \DateTimeImmutable($from);
-                return $DateImmutable->format(self::Dt_ISO8601);
+                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601, $from);
+                return $DateImmutable->format(\DateTimeImmutable::ISO8601);
             }
             elseif(preg_match(self::Reg_RFC822,$from,$RegMatch))
             {
-                $from = strval($from);
-                $DateImmutable = new \DateTimeImmutable($from);
-                return $DateImmutable->format(self::Dt_RFC822);
+                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822, $from);
+                return $DateImmutable->format(\DateTimeImmutable::RFC822);
             }
             elseif(preg_match(self::Reg_RFC7231,$from,$RegMatch))
             {
-                $from = strval($from);
-                $DateImmutable = new \DateTimeImmutable($from);
-                return $DateImmutable->format(self::Dt_RFC7231);
+                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231, $from);
+                return $DateImmutable->format(\DateTimeImmutable::RFC7231);
             }
             elseif(preg_match(self::Reg_RFC3339_ext,$from,$RegMatch))
             {
-                $from = strval($from);
-                $DateImmutable = new \DateTimeImmutable($from);
-                return $DateImmutable->format(self::Dt_RFC3339_ext);
+                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $from);
+                return $DateImmutable->format(\DateTimeImmutable::RFC3339_EXTENDED);
             }
         }
         elseif(true === is_int($from) || true === is_float($from))
