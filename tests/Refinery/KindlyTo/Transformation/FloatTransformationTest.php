@@ -12,7 +12,7 @@ require_once('./libs/composer/vendor/autoload.php');
 use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
-const PosBool = true;
+const TrueBool = true;
 const PosBoolExpected = 1.0;
 const NegBoolOrigin = false;
 const NegBoolExpected = 0.0;
@@ -36,12 +36,12 @@ class FloatTransformationTest extends TestCase
 
     public function setUp(): void
     {
-        $transformation = new FloatTransformation();
+        $this->transformation = new FloatTransformation();
     }
 
     public function testPosBooleanToFloatTransformation()
     {
-        $transformedValue = $this->transformation->transform(PosBool);
+        $transformedValue = $this->transformation->transform(TrueBool);
 
         $this->assertEquals(PosBoolExpected, $transformedValue);
     }
