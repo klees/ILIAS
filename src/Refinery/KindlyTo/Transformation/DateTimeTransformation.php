@@ -36,7 +36,7 @@ class DateTimeTransformation implements Transformation
     {
         if(TRUE === is_string($from))
         {
-            if(preg_match(self::Reg_Atom, $from, $RegMatch))
+            if(\DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM, $from))
             {
                 $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM, $from);
                 return $DateImmutable->format(\DateTimeImmutable::ATOM);
