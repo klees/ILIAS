@@ -11,6 +11,7 @@ use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
 /**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
 use ILIAS\Refinery\Transformation;
 use SimpleSAML\TwigConfigurableI18n\Twig\Extensions\Node\Trans;
@@ -60,6 +61,8 @@ class Group
      *     we do with them
      *
      * All other data will be discarded.
+     *
+     * @return IntegerTransformation
      */
 
     public function int() : IntegerTransformation
@@ -87,6 +90,8 @@ class Group
      *     subsequent calculations. Do you really want to do math with floats?
      *
      * All other data will be discarded.
+     *
+     * @return FloatTransformation
      */
     public function float() : FloatTransformation
     {
@@ -145,6 +150,8 @@ class Group
      * as well, would we map [null] to false or to true? Why? All this problems
      * seem to introduce more problems than they solve, so we decided to not be
      * very liberal here.
+     *
+     * @return BooleanTransformation
      */
     public function bool() : BooleanTransformation
     {
@@ -161,6 +168,8 @@ class Group
      *   - floats, which will be interpreted as Unix timestamps.
      *
      * All other data will be discarded.
+     *
+     * @return DateTimeTransformation
      */
     public function dateTime() : DateTimeTransformation
     {
@@ -172,10 +181,12 @@ class Group
      *
      * This supports all data represented as PHP array, which will be used via
      * array_values($v). Non-arrays will be wrapped in one.
+     * @param Transformation $transformation
+     * @return Transformation
      */
     public function listOf(Transformation $transformation) : Transformation
     {
-        throw new \LogicException("Not implemented yet.");
+        return new ListTransformation($transformation);
     }
 
     /**
