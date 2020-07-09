@@ -20,7 +20,6 @@ use PHPUnit\Framework\TestCase;
 class DateTimeTransformationTest extends TestCase
 {
     const Date_Origin = '2020-07-06T12:23:05+0000';
-    const ISO8601 = 'Y-m-d\TH:i:sO';
     const Date_Int = 20200706122305;
     const Unix_Date = '1594038185';
 
@@ -36,10 +35,13 @@ class DateTimeTransformationTest extends TestCase
 
     public function testDateTimeTransformation()
     {
-        $original = new DateTime(self::Date_Origin);
+        $original = DateTime::createFromFormat(DateTime::ISO8601,self::Date_Origin);
+        $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,self::Date_Origin);
+        /**$original = new DateTime(self::Date_Origin);
         $original = $original->format(self::ISO8601);
         $expected = new \DateTimeImmutable(self::Date_Origin);
         $expected = $expected->format(self::ISO8601);
+         */
 
         $transformedValue = $this->transformation->transform($original);
 
