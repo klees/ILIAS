@@ -18,9 +18,9 @@ use ILIAS\Tests\Refinery\TestCase;
 class FloatTransformationTest extends TestCase
 {
     const True_Bool = true;
-    const Pos_Bool_Expected = 1.0;
+    const Pos_Bool_Expected = 1;
     const Neg_Bool_Origin = false;
-    const Neg_Bool_Expected = 0.0;
+    const Neg_Bool_Expected = 0;
     const String_Origin_Float = '234,23';
     const String_Expected_Float = 234.23;
     const String_Float_Point_Origin = '7E10';
