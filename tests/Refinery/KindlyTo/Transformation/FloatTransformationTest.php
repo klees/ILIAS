@@ -12,23 +12,21 @@ require_once('./libs/composer/vendor/autoload.php');
 use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
-const TrueBool = true;
-const PosBoolExpected = 1.0;
-const NegBoolOrigin = false;
-const NegBoolExpected = 0.0;
-const StringOriginFloat = '234,23';
-const StringExpectedFloat = 234.23;
-const StringFloatPointOrigin = '7E10';
-const StringFloatPointExpected = 70000000000;
-const IntOrigin = 23;
-const IntExpected = 23.0;
-
-
 /**
  * Test transformations in this Group
  */
 class FloatTransformationTest extends TestCase
 {
+    const True_Bool = true;
+    const Pos_Bool_Expected = 1.0;
+    const Neg_Bool_Origin = false;
+    const Neg_Bool_Expected = 0.0;
+    const String_Origin_Float = '234,23';
+    const String_Expected_Float = 234.23;
+    const String_Float_Point_Origin = '7E10';
+    const String_Float_Point_Expected = 70000000000;
+    const Int_Origin = 23;
+    const Int_Expected = 23.0;
     /**
      * @var FloatTransformation
      */
@@ -41,33 +39,33 @@ class FloatTransformationTest extends TestCase
 
     public function testPosBooleanToFloatTransformation()
     {
-        $transformedValue = $this->transformation->transform(TrueBool);
+        $transformedValue = $this->transformation->transform(self::True_Bool);
 
-        $this->assertEquals(PosBoolExpected, $transformedValue);
+        $this->assertEquals(self::Pos_Bool_Expected, $transformedValue);
     }
 
     public function testNegBooleanToFloatTransformation()
     {
-        $transformedValue = $this->transformation->transform(NegBoolOrigin);
+        $transformedValue = $this->transformation->transform(self::Neg_Bool_Expected);
 
-        $this->assertEquals(NegBoolExpected, $transformedValue);
+        $this->assertEquals(self::Neg_Bool_Expected, $transformedValue);
     }
     public function testStringToFloatTransformation()
     {
-        $transformedValue = $this->transformation->transform(StringOriginFloat);
+        $transformedValue = $this->transformation->transform(self::String_Origin_Float);
 
-        $this->assertEquals(StringExpectedFloat, $transformedValue);
+        $this->assertEquals(self::String_Expected_Float, $transformedValue);
     }
     public function testStringFloatingPointToFloatTransformation()
     {
-        $transformedValue = $this->transformation->transform(StringFloatPointOrigin);
+        $transformedValue = $this->transformation->transform(self::String_Float_Point_Origin);
 
-        $this->assertEquals(StringFloatPointExpected, $transformedValue);
+        $this->assertEquals(self::String_Float_Point_Expected, $transformedValue);
     }
     public function testIntegerToFloatTransformation()
     {
-        $transformedValue = $this->transformation->transform(IntOrigin);
+        $transformedValue = $this->transformation->transform(self::Int_Origin);
 
-        $this->assertEquals(IntExpected, $transformedValue);
+        $this->assertEquals(self::Int_Expected, $transformedValue);
     }
 }
