@@ -12,20 +12,20 @@ require_once('./libs/composer/vendor/autoload.php');
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
-const PosBoolean = 'true';
-const NegBoolean = 'false';
-const PosBooleanNumber = 1;
-const NegBooleanNumber = 0;
-const PosBooleanNumberString = '1';
-const NegBooleanNumberString = '0';
-const TransformedPosBoolean = true;
-const TransformedNegBoolean = false;
-
 /**
 * Test transformations in this Group
 */
 class BooleanTransformationTest extends TestCase
 {
+    const Pos_Boolean = 'true';
+    const Neg_Boolean = 'false';
+    const Pos_Boolean_Number = 1;
+    const Neg_Boolean_Number = 0;
+    const Pos_Boolean_Number_String = '1';
+    const Neg_Boolean_Number_String = '0';
+    const Transformed_Pos_Boolean = true;
+    const Transformed_Neg_Boolean = false;
+
     /**
      * @var BooleanTransformation
      */
@@ -39,34 +39,34 @@ class BooleanTransformationTest extends TestCase
     public function testPosBooleanTransformation()
     {
 
-            $transformedValue = $this->transformation->transform(PosBoolean);
+            $transformedValue = $this->transformation->transform(self::Pos_Boolean);
 
-            $this->assertEquals(TransformedPosBoolean, $transformedValue);
+            $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
 
-            $transformedValue = $this->transformation->transform(PosBooleanNumber);
+            $transformedValue = $this->transformation->transform(self::Pos_Boolean_Number);
 
-            $this->assertEquals(TransformedPosBoolean, $transformedValue);
+            $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
 
-            $transformedValue = $this->transformation->transform(PosBooleanNumberString);
+            $transformedValue = $this->transformation->transform(self::Pos_Boolean_Number_String);
 
-            $this->assertEquals(TransformedPosBoolean, $transformedValue);
+            $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
 
     }
 
     public function testNegBooleanTransformation()
     {
 
-            $transformedValue = $this->transformation->transform(NegBoolean);
+            $transformedValue = $this->transformation->transform(self::Neg_Boolean);
 
-            $this->assertEquals(TransformedNegBoolean, $transformedValue);
+            $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
 
-            $transformedValue = $this->transformation->transform(NegBooleanNumber);
+            $transformedValue = $this->transformation->transform(self::Neg_Boolean_Number);
 
-            $this->assertEquals(TransformedNegBoolean, $transformedValue);
+            $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
 
-            $transformedValue = $this->transformation->transform(NegBooleanNumberString);
+            $transformedValue = $this->transformation->transform(self::Neg_Boolean_Number_String);
 
-            $this->assertEquals(TransformedNegBoolean, $transformedValue);
+            $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
 
     }
 }

@@ -12,25 +12,25 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
-const BoolTrueString = 'true';
-const BoolFalseString = 'false';
-const BoolTrueNumber = 1;
-const BoolFalseNumber = 0;
-const BoolTrueNumberString = '1';
-const BoolFalseNumberString = '0';
-
 class BooleanTransformation implements Transformation
 {
+    const Bool_True_String = 'true';
+    const Bool_False_String = 'false';
+    const Bool_True_Number = 1;
+    const Bool_False_Number = 0;
+    const Bool_True_Number_String = '1';
+    const Bool_False_Number_String = '0';
+
     use DeriveApplyToFromTransform;
 
     public function transform($from)
     {
-        if($from === BoolTrueNumber || $from === BoolTrueNumberString || mb_strtolower($from) === BoolTrueString)
+        if($from === self::Bool_True_Number || $from === self::Bool_True_Number_String || mb_strtolower($from) === self::Bool_True_String)
         {
             $from = true;
             return $from;
         }
-        elseif($from === BoolFalseNumber || $from === BoolFalseNumberString || mb_strtolower($from) === BoolFalseString)
+        elseif($from === self::Bool_False_Number || $from === self::Bool_False_Number_String || mb_strtolower($from) === self::Bool_False_String)
         {
             $from = false;
             return $from;
