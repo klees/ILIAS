@@ -15,6 +15,7 @@ use ILIAS\Refinery\ConstraintViolationException;
 const RegString = '/\s*(0|(-?[1-9]\d*([.,]\d+)?))\s*/';
 const RegStringDecimal ='/\,/';
 const RegStringFloating = '/\s*-?\d+[eE]-?\d+\s*/';
+const ValEmpty = "";
 
 class FloatTransformation implements Transformation
 {
@@ -32,7 +33,7 @@ class FloatTransformation implements Transformation
             $from = floatval(str_replace(',','.', str_replace('.','', $from)));
             return $from;
         }
-        elseif(true === is_string($from))
+        elseif(true === is_string($from) && $from != ValEmpty)
         {
             if(preg_match(RegString, $from, $RegMatch))
             {
