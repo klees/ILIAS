@@ -13,17 +13,17 @@ use DateTime;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use PHPUnit\Framework\TestCase;
 
-const DateOrigin = '2020-07-06T12:23:05+0000';
-const ISO8601 = 'Y-m-d\TH:i:sO';
-const DateInt = 20200706122305;
-const UnixDate = '1594038185';
-
 /**
  * Tests for DateTimeImmutable and Unix Timetable transformation
  */
 
 class DateTimeTransformationTest extends TestCase
 {
+    const Date_Origin = '2020-07-06T12:23:05+0000';
+    const ISO8601 = 'Y-m-d\TH:i:sO';
+    const Date_Int = 20200706122305;
+    const Unix_Date = '1594038185';
+
     /**
      * @var DateTimeTransformation
      */
@@ -36,9 +36,9 @@ class DateTimeTransformationTest extends TestCase
 
     public function testDateTimeTransformation()
     {
-        $original = new DateTime(DateOrigin);
+        $original = new DateTime(self::Date_Origin);
         $original = $original->format(ISO8601);
-        $expected = new \DateTimeImmutable(DateOrigin);
+        $expected = new \DateTimeImmutable(self::Date_Origin);
         $expected = $expected->format(ISO8601);
 
         $transformedValue = $this->transformation->transform($original);
@@ -48,9 +48,9 @@ class DateTimeTransformationTest extends TestCase
 
     public function testDateTimeToUnixTimestampTransformation()
     {
-        $transformedValue = $this->transformation->transform(DateInt);
+        $transformedValue = $this->transformation->transform(self::Date_Int);
 
-        $this->assertEquals(UnixDate, $transformedValue);
+        $this->assertEquals(self::Unix_Date, $transformedValue);
 
     }
 
