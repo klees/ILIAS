@@ -12,20 +12,20 @@ require_once('./libs/composer/vendor/autoload.php');
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
-const PosBool = true;
-const PosBoolExpected = 1;
-const NegBool = false;
-const NegBoolExpected = 0;
-const FloatOriginal = 20.5;
-const FloatExpected = 21;
-const StringOriginal = '4947642.4234Hello';
-const StringExpected = '4947642';
-
 /**
  * Test transformations in this Group
  */
 class IntegerTransformationTest extends TestCase
 {
+    const Pos_Bool = true;
+    const Pos_Bool_Expected = 1;
+    const Neg_Bool = false;
+    const Neg_Bool_Expected = 0;
+    const Float_Original = 20.5;
+    const Float_Expected = 21;
+    const String_Original = '4947642.4234Hello';
+    const String_Expected = '4947642';
+
     /**
      * @var IntegerTransformation
      */
@@ -38,30 +38,30 @@ class IntegerTransformationTest extends TestCase
 
     public function testStringToIntegerTransformation()
     {
-        $transformedValue = $this->transformation->transform(StringOriginal);
+        $transformedValue = $this->transformation->transform(self::String_Original);
 
-        $this->assertEquals(StringExpected, $transformedValue);
+        $this->assertEquals(self::String_Expected, $transformedValue);
     }
 
     public function testFloatToIntegerTransformation()
     {
-        $transformedValue = $this->transformation->transform(FloatOriginal);
+        $transformedValue = $this->transformation->transform(self::Float_Original);
 
-        $this->assertEquals(FloatExpected, $transformedValue);
+        $this->assertEquals(self::Float_Expected, $transformedValue);
     }
 
     public function testPosBooleanToIntegerTransformation()
     {
-        $transformedValue = $this->transformation->transform(PosBool);
+        $transformedValue = $this->transformation->transform(self::Pos_Bool);
 
-        $this->assertEquals(PosBoolExpected, $transformedValue);
+        $this->assertEquals(self::Pos_Bool_Expected, $transformedValue);
     }
 
     public function testNegBooleanToIntegerTransformation()
     {
-        $transformedValue = $this->transformation->transform(NegBool);
+        $transformedValue = $this->transformation->transform(self::Neg_Bool);
 
-        $this->assertEquals(NegBoolExpected, $transformedValue);
+        $this->assertEquals(self::Neg_Bool_Expected, $transformedValue);
     }
 
 
