@@ -12,12 +12,11 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
-const RegString = '/\s*(0|(-?[1-9]\d*([.,]\d+)?))\s*/';
-const RegStringDecimal ='/\,/';
-const RegStringFloating = '/\s*-?\d+[eE]-?\d+\s*/';
-
 class FloatTransformation implements Transformation
 {
+    const Reg_String = '/\s*(0|(-?[1-9]\d*([.,]\d+)?))\s*/';
+    const Reg_String_Floating = '/\s*-?\d+[eE]-?\d+\s*/';
+
     use DeriveApplyToFromTransform;
 
     public function transform($from)
@@ -29,25 +28,17 @@ class FloatTransformation implements Transformation
         }
         elseif(true === is_bool($from))
         {
-            $from = floatval(str_replace(',','.', str_replace('.','', $from)));
-            return $from;
+            return floatval($from);
         }
         elseif(true === is_string($from))
         {
-            if(preg_match(RegString, $from, $RegMatch))
+            if(preg_match(self::Reg_String, $from, $RegMatch))
             {
-                if(preg_match(RegStringDecimal, $from, $RegMatch))
-                {
-                    $from = floatval(str_replace(',','.', str_replace('.', '', $from)));
-                    return $from;
-                }
-                else
-                {
-                    $from = floatval($from);
-                    return $from;
-                }
+                $from = str_replace(',','.', $from);
+                return floatval($from);
+
             }
-            elseif(preg_match(RegStringFloating, $from, $RegMatch))
+            elseif(preg_match(self::Reg_String_Floating, $from, $RegMatch))
             {
                 $from = floatval($from);
                 return $from;
