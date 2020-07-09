@@ -12,7 +12,7 @@ require_once('./libs/composer/vendor/autoload.php');
 use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
-const PosBoolOrigin = true;
+const PosBool = true;
 const PosBoolExpected = 1.0;
 const NegBoolOrigin = false;
 const NegBoolExpected = 0.0;
@@ -22,6 +22,7 @@ const StringFloatPointOrigin = '7E10';
 const StringFloatPointExpected = 70000000000;
 const IntOrigin = 23;
 const IntExpected = 23.0;
+
 
 /**
  * Test transformations in this Group
@@ -40,7 +41,7 @@ class FloatTransformationTest extends TestCase
 
     public function testPosBooleanToFloatTransformation()
     {
-        $transformedValue = $this->transformation->transform(PosBoolOrigin);
+        $transformedValue = $this->transformation->transform(PosBool);
 
         $this->assertEquals(PosBoolExpected, $transformedValue);
     }
