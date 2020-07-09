@@ -39,6 +39,7 @@ class FloatTransformation implements Transformation
                 if(preg_match(RegStringDecimal, $from, $RegMatch))
                 {
                     $from = floatval(str_replace(',','.', str_replace('.', '', $from)));
+                    return $from;
                 }
                 else
                 {
