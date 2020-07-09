@@ -17,7 +17,7 @@ const PosBoolExpected = 1.0;
 const NegBoolOrigin = false;
 const NegBoolExpected = 0.0;
 const StringOriginFloat = '234,23'; /** was ist mit z.B. 2.434,32 oder 2,434.32 ??? */
-const StringExpectedFloat = 234.23; /** komma zu punkt oder ohne punkt??? => 234 anstatt 234.23 */
+const StringExpectedFloat = 234.23;
 const StringFloatPointOrigin = '7E10';
 const StringFloatPointExpected = 70000000000;
 const IntOrigin = 23;
