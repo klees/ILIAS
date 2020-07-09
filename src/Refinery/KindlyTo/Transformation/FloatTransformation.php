@@ -43,13 +43,6 @@ class FloatTransformation implements Transformation
                 $from = floatval($from);
                 return $from;
             }
-            else
-            {
-                throw new ConstraintViolationException(
-                    'The string could not be transformed into an float',
-                    'not_float'
-                );
-            }
         }
         else
         {
@@ -58,9 +51,6 @@ class FloatTransformation implements Transformation
                 'not_float'
             );
         }
-
-
-
     }
 
     public function applyTo(Result $data): Result
