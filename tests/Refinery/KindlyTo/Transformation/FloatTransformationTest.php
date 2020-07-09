@@ -46,7 +46,7 @@ class FloatTransformationTest extends TestCase
 
     public function testNegBooleanToFloatTransformation()
     {
-        $transformedValue = $this->transformation->transform(self::Neg_Bool_Expected);
+        $transformedValue = $this->transformation->transform(self::Neg_Bool_Origin);
 
         $this->assertEquals(self::Neg_Bool_Expected, $transformedValue);
     }
