@@ -8,11 +8,11 @@
 namespace ILIAS\Tests\Refinery\KindlyTo;
 
 use ILIAS\Refinery\KindlyTo\Group;
+use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
-use ILIAS\Refinery\KindlyTo\Transformation\FloatTransfromation;
 /**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
 use ILIAS\Tests\Refinery\TestCase;
 
