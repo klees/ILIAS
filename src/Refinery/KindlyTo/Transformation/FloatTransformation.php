@@ -28,7 +28,7 @@ class FloatTransformation implements Transformation
         }
         elseif(true === is_bool($from))
         {
-            return number_format(floatval($from),1);
+            return floatval($from);
         }
         elseif(true === is_string($from))
         {
