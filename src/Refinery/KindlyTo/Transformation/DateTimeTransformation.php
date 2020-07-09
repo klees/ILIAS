@@ -10,7 +10,6 @@ namespace ILIAS\Refinery\KindlyTo\Transformation;
 use ILIAS\Data\Result;
 use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
-use ILIAS\UI\Component\Input\Field\DateTime;
 
 /**
  * Set date format and RegExr constants.
@@ -76,7 +75,6 @@ class DateTimeTransformation implements Transformation
         {
             throw new \InvalidArgumentException("$from can not be transformed into DateTimeImmutable or Unix timestamp.", 1);
         }
-
     }
 
     /**
