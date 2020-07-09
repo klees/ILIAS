@@ -35,15 +35,9 @@ class DateTimeTransformationTest extends TestCase
 
     public function testDateTimeTransformation()
     {
-        $original = DateTime::createFromFormat(DateTime::ISO8601,self::Date_Origin);
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,self::Date_Origin);
-        /**$original = new DateTime(self::Date_Origin);
-        $original = $original->format(self::ISO8601);
-        $expected = new \DateTimeImmutable(self::Date_Origin);
-        $expected = $expected->format(self::ISO8601);
-         */
 
-        $transformedValue = $this->transformation->transform($original);
+        $transformedValue = $this->transformation->transform(self::Date_Origin);
 
         $this->assertEquals($expected, $transformedValue);
     }
