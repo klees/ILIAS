@@ -34,7 +34,33 @@ class ListTransformation implements Transformation
      */
     public function transform($from)
     {
+        if(false == is_array($from))
+        {
+            $from = array($from);
+            if(array_values() === $from)
+            {
+               throw new ConstraintViolationException(
+                   'The array ist empty',
+                   'value_array_is_empty'
+               ) ;
+            }
+        }
 
+        if(array_values() === $from)
+        {
+            throw new ConstraintViolationException(
+            'The array ist empty',
+            'value_array_is_empty'
+            ) ;
+        }
+
+        $result = array();
+        foreach($from as $val)
+        {
+            $transformedVal = $this->transformation->transform($val);
+            $result[] = $transformedVal;
+        }
+        return $result;
     }
 
     public function applyTo(Result $data): Result
