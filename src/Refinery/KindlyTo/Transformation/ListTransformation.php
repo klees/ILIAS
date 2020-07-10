@@ -34,10 +34,10 @@ class ListTransformation implements Transformation
      */
     public function transform($from)
     {
-        if(false == is_array($from))
+        if(false == array($from))
         {
             $from = array($from);
-            if(array_values() === $from)
+            if(array() === $from)
             {
                throw new ConstraintViolationException(
                    'The array ist empty',
@@ -46,7 +46,7 @@ class ListTransformation implements Transformation
             }
         }
 
-        if(array_values() === $from)
+        if(array() === $from)
         {
             throw new ConstraintViolationException(
             'The array ist empty',
