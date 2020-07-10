@@ -39,19 +39,4 @@ class ListTransformationTest extends TestCase
         $this->assertEquals(array(self::string_val), $transformedValue);
     }
 
-    public function testFailOnEmptyArrayTransformation()
-    {
-        $this->expectNotToPerformAssertions();
-        $transformList = new ListTransformation(new StringTransformation());
-        try
-        {
-            $transformedValue = $transformList->transform(array());
-        }
-        catch (ConstraintViolationException $exception)
-        {
-            return;
-        }
-        $this->fail();
-    }
-
 }
