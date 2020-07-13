@@ -62,9 +62,6 @@ class ListTransformation implements Transformation
         return $result;
     }
 
-    public function applyTo(Result $data): Result
-    {
-    }
     /**
      * @inheritdoc
      */
