@@ -34,7 +34,7 @@ class IntegerTransformationTest extends TestCase
      */
     public function testIntegerTransformation($originVal, $expectedVal)
     {
-        $transformedValue = $this->transformation->transform($originVal;
+        $transformedValue = $this->transformation->transform($originVal);
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
