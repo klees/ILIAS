@@ -66,6 +66,7 @@ class DictionaryTransformation implements Transformation
             $transformedValue = $this->transformation->transform($value);
             $result[$key] = $transformedValue;
         }
+        printf($result);
         return $result;
     }
 
