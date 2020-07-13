@@ -19,6 +19,9 @@ class IntegerTransformation implements Transformation
 
     use DeriveApplyToFromTransform;
 
+    /**
+     * @inheritdoc
+     */
     public function transform($from)
     {
 
@@ -65,10 +68,9 @@ class IntegerTransformation implements Transformation
         }
     }
 
-    public function applyTo(Result $data): Result
-    {
-    }
-
+    /**
+     * @inheritdoc
+     */
     public function __invoke($from)
     {
         return $this->transform($from);
