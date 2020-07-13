@@ -1,5 +1,5 @@
 <?php
-/* Copyright (c) 1998-2019 ILIAS open source, Extended GPL, see docs/LICENSE */
+/* Copyright (c) 1998-2020 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 /**
  * @author Luka Stocker <lstocker@concepts-and-training.de>
@@ -23,6 +23,9 @@ class StringTransformation implements Transformation
 
     use DeriveApplyToFromTransform;
 
+    /**
+     * @inheritdoc
+     */
     public function transform($from)
     {
         if(true === is_int($from) || true === is_float($from) || true === is_double($from))
@@ -62,10 +65,9 @@ class StringTransformation implements Transformation
         return "{$this->from}";
     }
 
-    public function applyTo(Result $data): Result
-    {
-    }
-
+    /**
+     * @inheritdoc
+     */
     public function __invoke($from)
     {
         return $this->transform($from);
