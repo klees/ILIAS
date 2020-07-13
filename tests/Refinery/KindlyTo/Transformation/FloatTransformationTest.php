@@ -40,32 +40,27 @@ class FloatTransformationTest extends TestCase
     public function testPosBooleanToFloatTransformation()
     {
         $transformedValue = $this->transformation->transform(self::True_Bool);
-
         $this->assertEquals(self::Pos_Bool_Expected, $transformedValue);
     }
 
     public function testNegBooleanToFloatTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Neg_Bool_Origin);
-
         $this->assertEquals(self::Neg_Bool_Expected, $transformedValue);
     }
     public function testStringToFloatTransformation()
     {
         $transformedValue = $this->transformation->transform(self::String_Origin_Float);
-
         $this->assertEquals(self::String_Expected_Float, $transformedValue);
     }
     public function testStringFloatingPointToFloatTransformation()
     {
         $transformedValue = $this->transformation->transform(self::String_Float_Point_Origin);
-
         $this->assertEquals(self::String_Float_Point_Expected, $transformedValue);
     }
     public function testIntegerToFloatTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Int_Origin);
-
         $this->assertEquals(self::Int_Expected, $transformedValue);
     }
 }
