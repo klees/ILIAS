@@ -7,12 +7,8 @@
 
 namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
-use ILIAS\Data\Result;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
-use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\TupleTransformation;
-use ILIAS\Refinery\ConstraintViolationException;
-use ILIAS\Refinery\IsArrayOfSameType;
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once ('./libs/composer/vendor/autoload.php');
