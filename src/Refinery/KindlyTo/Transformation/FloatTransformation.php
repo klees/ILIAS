@@ -19,6 +19,9 @@ class FloatTransformation implements Transformation
 
     use DeriveApplyToFromTransform;
 
+    /**
+     * @inheritdoc
+     */
     public function transform($from)
     {
         if(true === is_int($from))
@@ -53,10 +56,9 @@ class FloatTransformation implements Transformation
         }
     }
 
-    public function applyTo(Result $data): Result
-    {
-    }
-
+    /**
+     * @inheritdoc
+     */
     public function __invoke($from)
     {
         return $this->transform($from);
