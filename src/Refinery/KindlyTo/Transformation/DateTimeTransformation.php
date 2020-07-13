@@ -39,7 +39,7 @@ class DateTimeTransformation implements Transformation
             if(preg_match(self::Reg_Atom, $from, $RegMatch))
             {
                 $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM, $from);
-                return $DateImmutable;
+                return $DateImmutable->format(\DateTimeImmutable::ATOM);
             }
             elseif(preg_match(self::Reg_Cookie, $from, $RegMatch))
             {
