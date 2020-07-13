@@ -68,7 +68,7 @@ class GroupTest extends TestCase
 
     public function testIsRecordTransformationInterface()
     {
-        $transformation = $this->basicGroup->recordOf();
+        $transformation = $this->basicGroup->recordOf(array('tostring' => new StringTransformation()));
 
         $this->assertInstanceOf(RecordTransformation::class, $transformation);
     }
