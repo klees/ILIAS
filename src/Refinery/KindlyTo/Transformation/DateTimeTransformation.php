@@ -34,7 +34,7 @@ class DateTimeTransformation implements Transformation
      */
     public function transform($from)
     {
-        if(TRUE === is_string($from))
+        if(false === is_string($from))
         {
             if(preg_match(self::Reg_Atom, $from, $RegMatch))
             {
