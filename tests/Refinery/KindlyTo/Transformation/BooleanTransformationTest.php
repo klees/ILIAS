@@ -38,35 +38,25 @@ class BooleanTransformationTest extends TestCase
 
     public function testPosBooleanTransformation()
     {
-
             $transformedValue = $this->transformation->transform(self::Pos_Boolean);
-
             $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
 
             $transformedValue = $this->transformation->transform(self::Pos_Boolean_Number);
-
             $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
 
             $transformedValue = $this->transformation->transform(self::Pos_Boolean_Number_String);
-
             $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
-
     }
 
     public function testNegBooleanTransformation()
     {
-
             $transformedValue = $this->transformation->transform(self::Neg_Boolean);
-
             $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
 
             $transformedValue = $this->transformation->transform(self::Neg_Boolean_Number);
-
             $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
 
             $transformedValue = $this->transformation->transform(self::Neg_Boolean_Number_String);
-
             $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
-
     }
 }
