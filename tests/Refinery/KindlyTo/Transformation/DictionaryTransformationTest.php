@@ -15,12 +15,23 @@ require_once ('./libs/composer/vendor/autoload.php');
 
 class DictionaryTransformationTest extends TestCase
 {
-    const String_key = 'hello';
-    const String_val = 'world';
-    public function testDictionaryTransformation()
+    /**
+     * @dataProvider DictionaryTestDataProvider
+     * @param $originVal
+     * @param $expectedVal
+     */
+    public function testDictionaryTransformation($originVal, $expectedVal)
     {
         $transformation = new DictionaryTransformation(new StringTransformation());
-        $transformedValue = $transformation->transform(array(self::String_key => self::String_val));
-        $this->assertEquals(array(self::String_key => self::String_val), $transformedValue);
+        $transformedValue = $transformation->transform(array($originVal));
+        $this->assertEquals(array($expectedVal), $transformedValue);
+    }
+
+    public function DictionaryTestDataProvider()
+    {
+        return array(
+            'hello' => array('world'),
+            'hello2' => array(array('world2', 'world3', 'world4'))
+        );
     }
 }
