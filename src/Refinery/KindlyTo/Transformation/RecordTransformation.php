@@ -96,10 +96,10 @@ class RecordTransformation implements Transformation
      */
     private function ValueLength($values)
     {
-        $countOfValues = count($values);
-        $countOfTransformations = count($this->transformations);
+        $countValues = count($values);
+        $countTransformations = count($this->transformations);
 
-        if ($countOfValues !== $countOfTransformations) {
+        if ($countValues !== $countTransformations) {
             throw new ConstraintViolationException(
 
                     'The given values does not match',
