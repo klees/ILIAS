@@ -11,6 +11,7 @@ require_once('./libs/composer/vendor/autoload.php');
 
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Tests\Refinery\TestCase;
+use Sabre\VObject\Property\Boolean;
 
 
 /**
@@ -31,14 +32,14 @@ class BooleanTransformationTest extends TestCase
 
      /**
      * @dataProvider BooleanTestDataProvider
-     * @param $originVal
+     * @param string $originVal
      * @param boolean $expectedVal
      */
-    public function testBooleanTransformation($originVal, $expectedVal)
+    public function testBooleanTransformation(string $originVal, bool $expectedVal)
     {
             $transformedValue = $this->transformation->transform($originVal);
             $this->assertIsBool($transformedValue, '');
-            $this->assertInstanceOf(\PHPUnit\Framework\TestCase::class, $originVal, '');
+            $this->assertInstanceOf(BooleanTransformation::class, $originVal, '');
             $this->assertSame($expectedVal, $transformedValue);
     }
 
