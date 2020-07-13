@@ -52,9 +52,10 @@ class DateTimeTransformationTest extends TestCase
     public function DateTimeTestDataProvider()
     {
         return [
-            'ISO08601' => ['2020-07-06T12:23:05+0000',
+            'ISO08601' => [DateTime::createFromFormat(DATE_ISO8601, '2020-07-06T12:23:05+0000'),
                 \DateTimeImmutable::createFromFormat(DATE_ISO8601,'2020-07-06T12:23:05+0000')],
 
         ];
+
     }
 }
