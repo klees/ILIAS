@@ -36,19 +36,28 @@ class BooleanTransformationTest extends TestCase
         $this->transformation = new BooleanTransformation();
     }
 
-    public function testPosBooleanTransformation()
+    /**
+     * @dataProvider PosBooleanTestDataProvider
+     * @dataProvider NegBooleanTestDataProvider
+     * @param $originVal
+     * @param $expectedVal
+     */
+    public function testPosBooleanTransformation($originVal, $expectedVal)
     {
-            $transformedValue = $this->transformation->transform(self::Pos_Boolean);
+            /**$transformedValue = $this->transformation->transform(self::Pos_Boolean);
             $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
 
             $transformedValue = $this->transformation->transform(self::Pos_Boolean_Number);
             $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
 
             $transformedValue = $this->transformation->transform(self::Pos_Boolean_Number_String);
-            $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
+            $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);*/
+
+            $transformedValue = $this->transformation->transform($originVal);
+            $this->assertSame($expectedVal, $transformedValue);
     }
 
-    public function testNegBooleanTransformation()
+    /**public function testNegBooleanTransformation()
     {
             $transformedValue = $this->transformation->transform(self::Neg_Boolean);
             $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
@@ -58,5 +67,23 @@ class BooleanTransformationTest extends TestCase
 
             $transformedValue = $this->transformation->transform(self::Neg_Boolean_Number_String);
             $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
+    }*/
+
+    public function PosBooleanTestDataProvider()
+    {
+        return [
+            'pos_boolean' => ['true', true],
+            'pos_boolean_number' => [1, true],
+            'pos_boolean_number_string' => ['1', true]
+        ];
+    }
+
+    public function NegBooleanTestDataProvider()
+    {
+        return [
+            'neg_boolean' => ['false', false],
+            'neg_boolean_number' => [0, false],
+            'neg_boolean_number_string' => ['0', false]
+        ];
     }
 }
