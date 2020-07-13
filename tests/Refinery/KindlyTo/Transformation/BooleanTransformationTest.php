@@ -28,8 +28,7 @@ class BooleanTransformationTest extends TestCase
     }
 
     /**
-     * @dataProvider PosBooleanTestDataProvider
-     * @dataProvider NegBooleanTestDataProvider
+     * @dataProvider BooleanTestDataProvider
      * @param $originVal
      * @param $expectedVal
      */
@@ -39,18 +38,12 @@ class BooleanTransformationTest extends TestCase
             $this->assertSame($expectedVal, $transformedValue);
     }
 
-    public function PosBooleanTestDataProvider()
+    public function BooleanTestDataProvider()
     {
         return [
             'pos_boolean' => ['true', true],
             'pos_boolean_number' => [1, true],
-            'pos_boolean_number_string' => ['1', true]
-        ];
-    }
-
-    public function NegBooleanTestDataProvider()
-    {
-        return [
+            'pos_boolean_number_string' => ['1', true],
             'neg_boolean' => ['false', false],
             'neg_boolean_number' => [0, false],
             'neg_boolean_number_string' => ['0', false]
