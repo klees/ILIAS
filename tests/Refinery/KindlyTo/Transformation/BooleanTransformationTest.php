@@ -27,7 +27,7 @@ class BooleanTransformationTest extends TestCase
         $this->transformation = new BooleanTransformation();
     }
 
-    /**
+     /**
      * @dataProvider BooleanTestDataProvider
      * @param $originVal
      * @param boolean $expectedVal
@@ -36,7 +36,7 @@ class BooleanTransformationTest extends TestCase
     {
             $transformedValue = $this->transformation->transform($originVal);
             $this->assertIsBool($transformedValue, '');
-            $this->assertInstanceOf(\ilADTBoolean::class, $transformedValue);
+            $this->assertInstanceOf(BooleanTransformationTest::class, $transformedValue);
             $this->assertSame($expectedVal, $transformedValue);
     }
 
