@@ -7,10 +7,8 @@
 
 namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
-use ILIAS\Data\Result\Ok;
 use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
-use ILIAS\Refinery\ConstraintViolationException;
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once ('./libs/composer/vendor/autoload.php');
