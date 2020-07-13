@@ -24,8 +24,9 @@ class TupleTransformation implements Transformation
     /**
      * @param array $transformations;
      */
-    public function __construct()
+    public function __construct(array $transformations)
     {
+        $this->transformations = $transformations;
     }
 
     /**
@@ -33,7 +34,59 @@ class TupleTransformation implements Transformation
      */
     public function transform($from)
     {
-        // TODO: Implement transform() method.
+        if(false == is_array($from))
+        {
+            $from = array($from);
+            if(array() === $from)
+            {
+                throw new ConstraintViolationException(
+                    'The array ist empty',
+                    'value_array_is_empty'
+                ) ;
+            }
+        }
+        elseif(array() === $from)
+        {
+            throw new ConstraintViolationException(
+                'The array ist empty',
+                'value_array_is_empty'
+            ) ;
+        }
+
+        $this->ValueLength($from);
+        $result = array();
+        foreach($from as $key => $value)
+        {
+            if(false === array_key_exists($key, $this->transformations))
+            {
+                throw new ConstraintViolationException(
+                    'Matching values not found',
+                    'matching_values_not_found'
+                );
+            }
+            $transformedValue = $this->transformations[$key]->transform($value);
+            $result[] = $transformedValue;
+        }
+        return $result;
+
+    }
+
+    /**
+     * @param $values
+     */
+    public function ValueLength($values)
+    {
+        $countValues = count($values);
+        $countTransformations = count($this->transformations);
+
+        if ($countValues !== $countTransformations) {
+            throw new ConstraintViolationException(
+
+                'The given values does not match',
+                'value_length_does_not_match'
+
+            );
+        }
     }
 
     /**
