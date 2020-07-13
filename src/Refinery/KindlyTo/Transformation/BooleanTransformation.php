@@ -23,6 +23,9 @@ class BooleanTransformation implements Transformation
 
     use DeriveApplyToFromTransform;
 
+    /**
+     * @inheritdoc
+     */
     public function transform($from)
     {
         if($from === self::Bool_True_Number || $from === self::Bool_True_Number_String || mb_strtolower($from) === self::Bool_True_String)
@@ -43,10 +46,10 @@ class BooleanTransformation implements Transformation
         }
 
     }
-    public function applyTo(Result $data): Result
-    {
-    }
 
+    /**
+     * @inheritdoc
+     */
     public function __invoke($from)
     {
         return $this->transform($from);
