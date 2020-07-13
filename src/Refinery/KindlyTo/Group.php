@@ -12,6 +12,7 @@ use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
 /**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
 use ILIAS\Refinery\Transformation;
 use SimpleSAML\TwigConfigurableI18n\Twig\Extensions\Node\Trans;
@@ -218,9 +219,12 @@ class Group
      *
      * This supports all data represented as PHP array. Non-arrays will be wrapped
      * in one.
+     *
+     * @param array $transformations
+     * @return Transformation
      */
     public function recordOf(array $transformations) : Transformation
     {
-        throw new \LogicException("Not implemented yet.");
+        return new RecordTransformation($transformations);
     }
 }
