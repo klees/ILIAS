@@ -7,31 +7,22 @@
 
 namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
+use ILIAS\Data\Result\Ok;
 use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
+use ILIAS\Refinery\ConstraintViolationException;
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once ('./libs/composer/vendor/autoload.php');
 
 class DictionaryTransformationTest extends TestCase
 {
-    /**
-     * @dataProvider DictionaryTestDataProvider
-     * @param $originVal
-     * @param $expectedVal
-     */
-    public function testDictionaryTransformation($originVal, $expectedVal)
+    const String_key = 'hello';
+    const String_val = 'world';
+    public function testDictionaryTransformation()
     {
         $transformation = new DictionaryTransformation(new StringTransformation());
-        $transformedValue = $transformation->transform($originVal);
-        $this->assertEquals($expectedVal, $transformedValue);
-    }
-
-    public function DictionaryTestDataProvider()
-    {
-        return array(
-            array('hello' => 'world'),
-            array('hello2' => array('world2', 'world3', 'world4'))
-        );
+        $transformedValue = $transformation->transform(array(self::String_key,self::String_val));
+        $this->assertEquals(array(self::String_key,self::String_val), $transformedValue);
     }
 }
