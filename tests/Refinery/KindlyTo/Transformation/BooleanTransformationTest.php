@@ -17,15 +17,6 @@ use ILIAS\Tests\Refinery\TestCase;
 */
 class BooleanTransformationTest extends TestCase
 {
-    const Pos_Boolean = 'true';
-    const Neg_Boolean = 'false';
-    const Pos_Boolean_Number = 1;
-    const Neg_Boolean_Number = 0;
-    const Pos_Boolean_Number_String = '1';
-    const Neg_Boolean_Number_String = '0';
-    const Transformed_Pos_Boolean = true;
-    const Transformed_Neg_Boolean = false;
-
     /**
      * @var BooleanTransformation
      */
