@@ -30,7 +30,7 @@ class DictionaryTransformationTest extends TestCase
     public function DictionaryTestDataProvider()
     {
         return array(
-            'hello' => array('world'),
+            'hello' => 'world',
             'hello2' => array(array('world2', 'world3', 'world4'))
         );
     }
