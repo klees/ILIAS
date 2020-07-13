@@ -65,7 +65,7 @@ class RecordTransformation implements Transformation
         }
 
         $result = array();
-        foreach($from as $key)
+        foreach($from as $key => $value)
         {
             $transformation = $this->transformations[$key];
             if(false === isset($transformation))
