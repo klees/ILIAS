@@ -87,29 +87,9 @@ class RecordTransformation implements Transformation
             $result[$key] = $transformedValue;
         }
         return $result;
-
     }
 
-    /**
-     * @param $values
-     * @throws ConstraintViolationException
-     */
-    private function ValueLength($values)
-    {
-        $countValues = count($values);
-        $countTransformations = count($this->transformations);
-
-        if ($countValues !== $countTransformations) {
-            throw new ConstraintViolationException(
-
-                    'The given values does not match',
-                    'value_length_does_not_match'
-
-            );
-        }
-    }
-
-    /**
+     /**
      * @inheritDoc
      */
     public function __invoke($from)

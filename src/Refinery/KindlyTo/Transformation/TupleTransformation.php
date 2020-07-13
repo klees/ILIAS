@@ -53,7 +53,6 @@ class TupleTransformation implements Transformation
             ) ;
         }
 
-        /**$this->ValueLength($from);*/
         $result = array();
         foreach($from as $key => $value)
         {
@@ -70,24 +69,6 @@ class TupleTransformation implements Transformation
         return $result;
 
     }
-
-    /**
-     * @param $values
-     */
-/**public function ValueLength($values)
-    {
-        $countValues = count($values);
-        $countTransformations = count($this->transformations);
-
-        if ($countValues !== $countTransformations) {
-            throw new ConstraintViolationException(
-
-                'The given values does not match',
-                'value_length_does_not_match'
-
-            );
-        }
-    }*/
 
     /**
      * @inheritDoc
