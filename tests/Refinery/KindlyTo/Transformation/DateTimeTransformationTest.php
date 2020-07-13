@@ -9,7 +9,6 @@ namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
 require_once('./libs/composer/vendor/autoload.php');
 
-use DateTime;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use PHPUnit\Framework\TestCase;
 
@@ -42,7 +41,6 @@ class DateTimeTransformationTest extends TestCase
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,self::Date_ISO);
         $transformedValue = $this->transformation->transform(self::Date_ISO);
-
         $this->assertEquals($expected->format(\DateTimeImmutable::ISO8601), $transformedValue);
     }
 
@@ -50,7 +48,6 @@ class DateTimeTransformationTest extends TestCase
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM,self::Date_Atom);
         $transformedValue = $this->transformation->transform(self::Date_Atom);
-
         $this->assertEquals($expected->format(\DateTimeImmutable::ATOM), $transformedValue);
     }
 
@@ -58,7 +55,6 @@ class DateTimeTransformationTest extends TestCase
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED,self::Date_RFC3339_EXT);
         $transformedValue = $this->transformation->transform(self::Date_RFC3339_EXT);
-
         $this->assertEquals($expected->format(\DateTimeImmutable::RFC3339_EXTENDED), $transformedValue);
     }
 
@@ -66,7 +62,6 @@ class DateTimeTransformationTest extends TestCase
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::COOKIE,self::Date_Cookie);
         $transformedValue = $this->transformation->transform(self::Date_Cookie);
-
         $this->assertEquals($expected->format(\DateTimeImmutable::COOKIE), $transformedValue);
     }
 
@@ -74,7 +69,6 @@ class DateTimeTransformationTest extends TestCase
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822,self::Date_RFC822);
         $transformedValue = $this->transformation->transform(self::Date_RFC822);
-
         $this->assertEquals($expected->format(\DateTimeImmutable::RFC822), $transformedValue);
     }
 
@@ -82,14 +76,12 @@ class DateTimeTransformationTest extends TestCase
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231,self::Date_RFC7231);
         $transformedValue = $this->transformation->transform(self::Date_RFC7231);
-
         $this->assertEquals($expected->format(\DateTimeImmutable::RFC7231), $transformedValue);
     }
 
     public function testDateTimeToUnixTimestampTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Date_Int);
-
         $this->assertEquals(self::Unix_Date, $transformedValue);
     }
 }
