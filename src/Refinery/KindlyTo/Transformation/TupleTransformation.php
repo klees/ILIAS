@@ -53,7 +53,7 @@ class TupleTransformation implements Transformation
             ) ;
         }
 
-        $this->ValueLength($from);
+        /**$this->ValueLength($from);*/
         $result = array();
         foreach($from as $key => $value)
         {
@@ -74,7 +74,7 @@ class TupleTransformation implements Transformation
     /**
      * @param $values
      */
-    public function ValueLength($values)
+/**public function ValueLength($values)
     {
         $countValues = count($values);
         $countTransformations = count($this->transformations);
@@ -87,7 +87,7 @@ class TupleTransformation implements Transformation
 
             );
         }
-    }
+    }*/
 
     /**
      * @inheritDoc
