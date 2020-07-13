@@ -13,9 +13,8 @@ use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\TupleTransformation;
 /**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
-
-use ILIAS\Refinery\To\Transformation\TupleTransformation;
 use ILIAS\Refinery\Transformation;
 use SimpleSAML\TwigConfigurableI18n\Twig\Extensions\Node\Trans;
 
