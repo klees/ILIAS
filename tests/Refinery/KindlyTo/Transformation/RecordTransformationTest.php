@@ -32,5 +32,4 @@ class RecordTransformationTest extends TestCase
         $transformedValue = $recTransform->transform(array(self::string_key => self::arr_String_Input, self::int_key => self::arr_Int_Input));
         $this->assertEquals(array(self::string_key => self::arr_String_Input, self::int_key => self::arr_Int_Input), $transformedValue);
     }
-
 }
