@@ -17,16 +17,6 @@ use ILIAS\Tests\Refinery\TestCase;
  */
 class FloatTransformationTest extends TestCase
 {
-    const True_Bool = true;
-    const Pos_Bool_Expected = 1.0;
-    const Neg_Bool_Origin = false;
-    const Neg_Bool_Expected = 0.0;
-    const String_Origin_Float = '234,23';
-    const String_Expected_Float = 234.23;
-    const String_Float_Point_Origin = '7E10';
-    const String_Float_Point_Expected = 70000000000;
-    const Int_Origin = 23;
-    const Int_Expected = 23.0;
     /**
      * @var FloatTransformation
      */
@@ -37,30 +27,25 @@ class FloatTransformationTest extends TestCase
         $this->transformation = new FloatTransformation();
     }
 
-    public function testPosBooleanToFloatTransformation()
+    /**
+     * @dataProvider FloatTestDataProvider
+     * @param $originVal
+     * @param $expectedVal
+     */
+    public function testFloatTransformation($originVal, $expectedVal)
     {
-        $transformedValue = $this->transformation->transform(self::True_Bool);
-        $this->assertEquals(self::Pos_Bool_Expected, $transformedValue);
+        $transformedValue = $this->transformation->transform($originVal);
+        $this->assertEquals($expectedVal, $transformedValue);
     }
 
-    public function testNegBooleanToFloatTransformation()
+    public function FloatTestDataProvider()
     {
-        $transformedValue = $this->transformation->transform(self::Neg_Bool_Origin);
-        $this->assertEquals(self::Neg_Bool_Expected, $transformedValue);
-    }
-    public function testStringToFloatTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::String_Origin_Float);
-        $this->assertEquals(self::String_Expected_Float, $transformedValue);
-    }
-    public function testStringFloatingPointToFloatTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::String_Float_Point_Origin);
-        $this->assertEquals(self::String_Float_Point_Expected, $transformedValue);
-    }
-    public function testIntegerToFloatTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::Int_Origin);
-        $this->assertEquals(self::Int_Expected, $transformedValue);
+        return [
+            'pos_bool' => [true, 1.0],
+            'neg_bool' => [false, 0.0],
+            'string_comma' => ['234,23', 234.23],
+            'string_floating_point' => ['7E10', 70000000000],
+            'int_val' => [23, 23.0]
+        ];
     }
 }
