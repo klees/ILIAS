@@ -44,49 +44,42 @@ class StringTransformationTest extends TestCase
     public function testStringToStringTransformation()
     {
         $transformedValue = $this->transformation->transform(self::String_Val);
-
         $this->assertEquals(self::String_Val, $transformedValue);
     }
 
     public function testIntegerToStringTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Int_Val);
-
         $this->assertEquals(self::Int_Transformed, $transformedValue);
     }
 
     public function testNegativeIntegerToStringTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Negative_Int_Val);
-
         $this->assertEquals(self::Negative_Int_Transformed, $transformedValue);
     }
 
     public function testZeroIntegerToStringTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Zero_Int_Val);
-
         $this->assertEquals(self::Zero_Int_Transformed, $transformedValue);
     }
 
     public function testPositiveBooleanToStringTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Positive_Bool);
-
         $this->assertEquals(self::Positive_Bool_Transformed, $transformedValue);
     }
 
     public function testNegativeBooleanToStringTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Negative_Bool);
-
         $this->assertEquals(self::Negative_Bool_Transformed, $transformedValue);
     }
 
     public function testFloatToStringTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Float_Val);
-
         $this->assertEquals(self::Float_Val_Transformed, $transformedValue);
     }
 }
