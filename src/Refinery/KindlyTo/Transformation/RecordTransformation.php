@@ -27,16 +27,67 @@ class RecordTransformation implements Transformation
 
     public function __construct(array $transformations)
     {
-
+        foreach($transformations as $key => $transformation)
+        {
+            if(false === is_string($key))
+            {
+                throw new ConstraintViolationException(
+                    'The array key must be a string',
+                    'key_is_not_a_string'
+                );
+            }
+        }
+        $this->transformations = $transformations;
     }
 
-    public function transform($form)
+    /**
+     * @inheritDoc
+     */
+    public function transform($from)
     {
+        if(false == is_array($from))
+        {
+            $from = array($from);
+            if(array() === $from)
+            {
+                throw new ConstraintViolationException(
+                    'The array ist empty',
+                    'value_array_is_empty'
+                ) ;
+            }
+        }
+        elseif(array() === $from)
+        {
+            throw new ConstraintViolationException(
+                'The array ist empty',
+                'value_array_is_empty'
+            ) ;
+        }
+
+        $result = array();
+        foreach($from as $key)
+        {
+            $transformation = $this->transformations[$key];
+            if(false === isset($transformation))
+            {
+                throw new ConstraintViolationException(
+                    'Could not find transformation',
+                    'array_key_does_not_exist'
+                );
+            }
+
+
+            $result[$key] = $transformation;
+        }
+        return $result;
 
     }
 
+    /**
+     * @inheritDoc
+     */
     public function __invoke($from)
     {
-        // TODO: Implement __invoke() method.
+        return $this->transform($from);
     }
 }
