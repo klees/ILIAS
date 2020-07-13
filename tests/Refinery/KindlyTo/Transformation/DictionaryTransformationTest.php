@@ -22,7 +22,7 @@ class DictionaryTransformationTest extends TestCase
     public function testDictionaryTransformation()
     {
         $transformation = new DictionaryTransformation(new StringTransformation());
-        $transformedValue = $transformation->transform(array(self::String_key,self::String_val));
-        $this->assertEquals(array(self::String_key,self::String_val), $transformedValue);
+        $transformedValue = $transformation->transform(array(self::String_key => self::String_val));
+        $this->assertEquals(array(self::String_key => self::String_val), $transformedValue);
     }
 }
