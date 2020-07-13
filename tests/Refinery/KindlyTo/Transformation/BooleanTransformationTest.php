@@ -53,8 +53,7 @@ class BooleanTransformationTest extends TestCase
         return [
             'pos_boolean' => ['true', true],
             'pos_boolean_number' => [1, true],
-            'pos_boolean_number_string' => ['1', true],
-            'false_boolean_test' => ['1', false]
+            'pos_boolean_number_string' => ['1', true]
         ];
     }
 
