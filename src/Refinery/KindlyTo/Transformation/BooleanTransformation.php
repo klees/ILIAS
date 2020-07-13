@@ -30,12 +30,12 @@ class BooleanTransformation implements Transformation
     {
         if($from === self::Bool_True_Number || $from === self::Bool_True_Number_String || mb_strtolower($from) === self::Bool_True_String)
         {
-            $from = true;
+            $from = boolval(true);
             return $from;
         }
         elseif($from === self::Bool_False_Number || $from === self::Bool_False_Number_String || mb_strtolower($from) === self::Bool_False_String)
         {
-            $from = false;
+            $from = boolval(false);
             return $from;
         }
         else {
