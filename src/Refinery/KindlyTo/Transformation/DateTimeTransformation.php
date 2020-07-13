@@ -12,7 +12,7 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 
 /**
- * Set date format and RegExr constants.
+ * Set date format and RegEx constants.
  * Constants with the same date formats are not set more then once:
  * - RFC3339 & W3C same as Atom
  * - RFC850 same as Cookie
@@ -34,7 +34,7 @@ class DateTimeTransformation implements Transformation
      */
     public function transform($from)
     {
-        if(false === is_string($from))
+        if(true === is_string($from))
         {
             if(preg_match(self::Reg_Atom, $from, $RegMatch))
             {
