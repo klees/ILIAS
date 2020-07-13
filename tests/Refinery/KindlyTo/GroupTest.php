@@ -13,6 +13,7 @@ use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
 /**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
 use ILIAS\Tests\Refinery\TestCase;
 
@@ -63,6 +64,13 @@ class GroupTest extends TestCase
         $transformation = $this->basicGroup->float();
 
         $this->assertInstanceOf(FloatTransformation::class, $transformation);
+    }
+
+    public function testIsRecordTransformationInterface()
+    {
+        $transformation = $this->basicGroup->recordOf();
+
+        $this->assertInstanceOf(RecordTransformation::class, $transformation);
     }
 
     /** public function testNewDictionaryTransformation()
