@@ -41,7 +41,7 @@ class DateTimeTransformationTest extends TestCase
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,self::Date_ISO);
         $transformedValue = $this->transformation->transform(self::Date_ISO);
-        $this->assertIsString($expected,'');
+        $this->assertIsObject($expected,'');
         $this->assertEquals($expected->format(\DateTimeImmutable::ISO8601), $transformedValue);
     }
 
