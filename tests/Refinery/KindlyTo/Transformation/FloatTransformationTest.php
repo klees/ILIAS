@@ -35,6 +35,7 @@ class FloatTransformationTest extends TestCase
     public function testFloatTransformation($originVal, $expectedVal)
     {
         $transformedValue = $this->transformation->transform($originVal);
+        $this->assertInstanceOf($expectedVal,$originVal, 'Failed InstanceOf');
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
