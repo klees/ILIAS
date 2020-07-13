@@ -15,6 +15,8 @@ use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
 /**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
+
+use ILIAS\Refinery\KindlyTo\Transformation\TupleTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once('./libs/composer/vendor/autoload.php');
