@@ -34,49 +34,48 @@ class GroupTest extends TestCase
     public function testIsStringTransformationInstance()
     {
         $transformation = $this->basicGroup->string();
-
         $this->assertInstanceOf(StringTransformation::class, $transformation);
     }
 
     public function testIsBooleanTransformationInstance()
     {
         $transformation = $this->basicGroup->bool();
-
         $this->assertInstanceOf(BooleanTransformation::class, $transformation);
     }
 
     public function testIsDateTimeTransformationInterface()
     {
         $transformation = $this->basicGroup->dateTime();
-
         $this->assertInstanceOf(DateTimeTransformation::class, $transformation);
     }
 
     public function testIsIntegerTransformationInterface()
     {
         $transformation = $this->basicGroup->int();
-
         $this->assertInstanceOf(IntegerTransformation::class, $transformation);
     }
 
     public function testIsFloatTransformationInterface()
     {
         $transformation = $this->basicGroup->float();
-
         $this->assertInstanceOf(FloatTransformation::class, $transformation);
     }
 
     public function testIsRecordTransformationInterface()
     {
         $transformation = $this->basicGroup->recordOf(array('tostring' => new StringTransformation()));
-
         $this->assertInstanceOf(RecordTransformation::class, $transformation);
+    }
+
+    public function testIsTupleTransformationInterface()
+    {
+        $transformation = $this->basicGroup->tupleOf(array(new StringTransformation()));
+        $this->assertInstanceOf(TupleTransformation::class, $transformation);
     }
 
     /** public function testNewDictionaryTransformation()
     {
         $transformation = $this->basicGroup->dictOf(new StringTransformation());
-
         $this->assertInstanceOf(DictionaryTransformation::class, $transformation);
     }*/
 }
