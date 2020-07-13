@@ -42,39 +42,19 @@ class BooleanTransformationTest extends TestCase
      * @param $originVal
      * @param $expectedVal
      */
-    public function testPosBooleanTransformation($originVal, $expectedVal)
+    public function testBooleanTransformation($originVal, $expectedVal)
     {
-            /**$transformedValue = $this->transformation->transform(self::Pos_Boolean);
-            $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
-
-            $transformedValue = $this->transformation->transform(self::Pos_Boolean_Number);
-            $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);
-
-            $transformedValue = $this->transformation->transform(self::Pos_Boolean_Number_String);
-            $this->assertEquals(self::Transformed_Pos_Boolean, $transformedValue);*/
-
             $transformedValue = $this->transformation->transform($originVal);
             $this->assertSame($expectedVal, $transformedValue);
     }
-
-    /**public function testNegBooleanTransformation()
-    {
-            $transformedValue = $this->transformation->transform(self::Neg_Boolean);
-            $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
-
-            $transformedValue = $this->transformation->transform(self::Neg_Boolean_Number);
-            $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
-
-            $transformedValue = $this->transformation->transform(self::Neg_Boolean_Number_String);
-            $this->assertEquals(self::Transformed_Neg_Boolean, $transformedValue);
-    }*/
 
     public function PosBooleanTestDataProvider()
     {
         return [
             'pos_boolean' => ['true', true],
             'pos_boolean_number' => [1, true],
-            'pos_boolean_number_string' => ['1', true]
+            'pos_boolean_number_string' => ['1', true],
+            'false_boolean_test' => ['1', false]
         ];
     }
 
