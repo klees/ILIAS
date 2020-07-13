@@ -67,6 +67,13 @@ class RecordTransformation implements Transformation
         $result = array();
         foreach($from as $key => $value)
         {
+            if (false === is_string($key))
+            {
+                throw new ConstraintViolationException(
+                    'Array key must be a string',
+                    'key_is_not_a_string'
+                );
+            }
             $transformation = $this->transformations[$key];
             if(false === isset($transformation))
             {
