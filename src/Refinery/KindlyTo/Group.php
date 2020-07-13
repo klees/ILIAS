@@ -14,7 +14,7 @@ use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\TupleTransformation;
-/**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
+use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;
 use ILIAS\Refinery\Transformation;
 use SimpleSAML\TwigConfigurableI18n\Twig\Extensions\Node\Trans;
 
@@ -196,12 +196,13 @@ class Group
      *
      * This supports all data represented as PHP array. Non-arrays will be wrapped
      * in one.
+     *
+     * @param Transformation $transformation
+     * @return Transformation
      */
     public function dictOf(Transformation $transformation) : Transformation
-    /**dictOf(Transformation $transformation) : DictionaryTransformation*/
     {
-        throw new \LogicException("Not implemented yet.");
-        /** return new DictionaryTransformation($transformation); */
+        return new DictionaryTransformation($transformation);
     }
 
     /**
