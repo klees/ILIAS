@@ -14,9 +14,8 @@ use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
-/**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
-
 use ILIAS\Refinery\KindlyTo\Transformation\TupleTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once('./libs/composer/vendor/autoload.php');
@@ -75,9 +74,9 @@ class GroupTest extends TestCase
         $this->assertInstanceOf(TupleTransformation::class, $transformation);
     }
 
-    /** public function testNewDictionaryTransformation()
+    public function testNewDictionaryTransformation()
     {
         $transformation = $this->basicGroup->dictOf(new StringTransformation());
         $this->assertInstanceOf(DictionaryTransformation::class, $transformation);
-    }*/
+    }
 }
