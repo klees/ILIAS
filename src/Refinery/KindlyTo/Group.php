@@ -14,6 +14,8 @@ use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
 /**use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;*/
+
+use ILIAS\Refinery\To\Transformation\TupleTransformation;
 use ILIAS\Refinery\Transformation;
 use SimpleSAML\TwigConfigurableI18n\Twig\Extensions\Node\Trans;
 
@@ -208,10 +210,13 @@ class Group
      *
      * This supports all data represented as PHP array, which will be used via
      * array_values($V). Non-arrays will be wrapped in one.
+     *
+     * @param array $transformation
+     * @return Transformation
      */
     public function tupleOf(array $transformation) : Transformation
     {
-        throw new \LogicException("Not implemented yet.");
+        return new TupleTransformation($transformation);
     }
 
     /**
