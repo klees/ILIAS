@@ -76,11 +76,30 @@ class RecordTransformation implements Transformation
                 );
             }
 
-
-            $result[$key] = $transformation;
+            $transformedValue = $transformation->transform($value);
+            $result[$key] = $transformedValue;
         }
         return $result;
 
+    }
+
+    /**
+     * @param $values
+     * @throws ConstraintViolationException
+     */
+    private function ValueLength($values)
+    {
+        $countOfValues = count($values);
+        $countOfTransformations = count($this->transformations);
+
+        if ($countOfValues !== $countOfTransformations) {
+            throw new ConstraintViolationException(
+
+                    'The given values does not match',
+                    'value_length_does_not_match'
+
+            );
+        }
     }
 
     /**
