@@ -23,8 +23,8 @@ class DictionaryTransformationTest extends TestCase
     public function testDictionaryTransformation($originVal, $expectedVal)
     {
         $transformation = new DictionaryTransformation(new StringTransformation());
-        $transformedValue = $transformation->transform(array($originVal));
-        $this->assertEquals(array($expectedVal), $transformedValue);
+        $transformedValue = $transformation->transform($originVal);
+        $this->assertEquals($expectedVal, $transformedValue);
     }
 
     public function DictionaryTestDataProvider()
