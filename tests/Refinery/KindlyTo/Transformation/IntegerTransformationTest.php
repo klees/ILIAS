@@ -17,15 +17,6 @@ use ILIAS\Tests\Refinery\TestCase;
  */
 class IntegerTransformationTest extends TestCase
 {
-    const Pos_Bool = true;
-    const Pos_Bool_Expected = 1;
-    const Neg_Bool = false;
-    const Neg_Bool_Expected = 0;
-    const Float_Original = 20.5;
-    const Float_Expected = 21;
-    const String_Original = '4947642.4234Hello';
-    const String_Expected = '4947642';
-
     /**
      * @var IntegerTransformation
      */
@@ -36,27 +27,25 @@ class IntegerTransformationTest extends TestCase
         $this->transformation = new IntegerTransformation();
     }
 
-    public function testStringToIntegerTransformation()
+    /**
+     * @dataProvider IntegerTestDataProvider
+     * @param $originVal
+     * @param $expectedVal
+     */
+    public function testIntegerTransformation($originVal, $expectedVal)
     {
-        $transformedValue = $this->transformation->transform(self::String_Original);
-        $this->assertEquals(self::String_Expected, $transformedValue);
+        $transformedValue = $this->transformation->transform($originVal;
+        $this->assertEquals($expectedVal, $transformedValue);
     }
 
-    public function testFloatToIntegerTransformation()
+    public function IntegerTestDataProvider()
     {
-        $transformedValue = $this->transformation->transform(self::Float_Original);
-        $this->assertEquals(self::Float_Expected, $transformedValue);
+        return [
+            'pos_bool' => [true, 1],
+            'neg_bool' => [false, 0],
+            'float_val' => [20.5, 21],
+            'string_val' => ['4947642.4234Hello', '4947642']
+        ];
     }
 
-    public function testPosBooleanToIntegerTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::Pos_Bool);
-        $this->assertEquals(self::Pos_Bool_Expected, $transformedValue);
-    }
-
-    public function testNegBooleanToIntegerTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::Neg_Bool);
-        $this->assertEquals(self::Neg_Bool_Expected, $transformedValue);
-    }
 }
