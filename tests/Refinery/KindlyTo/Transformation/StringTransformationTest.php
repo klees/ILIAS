@@ -17,20 +17,6 @@ use ILIAS\Tests\Refinery\TestCase;
  */
 class StringTransformationTest extends TestCase
 {
-    const String_Val = 'hello';
-    const Int_Val = 300;
-    const Negative_Int_Val = -300;
-    const Zero_Int_Val = 0;
-    const Positive_Bool = true;
-    const Negative_Bool = false;
-    const Float_Val = 20.5;
-    const Int_Transformed = '300';
-    const Negative_Int_Transformed = '-300';
-    const Zero_Int_Transformed = '0';
-    const Positive_Bool_Transformed = 'true';
-    const Negative_Bool_Transformed = 'false';
-    const Float_Val_Transformed = '20.5';
-
     /**
      * @var StringTransformation
      */
@@ -41,45 +27,27 @@ class StringTransformationTest extends TestCase
         $this->transformation = new StringTransformation();
     }
 
-    public function testStringToStringTransformation()
+    /**
+     * @dataProvider StringTestDataProvider
+     * @param $originVal
+     * @param $expectedVal
+     */
+    public function testStringTransformation($originVal, $expectedVal)
     {
-        $transformedValue = $this->transformation->transform(self::String_Val);
-        $this->assertEquals(self::String_Val, $transformedValue);
+        $transformedValue = $this->transformation->transform($originVal);
+        $this->assertEquals($expectedVal, $transformedValue);
     }
 
-    public function testIntegerToStringTransformation()
+    public function StringTestDataProvider()
     {
-        $transformedValue = $this->transformation->transform(self::Int_Val);
-        $this->assertEquals(self::Int_Transformed, $transformedValue);
-    }
-
-    public function testNegativeIntegerToStringTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::Negative_Int_Val);
-        $this->assertEquals(self::Negative_Int_Transformed, $transformedValue);
-    }
-
-    public function testZeroIntegerToStringTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::Zero_Int_Val);
-        $this->assertEquals(self::Zero_Int_Transformed, $transformedValue);
-    }
-
-    public function testPositiveBooleanToStringTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::Positive_Bool);
-        $this->assertEquals(self::Positive_Bool_Transformed, $transformedValue);
-    }
-
-    public function testNegativeBooleanToStringTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::Negative_Bool);
-        $this->assertEquals(self::Negative_Bool_Transformed, $transformedValue);
-    }
-
-    public function testFloatToStringTransformation()
-    {
-        $transformedValue = $this->transformation->transform(self::Float_Val);
-        $this->assertEquals(self::Float_Val_Transformed, $transformedValue);
+        return [
+            'string_val' => ['hello', 'hello'],
+            'int_val' => [300, '300'],
+            'neg_int_val' => [-300, '-300'],
+            'zero_int_val' => [0, '0'],
+            'pos_bool' => [true, 'true'],
+            'neg_bool' => [false, 'false'],
+            'float_val' => [20.5, '20.5']
+        ];
     }
 }
