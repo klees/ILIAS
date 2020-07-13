@@ -39,30 +39,24 @@ class IntegerTransformationTest extends TestCase
     public function testStringToIntegerTransformation()
     {
         $transformedValue = $this->transformation->transform(self::String_Original);
-
         $this->assertEquals(self::String_Expected, $transformedValue);
     }
 
     public function testFloatToIntegerTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Float_Original);
-
         $this->assertEquals(self::Float_Expected, $transformedValue);
     }
 
     public function testPosBooleanToIntegerTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Pos_Bool);
-
         $this->assertEquals(self::Pos_Bool_Expected, $transformedValue);
     }
 
     public function testNegBooleanToIntegerTransformation()
     {
         $transformedValue = $this->transformation->transform(self::Neg_Bool);
-
         $this->assertEquals(self::Neg_Bool_Expected, $transformedValue);
     }
-
-
 }
