@@ -48,6 +48,7 @@ class DateTimeTransformationTest extends TestCase
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM,self::Date_Atom);
         $transformedValue = $this->transformation->transform(self::Date_Atom);
+        $this->assertInstanceOf(\DateTimeImmutable::class, $transformedValue);
         $this->assertEquals($expected->format(\DateTimeImmutable::ATOM), $transformedValue);
     }
 
