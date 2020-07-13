@@ -11,6 +11,7 @@ require_once('./libs/composer/vendor/autoload.php');
 
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Tests\Refinery\TestCase;
+use phpDocumentor\Reflection\Types\Boolean;
 
 /**
 * Test transformations in this Group
@@ -35,7 +36,7 @@ class BooleanTransformationTest extends TestCase
     public function testBooleanTransformation($originVal, $expectedVal)
     {
             $transformedValue = $this->transformation->transform($originVal);
-            $this->assertInstanceOf(BooleanTransformation::class, $transformedValue);
+            $this->assertInstanceOf(Boolean::class, $transformedValue);
             $this->assertSame($expectedVal, $transformedValue);
     }
 
