@@ -9,6 +9,7 @@ namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
 require_once('./libs/composer/vendor/autoload.php');
 
+use ILIAS\Refinery\ConstraintViolationException;
 use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
 use ILIAS\Refinery\To\Transformation\StringTransformation;
 use ILIAS\Tests\Refinery\TestCase;
@@ -45,6 +46,23 @@ class ListTransformationTest extends TestCase
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
+    /**
+     * @dataProvider testFailureTransformations
+     * @param $origVal
+     */
+    public function testInvalidListTransformation($origVal)
+    {
+        $this->expectNotToPerformAssertions();
+        $transformList = new ListTransformation(new StringTransformation());
+        try {
+            $result = $transformList->transform($origVal);
+        }catch(ConstraintViolationException $exception)
+        {
+            return;
+        }
+        $this->fail();
+    }
+
     public function StringToListTransformationDataProvider()
     {
         return [
@@ -57,6 +75,13 @@ class ListTransformationTest extends TestCase
         return [
             'first_arr' => [array('hello', 'world'), ['hello', 'world']],
             'second_arr' => [array('hello2','world2'), ['hello2', 'world2']]
+        ];
+    }
+
+    public function testFailureTransformations()
+    {
+        return [
+            'transformation_is_invalid' => [array('hello', 1)]
         ];
     }
 }
