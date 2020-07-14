@@ -37,7 +37,7 @@ class BooleanTransformationTest extends TestCase
     public function testBooleanTransformation($originVal, bool $expectedVal)
     {
             $transformedValue = $this->transformation->transform($originVal);
-            $this->assertIsBool($transformedValue, '');
+            $this->assertIsBool($transformedValue);
             $this->assertSame($expectedVal, $transformedValue);
     }
 
