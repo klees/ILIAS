@@ -29,6 +29,16 @@ class RecordTransformation implements Transformation
     {
         foreach($transformations as $key => $transformation)
         {
+            if (!$transformation instanceof Transformation) {
+                $transformationClassName = Transformation::class;
+
+                throw new ConstraintViolationException(
+                    sprintf('The array MUST contain only "%s" instances', $transformationClassName),
+                    'not_a_transformation',
+                    $transformationClassName
+                );
+            }
+            
             if(false === is_string($key))
             {
                 throw new ConstraintViolationException(
