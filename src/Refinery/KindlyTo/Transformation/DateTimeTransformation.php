@@ -8,6 +8,7 @@
 namespace ILIAS\Refinery\KindlyTo\Transformation;
 
 use ILIAS\Data\Result;
+use ILIAS\Refinery\ConstraintViolationException;
 use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 
@@ -69,7 +70,10 @@ class DateTimeTransformation implements Transformation
         }
         else
         {
-            throw new \InvalidArgumentException("$from can not be transformed into DateTimeImmutable or Unix timestamp.", 1);
+            throw new ConstraintViolationException(
+                'No transformation possible',
+                'no_transform_possible'
+            );
         }
     }
 
