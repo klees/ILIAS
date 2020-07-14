@@ -33,21 +33,7 @@ class ListTransformationTest extends TestCase
         $this->assertEquals($expectedValue, $transformedValue);
     }
 
-    /**
-     * @dataProvider StringToListTransformationDataProvider
-     * @param $originVal
-     * @param $expectedVal
-     */
-    public function testNonArrayToArrayTransformation($originVal,$expectedVal)
-    {
-        $transformList = new ListTransformation(new StringTransformation());
-        $transformedValue = $transformList->transform($originVal);
-        $this->assertIsArray($transformedValue,'');
-        $this->assertEquals($expectedVal, $transformedValue);
-    }
-
-
-    public function testInvalidListTransformation()
+     public function testInvalidListTransformation()
     {
         $this->expectNotToPerformAssertions();
         $transformList = new ListTransformation(new StringTransformation());
@@ -60,7 +46,11 @@ class ListTransformationTest extends TestCase
         $this->fail();
     }
 
-    public function testOnNull()
+    /**
+     * @dataProvider ArrayFailureDataProvider
+     * @param $origValue
+     */
+    public function testOnNullAndEmptyArray($origValue)
     {
         $this->expectNotToPerformAssertions();
         $transformList = new ListTransformation(new StringTransformation());
@@ -73,18 +63,20 @@ class ListTransformationTest extends TestCase
         $this->fail();
     }
 
-    public function StringToListTransformationDataProvider()
-    {
-        return [
-            'string_val' => ['hello world',['hello world']]
-        ];
-    }
-
     public function ArrayToListTransformationDataProvider()
     {
         return [
             'first_arr' => [array('hello', 'world'), ['hello', 'world']],
-            'second_arr' => [array('hello2','world2'), ['hello2', 'world2']]
+            'second_arr' => [array('hello2','world2'), ['hello2', 'world2']],
+            'string_val' => ['hello world',['hello world']]
+        ];
+    }
+
+    public function ArrayFailureDataProvider()
+    {
+        return [
+            'empty_array' => [array()],
+            'null_array' => [array(null)]
         ];
     }
 
