@@ -11,7 +11,8 @@ require_once('./libs/composer/vendor/autoload.php');
 
 use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
 use ILIAS\Refinery\To\Transformation\StringTransformation;
-use ILIAS\Tests\Refinery\TestCase;
+/**use ILIAS\Tests\Refinery\TestCase;*/
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test transformations in this Group
@@ -22,7 +23,12 @@ class ListTransformationTest extends TestCase
     const second_arr = 'world';
     const string_val = 'hello world';
 
-    public function testListTransformation()
+    /**
+     * @dataProvider ArrayToListTransformation
+     * @param $originValue
+     * @param $expectedValue
+     */
+    public function testListTransformation($originValue, $expectedValue)
     {
         $transformList = new ListTransformation(new StringTransformation());
         $transformedValue = $transformList->transform(array(self::first_arr, self::second_arr));
@@ -32,13 +38,13 @@ class ListTransformationTest extends TestCase
 
     /**
      * @dataProvider StringToListTransformationDataProvider
-     * @param $originval
+     * @param $originVal
      * @param $expectedVal
      */
-    public function testNonArrayToArrayTransformation($originval,$expectedVal)
+    public function testNonArrayToArrayTransformation($originVal,$expectedVal)
     {
         $transformList = new ListTransformation(new StringTransformation());
-        $transformedValue = $transformList->transform($originval);
+        $transformedValue = $transformList->transform($originVal);
         $this->assertIsArray($transformedValue,'');
         $this->assertEquals($expectedVal, $transformedValue);
     }
@@ -47,6 +53,14 @@ class ListTransformationTest extends TestCase
     {
         return [
             'string_val' => ['hello world',array('hello world')],
+        ];
+    }
+
+    public function ArrayToListTransformation()
+    {
+        return [
+            'first_arr' => [array('hello', 'world'), array('hello', 'world')],
+            'second_arr' => [array('hello2','world2'), array('hello2', 'world2')]
         ];
     }
 }
