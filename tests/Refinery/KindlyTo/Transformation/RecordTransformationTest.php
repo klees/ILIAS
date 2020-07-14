@@ -16,12 +16,14 @@ require_once('./libs/composer/vendor/autoload.php');
 
 class RecordTransformationTest extends TestCase
 {
-    const arr_String_Input = 'hello';
-    const arr_Int_Input = 1;
-    const string_key = 'stringKey';
-    const int_key = 'integerKey';
-
-    public function testRecordTransformation()
+    /**
+     * @dataProvider RecordTransformationDataProvider
+     * @param $originVal
+     * @param $expectedVal
+     */
+    const string_key = 'hello';
+    const int_key = 1;
+    public function testRecordTransformation($originVal, $expectedVal)
     {
         $recTransform = new RecordTransformation(
             array(
@@ -29,7 +31,14 @@ class RecordTransformationTest extends TestCase
                 self::int_key => new IntegerTransformation()
             )
         );
-        $transformedValue = $recTransform->transform(array(self::string_key => self::arr_String_Input, self::int_key => self::arr_Int_Input));
-        $this->assertEquals(array(self::string_key => self::arr_String_Input, self::int_key => self::arr_Int_Input), $transformedValue);
+        $transformedValue = $recTransform->transform($originVal);
+        $this->assertEquals($expectedVal, $transformedValue);
+    }
+
+    public function RecordTransformationDataProvider()
+    {
+        return [
+          'first_arr_rec' => [array('intKey' => 1, 'stringKey' => 'hello'), ['intKey' => 1, 'stringKey' => 'hello']]
+        ];
     }
 }
