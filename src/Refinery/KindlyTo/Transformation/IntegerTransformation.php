@@ -31,16 +31,16 @@ class IntegerTransformation implements Transformation
             $from = intval($from);
             return $from;
         }
-        elseif(true === is_string($from) || $from <= PHP_INT_MAX || $from >= PHP_INT_MIN)
+        elseif(true === is_string($from) && $from <= PHP_INT_MAX && $from >= PHP_INT_MIN)
         {
+            $StrTrue = mb_strtolower("True");
+            $StrFalse = mb_strtolower("False");
+            $StrNull = mb_strtolower("Null");
+            $NoVal = "";
+            $null = null;
             if(preg_match(self::Reg_Int, $from, $RegMatch))
             {
-                $StrTrue = mb_strtolower("True");
-                $StrFalse = mb_strtolower("False");
-                $StrNull = mb_strtolower("Null");
-                $NoVal = "";
-
-                if(preg_match(self::Reg_Octal, $from, $RegMatch) || mb_strtolower($from) === ($StrTrue || $StrFalse || $StrNull || null || $NoVal))
+                if(preg_match(self::Reg_Octal, $from, $RegMatch))
                 {
                     throw new ConstraintViolationException(
                         'The value can not be transformed into an integer',
@@ -52,6 +52,13 @@ class IntegerTransformation implements Transformation
                     $from = intval($from);
                     return $from;
                 }
+            }
+            if(mb_strtolower($from) === ($StrTrue || $StrFalse || $StrNull || $null || $NoVal))
+            {
+                throw new ConstraintViolationException(
+                'The value can not be transformed into an integer',
+                'not_integer'
+                );
             }
         }
         elseif(true === is_bool($from))
