@@ -32,9 +32,9 @@ class RecordTransformationTest extends TestCase
                 self::int_key => new IntegerTransformation()
             )
         );
-        $transformedValue = $recTransform->transform($originVal);
+        $transformedValue = $recTransform->transform(array('string_key' => 'hello', 'int_key' => 1));
         $this->assertIsArray($transformedValue, '');
-        $this->assertEquals($expectedVal, $transformedValue);
+        $this->assertEquals(array('string_key' => 'hello', 'int_key' => 1), $transformedValue);
     }
 
     public function RecordTransformationDataProvider()
