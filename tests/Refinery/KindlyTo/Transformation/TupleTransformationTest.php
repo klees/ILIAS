@@ -35,10 +35,10 @@ class TupleTransformationTest extends TestCase
     }
 
     /**
+     *
      * 
-     * @param $failingVal
      */
-    public function testTupleFailingTransformations($failingVal)
+    public function testTupleFailingTransformations()
     {
         $this->expectNotToPerformAssertions();
         $transformation = new TupleTransformation(
