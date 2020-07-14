@@ -35,7 +35,7 @@ class StringTransformationTest extends TestCase
     public function testStringTransformation($originVal, $expectedVal)
     {
         $transformedValue = $this->transformation->transform($originVal);
-        $this->assertInstanceOf(StringTransformation::class,$transformedValue, '');
+        /**$this->assertInstanceOf(StringTransformation::class,$transformedValue, '');*/
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
@@ -52,4 +52,4 @@ class StringTransformationTest extends TestCase
         ];
     }
 }
-new StringTransformation();
+echo StringTransformationTest::class;
