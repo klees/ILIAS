@@ -39,10 +39,10 @@ class RecordTransformationTest extends TestCase
     }
 
     /**
-     * @dataProvider RecordTooManyValuesDataProvider
+     * @dataProvider RecordFailureDataProvider
      * @param $origVal
      */
-    public function testTecTooManyValues($origVal)
+    public function testRecordTransformationFailures($origVal)
     {
         $this->expectNotToPerformAssertions();
         $recTransformation = new RecordTransformation(
@@ -63,17 +63,17 @@ class RecordTransformationTest extends TestCase
 
 
 
-
     public function RecordTransformationDataProvider()
     {
         return [
           [array('stringKey' => 'hello', 'integerKey' => 1), array('stringKey' => 'hello', 'integerKey' => 1)]
         ];
     }
-    public function RecordTooManyValuesDataProvider()
+    public function RecordFailureDataProvider()
     {
         return [
-            [array('stringKey' => 'hello', 'integerKey' => 1, 'secondIntKey' => 1)]
+            'too_many_values' => [array('stringKey' => 'hello', 'integerKey' => 1, 'secondIntKey' => 1)],
+            'key_is_not_a_string' => [array('testKey' => 'hello', 1)]
         ];
     }
 }
