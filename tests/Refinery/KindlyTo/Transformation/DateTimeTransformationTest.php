@@ -52,17 +52,7 @@ class DateTimeTransformationTest extends TestCase
         $this->assertEquals($expectedValue, $transformedValue);
     }
 
-    /**
-     * @dataProvider DateTimeFailureDataProvider
-     * @param $noDate
-     */
-    public function testInvalidTransformation($noDate)
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->transformation->transform($noDate);
-    }
-
-    public function DateTimeTransformationDataProvider()
+        public function DateTimeTransformationDataProvider()
     {
         return [
             'iso8601' => ['2020-07-06T12:23:05+0000',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,'2020-07-06T12:23:05+0000')],
@@ -71,13 +61,6 @@ class DateTimeTransformationTest extends TestCase
             'cookie' => ['Monday, 06-Jul-2020 12:23:05 GMT+0000',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::COOKIE,'Monday, 06-Jul-2020 12:23:05 GMT+0000')],
             'rfc822' => ['Mon, 06 Jul 20 12:23:05 +0000',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822,'Mon, 06 Jul 20 12:23:05 +0000')],
             'rfc7231' => ['Mon, 06 Jul 2020 12:23:05 GMT',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231,'Mon, 06 Jul 2020 12:23:05 GMT')]
-        ];
-    }
-
-    public function DateTimeFailureDataProvider()
-    {
-        return [
-            'no_date' => ['hello world']
         ];
     }
 
