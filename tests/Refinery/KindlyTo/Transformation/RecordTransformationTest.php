@@ -19,6 +19,7 @@ class RecordTransformationTest extends TestCase
 {
     const string_key = 'stringKey';
     const int_key = 'integerKey';
+    const second_int_key = 'integerKey2';
 
     /**
      * @dataProvider RecordTransformationDataProvider
@@ -61,7 +62,36 @@ class RecordTransformationTest extends TestCase
         $this->fail();
     }
 
+    public function testInvalidArray()
+    {
+        $this->expectNotToPerformAssertions();
+        try {
+            $recTransformation = new RecordTransformation(
+                array(
+                    new StringTransformation(),
+                    new IntegerTransformation()
+                )
+            );
+        }catch(ConstraintViolationException $exception)
+        {
+            return;
+        }
+        $this->fail();
+    }
 
+
+    public function testRecordInvalidKey()
+    {
+        $this->expectNotToPerformAssertions();
+        $recTransformation = new RecordTransformation(
+          array(
+              self::string_key => new StringTransformation(),
+              self::int_key => new IntegerTransformation()
+          )
+        );
+
+
+    }
 
     public function RecordTransformationDataProvider()
     {
@@ -69,11 +99,13 @@ class RecordTransformationTest extends TestCase
           [array('stringKey' => 'hello', 'integerKey' => 1), array('stringKey' => 'hello', 'integerKey' => 1)]
         ];
     }
+    
     public function RecordFailureDataProvider()
     {
         return [
             'too_many_values' => [array('stringKey' => 'hello', 'integerKey' => 1, 'secondIntKey' => 1)],
-            'key_is_not_a_string' => [array('testKey' => 'hello', 1)]
+            'key_is_not_a_string' => [array('testKey' => 'hello', 1)],
+            'key_is_invalid' => [array('stringKey' => 'hello', 'integerKey2' => 1)]
         ];
     }
 }
