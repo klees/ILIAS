@@ -7,7 +7,6 @@
 
 namespace ILIAS\Refinery\KindlyTo\Transformation;
 
-use ILIAS\Data\Result;
 use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
@@ -45,6 +44,13 @@ class FloatTransformation implements Transformation
             {
                 $from = floatval($from);
                 return $from;
+            }
+            else
+            {
+                throw new ConstraintViolationException(
+                    'The value could not be transformed into an float',
+                    'not_float'
+                );
             }
         }
         else
