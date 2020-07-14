@@ -9,6 +9,7 @@ namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
 require_once('./libs/composer/vendor/autoload.php');
 
+use ILIAS\Refinery\Custom\Transformation;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
@@ -27,16 +28,15 @@ class StringTransformationTest extends TestCase
         $this->transformation = new StringTransformation();
     }
 
-    /**
+     /**
      * @dataProvider StringTestDataProvider
      * @param $originVal
-     * @param $expectedVal
-     * @return string
+     * @param string $expectedVal
      */
     public function testStringTransformation($originVal, $expectedVal)
     {
         $transformedValue = $this->transformation->transform($originVal);
-        $this->assertInstanceOf(TestCase::class,$transformedValue, '');
+        $this->assertInstanceOf(Transformation::class,$transformedValue, '');
         $this->assertEquals($expectedVal, $transformedValue);
 
     }
