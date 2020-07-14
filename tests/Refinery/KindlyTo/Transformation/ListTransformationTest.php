@@ -22,7 +22,6 @@ class ListTransformationTest extends TestCase
     const second_arr = 'world';
     const string_val = 'hello world';
 
-
     public function testListTransformation()
     {
         $transformList = new ListTransformation(new StringTransformation());
@@ -31,10 +30,23 @@ class ListTransformationTest extends TestCase
         $this->assertEquals(array(self::first_arr, self::second_arr), $transformedValue);
     }
 
-    public function testNonArrayToArrayTransformation()
+    /**
+     * @dataProvider StringToListTransformationDataProvider
+     * @param $originval
+     * @param $expectedVal
+     */
+    public function testNonArrayToArrayTransformation($originval,$expectedVal)
     {
         $transformList = new ListTransformation(new StringTransformation());
-        $transformedValue = $transformList->transform(self::string_val);
-        $this->assertEquals(array(self::string_val), $transformedValue);
+        $transformedValue = $transformList->transform($originval);
+        $this->assertIsArray($transformedValue,'');
+        $this->assertEquals($expectedVal, $transformedValue);
+    }
+
+    public function StringToListTransformationDataProvider()
+    {
+        return [
+            'string_val' => ['hello world',array('hello world')],
+        ];
     }
 }
