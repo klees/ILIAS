@@ -45,6 +45,7 @@ class TupleTransformation implements Transformation
      */
     public function transform($from)
     {
+        $this->ValueLength($from);
         if(false == is_array($from))
         {
             $from = array($from);
@@ -79,6 +80,22 @@ class TupleTransformation implements Transformation
         }
         return $result;
 
+    }
+
+    /**
+     * @param $values
+     */
+    private function ValueLength($values)
+    {
+        $countOfValues = count($values);
+        $countOfTransformations = count($this->transformations);
+
+        if ($countOfValues !== $countOfTransformations) {
+            throw new ConstraintViolationException(
+                'The given value does not match with the given transformations',
+                'given_values_'
+            );
+        }
     }
 
     /**
