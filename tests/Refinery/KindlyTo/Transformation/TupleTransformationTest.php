@@ -113,14 +113,14 @@ class TupleTransformationTest extends TestCase
     public function TupleFailingTransformationDataProvider()
     {
         return [
-            'incorrect_tuple' => [array(1,2)]
+            'incorrect_tuple' => [array(1, 2)]
         ];
     }
 
     public function TupleTransformationDataProvider()
     {
         return [
-          'array_test01' => [array(1,2), [1,2]]
+          'array_test01' => [array(1, 2), [1, 2]]
         ];
     }
 }
