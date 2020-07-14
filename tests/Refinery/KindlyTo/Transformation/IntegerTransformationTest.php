@@ -42,8 +42,8 @@ class IntegerTransformationTest extends TestCase
     public function IntegerTestDataProvider()
     {
         return [
-            'pos_bool' => [true, 1],
-            'neg_bool' => [false, 0],
+            'pos_bool' => [true, (int)1],
+            'neg_bool' => [false, (int)0],
             'float_val' => [20.5, 21],
             'string_val' => ['4947642.4234Hello', '4947642']
         ];
