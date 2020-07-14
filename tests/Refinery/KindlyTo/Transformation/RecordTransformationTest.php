@@ -7,6 +7,7 @@
 
 namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
+use ILIAS\Refinery\ConstraintViolationException;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
@@ -24,7 +25,7 @@ class RecordTransformationTest extends TestCase
      * @param $originVal
      * @param $expectedVal
      */
-    public function testRecordTransformation($originVal, $expectedVal)
+    public function testRecordTransformationIsValid($originVal, $expectedVal)
     {
         $recTransform = new RecordTransformation(
             array(
@@ -37,10 +38,42 @@ class RecordTransformationTest extends TestCase
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
+    /**
+     * @dataProvider RecordTooManyValuesDataProvider
+     * @param $origVal
+     */
+    public function testTecTooManyValues($origVal)
+    {
+        $this->expectNotToPerformAssertions();
+        $recTransformation = new RecordTransformation(
+            array(
+                self::string_key => new StringTransformation(),
+                self::int_key => new IntegerTransformation()
+            )
+        );
+
+        try {
+            $result = $recTransformation->transform($origVal);
+        }catch (ConstraintViolationException $exception)
+        {
+            return;
+        }
+        $this->fail();
+    }
+
+
+
+
     public function RecordTransformationDataProvider()
     {
         return [
           [array('stringKey' => 'hello', 'integerKey' => 1), array('stringKey' => 'hello', 'integerKey' => 1)]
+        ];
+    }
+    public function RecordTooManyValuesDataProvider()
+    {
+        return [
+            [array('stringKey' => 'hello', 'integerKey' => 1, 'secondIntKey' => 1)]
         ];
     }
 }
