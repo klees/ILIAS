@@ -57,7 +57,7 @@ class IntegerTransformation implements Transformation
         elseif(true === is_bool($from))
         {
             $from = intval($from);
-            return $from;
+            return (int)$from;
         }
         else
         {
