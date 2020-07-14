@@ -28,6 +28,7 @@ class TupleTransformationTest extends TestCase
         );
 
         $transformedValue = $transformation->transform($originVal);
+        $this->assertIsArray($transformedValue);
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
