@@ -28,7 +28,7 @@ class ListTransformationTest extends TestCase
     {
         $transformList = new ListTransformation(new StringTransformation());
         $transformedValue = $transformList->transform($originValue);
-        $this->assertIsArray($transformedValue,'');
+        $this->assertIsArray($transformedValue);
         $this->assertEquals($expectedValue, $transformedValue);
     }
 
