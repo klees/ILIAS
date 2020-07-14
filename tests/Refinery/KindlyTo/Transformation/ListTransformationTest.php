@@ -55,7 +55,7 @@ class ListTransformationTest extends TestCase
         $this->expectNotToPerformAssertions();
         $transformList = new ListTransformation(new StringTransformation());
         try{
-            $result = $transformList->transform(null);
+            $result = $transformList->transform($origValue);
         }catch(ConstraintViolationException $exception)
         {
             return;
