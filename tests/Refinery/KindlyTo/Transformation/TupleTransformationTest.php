@@ -15,15 +15,26 @@ require_once ('./libs/composer/vendor/autoload.php');
 
 class TupleTransformationTest extends TestCase
 {
-    const int_val_1 = 1;
-    const int_val_2 = 2;
-    public function testTupleTransformation()
+
+    /**
+     * @dataProvider TupleTransformationDataProvider
+     * @param $originVal
+     * @param $expectedVal
+     */
+    public function testTupleTransformation($originVal, $expectedVal)
     {
         $transformation = new TupleTransformation(
             array(new IntegerTransformation(), new IntegerTransformation())
         );
 
-        $transformedValue = $transformation->transform(array(self::int_val_1,self::int_val_2));
-        $this->assertEquals(array(self::int_val_1,self::int_val_2), $transformedValue);
+        $transformedValue = $transformation->transform($originVal);
+        $this->assertEquals($expectedVal, $transformedValue);
+    }
+
+    public function TupleTransformationDataProvider()
+    {
+        return [
+          'array_test01' => [array(1,2), [1,2]]
+        ];
     }
 }
