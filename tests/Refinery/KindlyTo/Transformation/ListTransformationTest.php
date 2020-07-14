@@ -19,10 +19,6 @@ use ILIAS\Tests\Refinery\TestCase;
  */
 class ListTransformationTest extends TestCase
 {
-    const first_arr = 'hello';
-    const second_arr = 'world';
-    const string_val = 'hello world';
-
     /**
      * @dataProvider ArrayToListTransformation
      * @param $originValue
