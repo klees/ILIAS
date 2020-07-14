@@ -29,6 +29,7 @@ class DictionaryTransformationTest extends TestCase
     {
         $transformation = new DictionaryTransformation(new StringTransformation());
         $transformedValue = $transformation->transform($originVal);
+        $this->assertIsArray($transformedValue, '');
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
@@ -36,7 +37,7 @@ class DictionaryTransformationTest extends TestCase
     {
         return [
             'first_arr' => [array('hello' => 'world'), ['hello' => 'world'] ],
-            'second_arr' => [array('moin' => 'welt', 'moin2' => 'erde'),['moin' => 'welt', 'moin2' => 'erde']]
+            'second_arr' => [array('hi' => 'earth', 'goodbye' => 'world'),['hi' => 'earth', 'goodbye' => 'world']]
         ];
     }
 }
