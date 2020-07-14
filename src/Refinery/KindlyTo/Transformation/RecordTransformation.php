@@ -38,7 +38,7 @@ class RecordTransformation implements Transformation
                     $transformationClassName
                 );
             }
-            
+
             if(false === is_string($key))
             {
                 throw new ConstraintViolationException(
