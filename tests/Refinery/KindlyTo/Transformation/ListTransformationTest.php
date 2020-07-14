@@ -11,8 +11,8 @@ require_once('./libs/composer/vendor/autoload.php');
 
 use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
 use ILIAS\Refinery\To\Transformation\StringTransformation;
-/**use ILIAS\Tests\Refinery\TestCase;*/
-use PHPUnit\Framework\TestCase;
+use ILIAS\Tests\Refinery\TestCase;
+
 
 /**
  * Test transformations in this Group
@@ -31,10 +31,9 @@ class ListTransformationTest extends TestCase
     public function testListTransformation($originValue, $expectedValue)
     {
         $transformList = new ListTransformation(new StringTransformation());
-        $transformedValue = $transformList->transform(array(self::first_arr, self::second_arr));
+        $transformedValue = $transformList->transform($originValue);
         $this->assertIsArray($transformedValue,'');
-        $this->assertInstanceOf(TestCase::class,$transformedValue,'');
-        $this->assertEquals(array(self::first_arr, self::second_arr), $transformedValue);
+        $this->assertEquals($expectedValue, $transformedValue);
     }
 
     /**
