@@ -16,9 +16,6 @@ require_once('./libs/composer/vendor/autoload.php');
 
 class RecordTransformationTest extends TestCase
 {
-
-    const arr_String_Input = 'hello';
-    const arr_Int_Input = 1;
     const string_key = 'stringKey';
     const int_key = 'integerKey';
 
