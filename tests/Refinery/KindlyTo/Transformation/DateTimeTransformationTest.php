@@ -69,7 +69,7 @@ class DateTimeTransformationTest extends TestCase
     public function UnixTimestampTransformationDataProvider()
     {
         return [
-            [20200706122305, strtotime(20200706122305)]
+            [20200706122305, \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,'2020-07-06T12:23:05+0000')]
         ];
     }
 }
