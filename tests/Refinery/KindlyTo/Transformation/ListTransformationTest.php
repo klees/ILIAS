@@ -81,7 +81,7 @@ class ListTransformationTest extends TestCase
     public function testFailureTransformations()
     {
         return [
-            'transformation_is_invalid' => [array('hello', 1)]
+            'transformation_is_invalid' => [array('hello', 2)]
         ];
     }
 }
