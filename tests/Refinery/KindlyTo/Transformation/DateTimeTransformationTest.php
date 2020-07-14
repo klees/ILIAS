@@ -49,7 +49,8 @@ class DateTimeTransformationTest extends TestCase
     public function testDateTimeToUnixTimestampTransformation($originValue, $expectedValue)
     {
         $transformedValue = $this->transformation->transform($originValue);
-        $this->assertIsNumeric($transformedValue,'');
+        $this->assertIsObject($transformedValue);
+        $this->assertInstanceOf(\DateTimeImmutable::class, $transformedValue);
         $this->assertEquals($expectedValue, $transformedValue);
     }
 
