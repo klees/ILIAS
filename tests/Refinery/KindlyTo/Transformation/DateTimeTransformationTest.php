@@ -42,11 +42,15 @@ class DateTimeTransformationTest extends TestCase
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
-    public function testTransformIsInvalid()
+    /**
+     * @dataProvider TransformationFailureDataProvider
+     * @param $failingValue
+     */
+    public function testTransformIsInvalid($failingValue)
     {
         $this->expectNotToPerformAssertions();
         try {
-            $transformedValue = $this->transformation->transform('hello');
+            $transformedValue = $this->transformation->transform($failingValue);
         }catch(ConstraintViolationException $exception)
         {
             return;
@@ -64,6 +68,13 @@ class DateTimeTransformationTest extends TestCase
             'rfc822' => ['Mon, 06 Jul 20 12:23:05 +0000',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822,'Mon, 06 Jul 20 12:23:05 +0000')],
             'rfc7231' => ['Mon, 06 Jul 2020 12:23:05 GMT',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231,'Mon, 06 Jul 2020 12:23:05 GMT')],
             'unix_timestamp' => [20200706122305, \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,'2020-07-06T12:23:05+0000')]
+        ];
+    }
+
+    public function TransformationFailureDataProvider()
+    {
+        return [
+            'no_matching_string_format' => ['hello']
         ];
     }
 }
