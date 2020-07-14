@@ -35,7 +35,7 @@ class TupleTransformationTest extends TestCase
     }
 
     /**
-     * @dataProvider TupleFailingTransformationDataProvider
+     * 
      * @param $failingVal
      */
     public function testTupleFailingTransformations($failingVal)
