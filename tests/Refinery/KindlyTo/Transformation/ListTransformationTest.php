@@ -22,11 +22,12 @@ class ListTransformationTest extends TestCase
     const second_arr = 'world';
     const string_val = 'hello world';
 
+
     public function testListTransformation()
     {
         $transformList = new ListTransformation(new StringTransformation());
         $transformedValue = $transformList->transform(array(self::first_arr, self::second_arr));
-        $this->assertInstanceOf(ListTransformation::class, $transformedValue);
+        $this->assertInstanceOf('ListTransformationTest', $transformedValue);
         $this->assertEquals(array(self::first_arr, self::second_arr), $transformedValue);
     }
 
