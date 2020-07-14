@@ -44,7 +44,6 @@ class BooleanTransformation implements Transformation
                 'not_boolean'
             );
         }
-
     }
 
     /**
