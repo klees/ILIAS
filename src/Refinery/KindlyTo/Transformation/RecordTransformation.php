@@ -66,13 +66,6 @@ class RecordTransformation implements Transformation
                 ) ;
             }
         }
-        elseif(array() === $from)
-        {
-            throw new ConstraintViolationException(
-                'The array ist empty',
-                'value_array_is_empty'
-            ) ;
-        }
 
         $result = array();
         foreach($from as $key => $value)
@@ -84,15 +77,16 @@ class RecordTransformation implements Transformation
                     'key_is_not_a_string'
                 );
             }
-            $transformation = $this->transformations[$key];
-            if(false === isset($transformation))
+
+            if(false === isset($this->transformations[$key]))
             {
                 throw new ConstraintViolationException(
-                    'Could not find transformation',
-                    'array_key_does_not_exist'
+                    sprintf('Could not find transformation for key "%s"', $key),
+                    'no_array_key_existing'
                 );
             }
 
+            $transformation = $this->transformations[$key];
             $transformedValue = $transformation->transform($value);
             $result[$key] = $transformedValue;
         }

@@ -10,7 +10,6 @@ namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
-use ILIAS\Refinery\Transformation;
 use ILIAS\Tests\Refinery\TestCase;
 
 require_once('./libs/composer/vendor/autoload.php');
@@ -41,7 +40,7 @@ class RecordTransformationTest extends TestCase
     public function RecordTransformationDataProvider()
     {
         return [
-            [array('string_key' => 'hello', 'int_key' => 1), ['string_key' => 'hello', 'int_key' => 1]]
+            [array('string_key' => 'hello', 'int_key' => 1), array('string_key' => 'hello', 'int_key' => 1)]
         ];
     }
 
