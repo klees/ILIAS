@@ -36,22 +36,9 @@ class DateTimeTransformationTest extends TestCase
     public function testDateTimeISOTransformation($originVal, $expectedVal)
     {
         $transformedValue = $this->transformation->transform($originVal);
-        $this->assertIsObject($transformedValue,'');
-        $this->assertInstanceOf(\DateTimeImmutable::class, $transformedValue);
-        $this->assertEquals($expectedVal, $transformedValue);
-    }
-
-    /**
-     * @dataProvider UnixTimestampTransformationDataProvider
-     * @param $originValue
-     * @param $expectedValue
-     */
-    public function testDateTimeToUnixTimestampTransformation($originValue, $expectedValue)
-    {
-        $transformedValue = $this->transformation->transform($originValue);
         $this->assertIsObject($transformedValue);
         $this->assertInstanceOf(\DateTimeImmutable::class, $transformedValue);
-        $this->assertEquals($expectedValue, $transformedValue);
+        $this->assertEquals($expectedVal, $transformedValue);
     }
 
     public function DateTimeTransformationDataProvider()
@@ -62,14 +49,8 @@ class DateTimeTransformationTest extends TestCase
             'rfc3339_ext' => ['2020-07-06T12:23:05.000+00:00',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED,'2020-07-06T12:23:05.000+00:00')],
             'cookie' => ['Monday, 06-Jul-2020 12:23:05 GMT+0000',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::COOKIE,'Monday, 06-Jul-2020 12:23:05 GMT+0000')],
             'rfc822' => ['Mon, 06 Jul 20 12:23:05 +0000',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822,'Mon, 06 Jul 20 12:23:05 +0000')],
-            'rfc7231' => ['Mon, 06 Jul 2020 12:23:05 GMT',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231,'Mon, 06 Jul 2020 12:23:05 GMT')]
-        ];
-    }
-
-    public function UnixTimestampTransformationDataProvider()
-    {
-        return [
-            [20200706122305, \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,'2020-07-06T12:23:05+0000')]
+            'rfc7231' => ['Mon, 06 Jul 2020 12:23:05 GMT',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231,'Mon, 06 Jul 2020 12:23:05 GMT')],
+            'unixtimestamp' => [20200706122305, \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,'2020-07-06T12:23:05+0000')]
         ];
     }
 }
