@@ -36,7 +36,7 @@ class RecordTransformationTest extends TestCase
             )
         );
         $transformedValue = $recTransform->transform($originVal);
-        $this->assertIsArray($transformedValue,'');
+        $this->assertIsArray($transformedValue);
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
