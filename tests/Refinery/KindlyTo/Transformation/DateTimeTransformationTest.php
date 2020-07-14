@@ -42,47 +42,48 @@ class DateTimeTransformationTest extends TestCase
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,self::Date_ISO);
         $transformedValue = $this->transformation->transform(self::Date_ISO);
         $this->assertIsObject($transformedValue,'');
-        $this->assertInstanceOf(\DateTimeImmutable::class,self::Date_ISO, '');/***/
         $this->assertEquals($expected, $transformedValue);
     }
 
-
-
-/**
     public function testDateTimeAtomTransformation()
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM,self::Date_Atom);
         $transformedValue = $this->transformation->transform(self::Date_Atom);
-        $this->assertEquals($expected->format(\DateTimeImmutable::ATOM), $transformedValue);
+        $this->assertIsObject($transformedValue,'');
+        $this->assertEquals($expected, $transformedValue);
     }
 
     public function testDateTimeRFCExtTransformation()
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED,self::Date_RFC3339_EXT);
         $transformedValue = $this->transformation->transform(self::Date_RFC3339_EXT);
-        $this->assertEquals($expected->format(\DateTimeImmutable::RFC3339_EXTENDED), $transformedValue);
+        $this->assertIsObject($transformedValue,'');
+        $this->assertEquals($expected, $transformedValue);
     }
 
     public function testDateTimeCookieTransformation()
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::COOKIE,self::Date_Cookie);
         $transformedValue = $this->transformation->transform(self::Date_Cookie);
-        $this->assertEquals($expected->format(\DateTimeImmutable::COOKIE), $transformedValue);
+        $this->assertIsObject($transformedValue,'');
+        $this->assertEquals($expected, $transformedValue);
     }
 
     public function testDateTimeRFC822Transformation()
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822,self::Date_RFC822);
         $transformedValue = $this->transformation->transform(self::Date_RFC822);
-        $this->assertEquals($expected->format(\DateTimeImmutable::RFC822), $transformedValue);
+        $this->assertIsObject($transformedValue,'');
+        $this->assertEquals($expected, $transformedValue);
     }
 
     public function testDateTimeRFC7231Transformation()
     {
         $expected = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231,self::Date_RFC7231);
         $transformedValue = $this->transformation->transform(self::Date_RFC7231);
-        $this->assertEquals($expected->format(\DateTimeImmutable::RFC7231), $transformedValue);
-    }*/
+        $this->assertIsObject($transformedValue,'');
+        $this->assertEquals($expected, $transformedValue);
+    }
 
     public function testDateTimeToUnixTimestampTransformation()
     {
