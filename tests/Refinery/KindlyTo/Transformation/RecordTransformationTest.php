@@ -12,6 +12,7 @@ use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
 use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
 use ILIAS\Tests\Refinery\TestCase;
+use Symfony\Component\DependencyInjection\Tests\Compiler\I;
 
 require_once('./libs/composer/vendor/autoload.php');
 
@@ -79,18 +80,27 @@ class RecordTransformationTest extends TestCase
         $this->fail();
     }
 
-
-    public function testRecordInvalidKey()
+    /**
+     * @dataProvider RecordValueInvalidDataProvider
+     * @param $originalValue
+     */
+    public function testInvalidValueDoesNotMatch($originalValue)
     {
         $this->expectNotToPerformAssertions();
         $recTransformation = new RecordTransformation(
-          array(
-              self::string_key => new StringTransformation(),
-              self::int_key => new IntegerTransformation()
-          )
+            array(
+                self::int_key => new IntegerTransformation(),
+                self::second_int_key => new IntegerTransformation()
+            )
         );
 
-
+        try {
+            $result = $recTransformation->transform()
+        }catch(ConstraintViolationException $exception)
+        {
+            return;
+        }
+        $this->fail();
     }
 
     public function RecordTransformationDataProvider()
@@ -99,13 +109,20 @@ class RecordTransformationTest extends TestCase
           [array('stringKey' => 'hello', 'integerKey' => 1), array('stringKey' => 'hello', 'integerKey' => 1)]
         ];
     }
-    
+
     public function RecordFailureDataProvider()
     {
         return [
             'too_many_values' => [array('stringKey' => 'hello', 'integerKey' => 1, 'secondIntKey' => 1)],
             'key_is_not_a_string' => [array('testKey' => 'hello', 1)],
-            'key_is_invalid' => [array('stringKey' => 'hello', 'integerKey2' => 1)]
+            'key_value_is_invalid' => [array('stringKey' => 'hello', 'integerKey2' => 1)]
+        ];
+    }
+
+    public function RecordValueInvalidDataProvider()
+    {
+        return [
+          'invalid_value' => [array('stringKey' => 'hello', 'integerKey2' => 1)]
         ];
     }
 }
