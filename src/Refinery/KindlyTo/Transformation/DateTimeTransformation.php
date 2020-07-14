@@ -61,6 +61,13 @@ class DateTimeTransformation implements Transformation
             {
                 return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $from);
             }
+            else
+            {
+                throw new ConstraintViolationException(
+                    'No transformation possible',
+                    'no_transform_possible'
+                );
+            }
         }
         elseif(true === is_int($from) || true === is_float($from))
         {
