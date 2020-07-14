@@ -26,6 +26,17 @@ class TupleTransformation implements Transformation
      */
     public function __construct(array $transformations)
     {
+        foreach ($transformations as $transformation) {
+            if (!$transformation instanceof Transformation) {
+                $transformationClassName = Transformation::class;
+
+                throw new ConstraintViolationException(
+                    sprintf('The array MUST contain only "%s" instances', $transformationClassName),
+                    'not_a_transformation',
+                    $transformationClassName
+                );
+            }
+        }
         $this->transformations = $transformations;
     }
 
