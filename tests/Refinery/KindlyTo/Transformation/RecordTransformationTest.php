@@ -95,7 +95,7 @@ class RecordTransformationTest extends TestCase
         );
 
         try {
-            $result = $recTransformation->transform()
+            $result = $recTransformation->transform();
         }catch(ConstraintViolationException $exception)
         {
             return;
