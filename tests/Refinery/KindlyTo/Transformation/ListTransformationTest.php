@@ -60,6 +60,19 @@ class ListTransformationTest extends TestCase
         $this->fail();
     }
 
+    public function testOnNull()
+    {
+        $this->expectNotToPerformAssertions();
+        $transformList = new ListTransformation(new StringTransformation());
+        try{
+            $result = $transformList->transform(null);
+        }catch(ConstraintViolationException $exception)
+        {
+            return;
+        }
+        $this->fail();
+    }
+
     public function StringToListTransformationDataProvider()
     {
         return [
