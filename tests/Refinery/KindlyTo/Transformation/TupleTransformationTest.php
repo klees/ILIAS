@@ -42,18 +42,15 @@ class TupleTransformationTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
         $transformation = new TupleTransformation(
-            array(
-                new IntegerTransformation(),
-                new StringTransformation()
-            )
+            array(new IntegerTransformation(), new StringTransformation())
         );
 
         try {
-            $result = $transformation->transform($failingVal);
-        }catch(ConstraintViolationException $exception)
-        {
+            $result = $transformation->transform(array(1, 2));
+        } catch (ConstraintViolationException $exception) {
             return;
         }
+
         $this->fail();
     }
 
