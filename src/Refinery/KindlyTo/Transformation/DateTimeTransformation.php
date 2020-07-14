@@ -33,40 +33,30 @@ class DateTimeTransformation implements Transformation
      */
     public function transform($from)
     {
-        if(true === is_string($from))
+        try {
+            if (true === is_string($from))
+            {
+                if (preg_match(self::Reg_Atom, $from, $RegMatch)) {
+                    return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM, $from);
+                } elseif (preg_match(self::Reg_Cookie, $from, $RegMatch)) {
+                    return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::COOKIE, $from);
+                } elseif (preg_match(self::Reg_ISO8601, $from, $RegMatch)) {
+                    return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601, $from);
+                } elseif (preg_match(self::Reg_RFC822, $from, $RegMatch)) {
+                    return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822, $from);
+                } elseif (preg_match(self::Reg_RFC7231, $from, $RegMatch)) {
+                    return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231, $from);
+                } elseif (preg_match(self::Reg_RFC3339_ext, $from, $RegMatch)) {
+                    return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $from);
+                }
+            }
+            elseif (true === is_int($from) || true === is_float($from))
+            {
+                return $UnixTimestamp = strtotime($from);
+            }
+        }catch (\Exception $e)
         {
-            if(preg_match(self::Reg_Atom, $from, $RegMatch))
-            {
-                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM, $from);
-            }
-            elseif(preg_match(self::Reg_Cookie, $from, $RegMatch))
-            {
-                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::COOKIE, $from);
-            }
-            elseif(preg_match(self::Reg_ISO8601,$from,$RegMatch))
-            {
-                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601, $from);
-            }
-            elseif(preg_match(self::Reg_RFC822,$from,$RegMatch))
-            {
-                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822, $from);
-            }
-            elseif(preg_match(self::Reg_RFC7231,$from,$RegMatch))
-            {
-                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231, $from);
-            }
-            elseif(preg_match(self::Reg_RFC3339_ext,$from,$RegMatch))
-            {
-                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $from);
-            }
-        }
-        elseif(true === is_int($from) || true === is_float($from))
-        {
-            return $UnixTimestamp = strtotime($from);
-        }
-        else
-        {
-            throw new \InvalidArgumentException("$from can not be transformed into DateTimeImmutable or Unix timestamp.", 1);
+            throw new \InvalidArgumentException($e->getMessage(),1);
         }
     }
 
