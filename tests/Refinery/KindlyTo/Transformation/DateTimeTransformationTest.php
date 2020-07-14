@@ -10,7 +10,7 @@ namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 require_once('./libs/composer/vendor/autoload.php');
 
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
-use PHPUnit\Framework\TestCase;
+use ILIAS\Tests\Refinery\TestCase;
 
 /**
  * Tests for DateTimeImmutable and Unix Timetable transformation
