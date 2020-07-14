@@ -70,5 +70,4 @@ class DateTimeTransformationTest extends TestCase
             [20200706122305, strtotime(20200706122305)]
         ];
     }
-
 }
