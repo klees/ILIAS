@@ -31,7 +31,7 @@ class IntegerTransformation implements Transformation
             $from = intval($from);
             return $from;
         }
-        elseif(true === is_string($from) && $from <= PHP_INT_MAX && $from >= PHP_INT_MIN)
+        elseif(true === is_string($from) || $from <= PHP_INT_MAX || $from >= PHP_INT_MIN)
         {
             $StrTrue = mb_strtolower("True");
             $StrFalse = mb_strtolower("False");
