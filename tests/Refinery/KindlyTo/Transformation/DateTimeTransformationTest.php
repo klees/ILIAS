@@ -9,6 +9,7 @@ namespace ILIAS\Tests\Refinery\KindlyTo\Transformation;
 
 require_once('./libs/composer/vendor/autoload.php');
 
+use ILIAS\Refinery\ConstraintViolationException;
 use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
@@ -39,6 +40,18 @@ class DateTimeTransformationTest extends TestCase
         $this->assertIsObject($transformedValue);
         $this->assertInstanceOf(\DateTimeImmutable::class, $transformedValue);
         $this->assertEquals($expectedVal, $transformedValue);
+    }
+
+    public function testTransformIsInvalid()
+    {
+        $this->expectNotToPerformAssertions();
+        try {
+            $transformedValue = $this->transformation->transform('hello world');
+        }catch(ConstraintViolationException $exception)
+        {
+            return;
+        }
+        $this->fail();
     }
 
     public function DateTimeTransformationDataProvider()
