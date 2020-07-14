@@ -37,6 +37,7 @@ class DateTimeTransformationTest extends TestCase
     {
         $transformedValue = $this->transformation->transform($originVal);
         $this->assertIsObject($transformedValue,'');
+        $this->assertInstanceOf(\DateTimeImmutable::class, $transformedValue);
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
@@ -52,7 +53,7 @@ class DateTimeTransformationTest extends TestCase
         $this->assertEquals($expectedValue, $transformedValue);
     }
 
-        public function DateTimeTransformationDataProvider()
+    public function DateTimeTransformationDataProvider()
     {
         return [
             'iso8601' => ['2020-07-06T12:23:05+0000',\DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601,'2020-07-06T12:23:05+0000')],
