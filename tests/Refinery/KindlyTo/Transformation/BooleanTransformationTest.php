@@ -11,8 +11,7 @@ require_once('./libs/composer/vendor/autoload.php');
 
 use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
 use ILIAS\Tests\Refinery\TestCase;
-use Sabre\VObject\Property\Boolean;
-
+use ILIAS\Refinery\ConstraintViolationException;
 
 /**
 * Test transformations in this Group
