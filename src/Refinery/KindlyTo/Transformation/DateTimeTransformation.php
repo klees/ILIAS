@@ -38,33 +38,27 @@ class DateTimeTransformation implements Transformation
         {
             if(preg_match(self::Reg_Atom, $from, $RegMatch))
             {
-                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM, $from);
-                return $DateImmutable->format(\DateTimeImmutable::ATOM);
+                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ATOM, $from);
             }
             elseif(preg_match(self::Reg_Cookie, $from, $RegMatch))
             {
-                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::COOKIE, $from);
-                return $DateImmutable->format(\DateTimeImmutable::COOKIE);
+                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::COOKIE, $from);
             }
             elseif(preg_match(self::Reg_ISO8601,$from,$RegMatch))
             {
-                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601, $from);
-                return $DateImmutable->format(\DateTimeImmutable::ISO8601);
+                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601, $from);
             }
             elseif(preg_match(self::Reg_RFC822,$from,$RegMatch))
             {
-                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822, $from);
-                return $DateImmutable->format(\DateTimeImmutable::RFC822);
+                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC822, $from);
             }
             elseif(preg_match(self::Reg_RFC7231,$from,$RegMatch))
             {
-                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231, $from);
-                return $DateImmutable->format(\DateTimeImmutable::RFC7231);
+                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC7231, $from);
             }
             elseif(preg_match(self::Reg_RFC3339_ext,$from,$RegMatch))
             {
-                $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $from);
-                return $DateImmutable->format(\DateTimeImmutable::RFC3339_EXTENDED);
+                return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::RFC3339_EXTENDED, $from);
             }
         }
         elseif(true === is_int($from) || true === is_float($from))
