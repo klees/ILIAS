@@ -14,7 +14,6 @@ use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
 use ILIAS\Refinery\To\Transformation\StringTransformation;
 use ILIAS\Tests\Refinery\TestCase;
 
-
 /**
  * Test transformations in this Group
  */
@@ -33,12 +32,11 @@ class ListTransformationTest extends TestCase
         $this->assertEquals($expectedValue, $transformedValue);
     }
 
-     
     /**
      * @dataProvider ArrayFailureDataProvider
      * @param $origValue
      */
-    public function testOnNullAndEmptyArray($origValue)
+    public function testFailingTransformations($origValue)
     {
         $this->expectNotToPerformAssertions();
         $transformList = new ListTransformation(new StringTransformation());
@@ -68,6 +66,4 @@ class ListTransformationTest extends TestCase
             'value_is_no_string' => [array('hello', 2)]
         ];
     }
-
-
 }
