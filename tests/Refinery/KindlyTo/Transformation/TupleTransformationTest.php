@@ -35,26 +35,6 @@ class TupleTransformationTest extends TestCase
     }
 
     /**
-     *
-     * 
-     */
-    public function testTupleFailingTransformations()
-    {
-        $this->expectNotToPerformAssertions();
-        $transformation = new TupleTransformation(
-            array(new IntegerTransformation(), new StringTransformation())
-        );
-
-        try {
-            $result = $transformation->transform(array(1, 2));
-        } catch (ConstraintViolationException $exception) {
-            return;
-        }
-
-        $this->fail();
-    }
-
-    /**
      * @dataProvider TupleFailingTransformationDataProvider
      * @param $failingVal
      */
