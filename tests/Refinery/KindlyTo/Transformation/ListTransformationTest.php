@@ -52,15 +52,15 @@ class ListTransformationTest extends TestCase
     public function StringToListTransformationDataProvider()
     {
         return [
-            'string_val' => ['hello world',array('hello world')],
+            'string_val' => ['hello world',['hello world']],
         ];
     }
 
     public function ArrayToListTransformation()
     {
         return [
-            'first_arr' => [array('hello', 'world'), array('hello', 'world')],
-            'second_arr' => [array('hello2','world2'), array('hello2', 'world2')]
+            'first_arr' => [array('hello', 'world'), ['hello', 'world']],
+            'second_arr' => [array('hello2','world2'), ['hello2', 'world2']]
         ];
     }
 }
