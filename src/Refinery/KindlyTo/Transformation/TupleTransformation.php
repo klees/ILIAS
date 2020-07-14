@@ -46,6 +46,7 @@ class TupleTransformation implements Transformation
     public function transform($from)
     {
         $this->ValueLength($from);
+
         if(false == is_array($from))
         {
             $from = array($from);
