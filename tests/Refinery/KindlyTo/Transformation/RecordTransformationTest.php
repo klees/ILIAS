@@ -27,8 +27,8 @@ class RecordTransformationTest extends TestCase
     {
         $recTransform = new RecordTransformation(
             array(
-                self::string_key => new StringTransformation(),
-                self::int_key => new IntegerTransformation()
+                self::string_key => new StringTransformation('hello'),
+                self::int_key => new IntegerTransformation(1)
             )
         );
         $transformedValue = $recTransform->transform($originVal);
