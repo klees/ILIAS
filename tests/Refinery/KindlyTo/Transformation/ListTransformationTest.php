@@ -33,19 +33,7 @@ class ListTransformationTest extends TestCase
         $this->assertEquals($expectedValue, $transformedValue);
     }
 
-     public function testInvalidListTransformation()
-    {
-        $this->expectNotToPerformAssertions();
-        $transformList = new ListTransformation(new StringTransformation());
-        try {
-            $result = $transformList->transform(array('hello', 2));
-        }catch(ConstraintViolationException $exception)
-        {
-            return;
-        }
-        $this->fail();
-    }
-
+     
     /**
      * @dataProvider ArrayFailureDataProvider
      * @param $origValue
@@ -76,7 +64,8 @@ class ListTransformationTest extends TestCase
     {
         return [
             'empty_array' => [array()],
-            'null_array' => [array(null)]
+            'null_array' => [array(null)],
+            'value_is_no_string' => [array('hello', 2)]
         ];
     }
 
