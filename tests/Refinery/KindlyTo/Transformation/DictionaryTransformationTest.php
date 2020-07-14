@@ -28,7 +28,7 @@ class DictionaryTransformationTest extends TestCase
     {
         $transformation = new DictionaryTransformation(new StringTransformation());
         $transformedValue = $transformation->transform($originVal);
-        $this->assertIsArray($transformedValue, '');
+        $this->assertIsArray($transformedValue);
         $this->assertEquals($expectedVal, $transformedValue);
     }
 
