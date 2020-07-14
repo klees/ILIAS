@@ -21,7 +21,7 @@ use ILIAS\Tests\Refinery\TestCase;
 class ListTransformationTest extends TestCase
 {
     /**
-     * @dataProvider ArrayToListTransformation
+     * @dataProvider ArrayToListTransformationDataProvider
      * @param $originValue
      * @param $expectedValue
      */
@@ -47,7 +47,7 @@ class ListTransformationTest extends TestCase
     }
 
     /**
-     * @dataProvider testFailureTransformations
+     * @dataProvider testFailedTransformationsDataProvider()
      * @param $origVal
      */
     public function testInvalidListTransformation($origVal)
@@ -66,11 +66,11 @@ class ListTransformationTest extends TestCase
     public function StringToListTransformationDataProvider()
     {
         return [
-            'string_val' => ['hello world',['hello world']],
+            'string_val' => ['hello world',['hello world']]
         ];
     }
 
-    public function ArrayToListTransformation()
+    public function ArrayToListTransformationDataProvider()
     {
         return [
             'first_arr' => [array('hello', 'world'), ['hello', 'world']],
@@ -78,7 +78,7 @@ class ListTransformationTest extends TestCase
         ];
     }
 
-    public function testFailureTransformations()
+    public function testFailedTransformationsDataProvider()
     {
         return [
             'transformation_is_invalid' => [array('hello', 2)]
