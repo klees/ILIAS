@@ -31,12 +31,14 @@ class StringTransformationTest extends TestCase
      * @dataProvider StringTestDataProvider
      * @param $originVal
      * @param $expectedVal
+     * @return string
      */
     public function testStringTransformation($originVal, $expectedVal)
     {
         $transformedValue = $this->transformation->transform($originVal);
-        /**$this->assertInstanceOf(StringTransformation::class,$transformedValue, '');*/
+        $this->assertInstanceOf(static::class,$transformedValue, '');
         $this->assertEquals($expectedVal, $transformedValue);
+
     }
 
     public function StringTestDataProvider()
@@ -52,4 +54,3 @@ class StringTransformationTest extends TestCase
         ];
     }
 }
-echo StringTransformationTest::class;
