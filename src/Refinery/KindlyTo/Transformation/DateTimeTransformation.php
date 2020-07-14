@@ -63,7 +63,8 @@ class DateTimeTransformation implements Transformation
         }
         elseif(true === is_int($from) || true === is_float($from))
         {
-            return $UnixTimestamp = strtotime($from);
+            $UnixTimestamp = strtotime($from);
+            return $DateImmutable = \DateTimeImmutable::createFromFormat(\DateTimeImmutable::ISO8601, $UnixTimestamp);
         }
         else
         {
