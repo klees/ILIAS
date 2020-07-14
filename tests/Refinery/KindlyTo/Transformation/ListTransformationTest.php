@@ -33,6 +33,7 @@ class ListTransformationTest extends TestCase
         $transformList = new ListTransformation(new StringTransformation());
         $transformedValue = $transformList->transform(array(self::first_arr, self::second_arr));
         $this->assertIsArray($transformedValue,'');
+        $this->assertInstanceOf(TestCase::class,$transformedValue,'');
         $this->assertEquals(array(self::first_arr, self::second_arr), $transformedValue);
     }
 
