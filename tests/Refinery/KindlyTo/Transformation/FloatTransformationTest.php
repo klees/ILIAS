@@ -46,7 +46,8 @@ class FloatTransformationTest extends TestCase
             'neg_bool' => [false, 0.0],
             'string_comma' => ['234,23', 234.23],
             'string_floating_point' => ['7E10', 70000000000],
-            'int_val' => [23, 23.0]
+            'int_val' => [23, 23.0],
+            'neg_int_val' => [-2, -2.0]
         ];
     }
 }
