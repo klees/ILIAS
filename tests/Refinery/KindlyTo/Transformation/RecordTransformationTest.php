@@ -24,19 +24,15 @@ class RecordTransformationTest extends TestCase
 
     /**
      * @dataProvider RecordTransformationDataProvider
-     * @dataProvider RecKeyDataProvider
-     * @param $stringk
-     * @param $intk
      * @param $originVal
      * @param $expectedVal
-     *
      */
-    public function testRecordTransformationIsValid($stringk, $intk, $originVal, $expectedVal)
+    public function testRecordTransformationIsValid($originVal, $expectedVal)
     {
         $recTransform = new RecordTransformation(
             array(
-                $stringk => new StringTransformation(),
-                $intk => new IntegerTransformation()
+                self::string_key => new StringTransformation(),
+                self::int_key => new IntegerTransformation()
             )
         );
         $transformedValue = $recTransform->transform($originVal);
@@ -105,13 +101,6 @@ class RecordTransformationTest extends TestCase
             return;
         }
         $this->fail();
-    }
-
-    public function RecKeyDataProvider()
-    {
-        return [
-            'string_key' => ['string_key', 'int_key', 'another_int_key']
-        ];
     }
 
     public function RecordTransformationDataProvider()
