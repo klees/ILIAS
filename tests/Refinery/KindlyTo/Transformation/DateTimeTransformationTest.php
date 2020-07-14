@@ -46,7 +46,7 @@ class DateTimeTransformationTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
         try {
-            $transformedValue = $this->transformation->transform('hello world');
+            $transformedValue = $this->transformation->transform('hello');
         }catch(ConstraintViolationException $exception)
         {
             return;
