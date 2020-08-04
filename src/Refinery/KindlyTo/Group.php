@@ -2,10 +2,19 @@
 declare(strict_types=1);
 
 /* Copyright (c) 2020 Richard Klees, Extended GPL, see docs/LICENSE */
-
+/* Copyright (c) 2020 Luka K. A. Stocker, Extended GPL, see docs/LICENSE */
 
 namespace ILIAS\Refinery\KindlyTo;
 
+use ILIAS\Refinery\KindlyTo\Transformation\StringTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\BooleanTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\DateTimeTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\IntegerTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\FloatTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\ListTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\RecordTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\TupleTransformation;
+use ILIAS\Refinery\KindlyTo\Transformation\DictionaryTransformation;
 use ILIAS\Refinery\Transformation;
 
 /**
@@ -19,8 +28,16 @@ use ILIAS\Refinery\Transformation;
  * community. Thanks Michael Jansen, Fabian Schmid, Alex Killing, Stephan Winiker,
  * Timon Amstutz and Nils Haagen.
  */
-class Group
-{
+class Group {
+    /**
+     * @var \ILIAS\Data\Factory
+     */
+    private $dataFactory;
+
+    public function __construct(\ILIAS\Data\Factory $dataFactory) {
+        $this->dataFactory = $dataFactory;
+    }
+
     /**
      * Get a kind transformation to an `int`.
      *
@@ -41,9 +58,8 @@ class Group
      *
      * All other data will be discarded.
      */
-    public function int() : Transformation
-    {
-        throw new \LogicException("Not implemented yet.");
+    public function int() : Transformation {
+        return new IntegerTransformation();
     }
 
     /**
@@ -67,9 +83,8 @@ class Group
      *
      * All other data will be discarded.
      */
-    public function float() : Transformation
-    {
-        throw new \LogicException("Not implemented yet.");
+    public function float() : Transformation {
+        return new FloatTransformation();
     }
 
     /**
@@ -93,9 +108,8 @@ class Group
      * serialization formats. So we don't loose much if we, e.g., transform an
      * array to "Array".
      */
-    public function string() : Transformation
-    {
-        throw new \LogicException("Not implemented yet.");
+    public function string() : Transformation {
+        return new StringTransformation();
     }
 
 
@@ -124,9 +138,8 @@ class Group
      * seem to introduce more problems than they solve, so we decided to not be
      * very liberal here.
      */
-    public function bool() : Transformation
-    {
-        throw new \LogicException("Not implemented yet.");
+    public function bool() : Transformation {
+        return new BooleanTransformation();
     }
 
     /**
@@ -139,9 +152,8 @@ class Group
      *
      * All other data will be discarded.
      */
-    public function dateTime() : DateTimeTransformation
-    {
-        throw new \LogicException("Not implemented yet.");
+    public function dateTime() : DateTimeTransformation {
+        return new DateTimeTransformation();
     }
 
     /**
@@ -149,10 +161,11 @@ class Group
      *
      * This supports all data represented as PHP array, which will be used via
      * array_values($v). Non-arrays will be wrapped in one.
+     * @param Transformation $transformation
+     * @return Transformation
      */
-    public function listOf(Transformation $transformation) : Transformation
-    {
-        throw new \LogicException("Not implemented yet.");
+    public function listOf($transformation) : Transformation {
+        return new ListTransformation($transformation);
     }
 
     /**
@@ -160,10 +173,12 @@ class Group
      *
      * This supports all data represented as PHP array. Non-arrays will be wrapped
      * in one.
+     *
+     * @param Transformation $transformation
+     * @return Transformation
      */
-    public function dictOf(Transformation $transformation) : Transformation
-    {
-        throw new \LogicException("Not implemented yet.");
+    public function dictOf($transformation) : Transformation {
+        return new DictionaryTransformation($transformation);
     }
 
     /**
@@ -171,20 +186,23 @@ class Group
      *
      * This supports all data represented as PHP array, which will be used via
      * array_values($V). Non-arrays will be wrapped in one.
+     *
+     * @param $transformation[] $transformation
+     * @return Transformation
      */
-    public function tupleOf(array $transformation) : Transformation
-    {
-        throw new \LogicException("Not implemented yet.");
+    public function tupleOf($transformation) : Transformation {
+        return new TupleTransformation($transformation);
     }
 
     /**
      * Get a kind transformation to a record.
-     *
      * This supports all data represented as PHP array. Non-arrays will be wrapped
      * in one.
+     *
+     * @param $transformations[] $transformations
+     * @return Transformation
      */
-    public function recordOf(array $transformations) : Transformation
-    {
-        throw new \LogicException("Not implemented yet.");
+    public function recordOf($transformations) : Transformation {
+        return new RecordTransformation($transformations);
     }
 }
