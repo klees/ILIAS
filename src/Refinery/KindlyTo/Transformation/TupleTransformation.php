@@ -38,8 +38,6 @@ class TupleTransformation implements Transformation
      */
     public function transform($from)
     {
-        $this->ValueLength($from);
-
         if (!is_array($from)) {
             $from = [$from];
         }
@@ -51,6 +49,8 @@ class TupleTransformation implements Transformation
                 $from
             ) ;
         }
+
+        $this->testLengthOf($from);
 
         $result = [];
         foreach ($from as $key => $value) {
@@ -67,7 +67,7 @@ class TupleTransformation implements Transformation
         return $result;
     }
 
-    private function ValueLength($values)
+    private function testLengthOf(array $values) : void
     {
         $countOfValues = count($values);
         $countOfTransformations = count($this->transformations);
