@@ -8,7 +8,8 @@ use ILIAS\Refinery\DeriveApplyToFromTransform;
 use ILIAS\Refinery\Transformation;
 use ILIAS\Refinery\ConstraintViolationException;
 
-class TupleTransformation implements Transformation {
+class TupleTransformation implements Transformation
+{
     use DeriveApplyToFromTransform;
 
     private $transformations;
@@ -16,7 +17,8 @@ class TupleTransformation implements Transformation {
     /**
      * @param Transformation[] $transformations;
      */
-    public function __construct($transformations) {
+    public function __construct($transformations)
+    {
         foreach ($transformations as $transformation) {
             if (!$transformation instanceof Transformation) {
                 $transformationClassName = Transformation::class;
@@ -34,14 +36,15 @@ class TupleTransformation implements Transformation {
     /**
      * @inheritDoc
      */
-    public function transform($from) {
+    public function transform($from)
+    {
         $this->ValueLength($from);
 
-        if(!is_array($from)) {
+        if (!is_array($from)) {
             $from = [$from];
         }
 
-        if([] === $from) {
+        if ([] === $from) {
             throw new ConstraintViolationException(
                 sprintf('The array "%s" ist empty', $from),
                 'value_array_is_empty',
@@ -50,9 +53,8 @@ class TupleTransformation implements Transformation {
         }
 
         $result = [];
-        foreach($from as $key => $value)
-        {
-            if(!array_key_exists($key, $this->transformations)) {
+        foreach ($from as $key => $value) {
+            if (!array_key_exists($key, $this->transformations)) {
                 throw new ConstraintViolationException(
                     sprintf('Matching value "%s" not found', $value),
                     'matching_values_not_found',
@@ -65,7 +67,8 @@ class TupleTransformation implements Transformation {
         return $result;
     }
 
-    private function ValueLength($values) {
+    private function ValueLength($values)
+    {
         $countOfValues = count($values);
         $countOfTransformations = count($this->transformations);
 
@@ -81,7 +84,8 @@ class TupleTransformation implements Transformation {
     /**
      * @inheritDoc
      */
-    public function __invoke($from) {
+    public function __invoke($from)
+    {
         return $this->transform($from);
     }
 }
