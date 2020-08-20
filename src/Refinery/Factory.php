@@ -51,7 +51,7 @@ class Factory
      * Combined validations and transformations for primitive data types that
      * establish a baseline for further constraints and more complex transformations.
      *
-     * Other then the `to`-group, the `kindlyTo` transformations attempts to implement
+     * Other then the `to`-group, the `kindlyTo` transformation attempts to implement
      * [Postels Law](https://en.wikipedia.org/wiki/Robustness_principle) by being
      * reasonably liberal when interpreting data. Look into the various transformations
      * in the group for detailed information what works exactly.
