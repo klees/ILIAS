@@ -40,6 +40,10 @@ class StringTransformation implements Transformation
             return $from;
         }
 
+        if (is_object($from) && method_exists($from, '__toString')) {
+            return (string) $from;
+        }
+
         throw new ConstraintViolationException(
             sprintf('The value "%s" could not be transformed into a string', $from),
             'not_string',
