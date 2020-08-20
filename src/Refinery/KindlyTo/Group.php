@@ -76,7 +76,7 @@ class Group
      *   - ints, which will be typecasted to float
      *   - bools, where true maps to 1.0 and false to 0.0
      * This doesn't support:
-     *   - "" will be discarded, as well as well as null, because null or empty are not 0
+     *   - "" will be discarded, as well as null, because null or empty are not 0
      *   - delimiters per mill, like 1'000, because they can't reliably be told from
      *     the decimal delimiter
      *   - written variants of "true", "false" or "null", because these definitely are
