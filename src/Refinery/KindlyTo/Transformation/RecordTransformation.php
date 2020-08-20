@@ -17,7 +17,7 @@ class RecordTransformation implements Transformation
     /**
      *@param Transformation[] $transformations
      */
-    public function __construct($transformations)
+    public function __construct(array $transformations)
     {
         foreach ($transformations as $key => $transformation) {
             if (!$transformation instanceof Transformation) {
