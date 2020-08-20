@@ -17,7 +17,7 @@ class TupleTransformation implements Transformation
     /**
      * @param Transformation[] $transformations;
      */
-    public function __construct($transformations)
+    public function __construct(array $transformations)
     {
         foreach ($transformations as $transformation) {
             if (!$transformation instanceof Transformation) {
