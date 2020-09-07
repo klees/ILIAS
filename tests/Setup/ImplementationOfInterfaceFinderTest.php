@@ -42,7 +42,7 @@ class ImplementationOfInterfaceFinderTest extends TestCase
 {
     public function testWithTestInterface1()
     {
-        $finder = new ImplementationOfInterfaceFinderForTest(TestInterface1::class);
+        $finder = new ImplementationOfInterfaceFinderForTest(PHP_BINARY, TestInterface1::class);
         $finder->class_names = [
             TestClass1::class,
             TestClass2::class,
@@ -55,7 +55,7 @@ class ImplementationOfInterfaceFinderTest extends TestCase
 
     public function testWithTestInterface2()
     {
-        $finder = new ImplementationOfInterfaceFinderForTest(TestInterface2::class);
+        $finder = new ImplementationOfInterfaceFinderForTest(PHP_BINARY, TestInterface2::class);
         $finder->class_names = [
             TestClass1::class,
             TestClass2::class,
@@ -68,7 +68,7 @@ class ImplementationOfInterfaceFinderTest extends TestCase
 
     public function testWithTestInterface3()
     {
-        $finder = new ImplementationOfInterfaceFinderForTest(TestInterface3::class);
+        $finder = new ImplementationOfInterfaceFinderForTest(PHP_BINARY, TestInterface3::class);
         $finder->class_names = [
             TestClass1::class,
             TestClass2::class,

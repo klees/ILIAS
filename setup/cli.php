@@ -119,6 +119,7 @@ function build_container_for_setup(string $executed_in_directory)
 
     $c["agent_finder"] = function ($c) {
         return new ILIAS\Setup\ImplementationOfInterfaceFinder(
+            PHP_BINARY,
             ILIAS\Setup\Agent::class
         );
     };

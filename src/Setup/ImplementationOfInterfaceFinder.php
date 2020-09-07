@@ -9,6 +9,10 @@ namespace ILIAS\Setup;
  */
 class ImplementationOfInterfaceFinder
 {
+    /**
+     * @var string
+     */
+    private $php_binary;
 
     /**
      * @var string
@@ -30,8 +34,9 @@ class ImplementationOfInterfaceFinder
         ];
 
 
-    public function __construct(string $interface)
+    public function __construct(string $php_binary, string $interface)
     {
+        $this->php_binary = $php_binary;
         $this->interface = $interface;
         $this->getAllClassNames();
     }
@@ -69,14 +74,17 @@ class ImplementationOfInterfaceFinder
 
     public function getMatchingClassNames() : \Iterator
     {
+        $script = escapeshellarg(__DIR__ . "/has_interface.php");
+
         foreach ($this->getAllClassNames() as $class_name) {
-            try {
-                $r = new \ReflectionClass($class_name);
-                if ($r->isInstantiable() && $r->implementsInterface($this->interface)) {
-                    yield $class_name;
-                }
-            } catch (\Throwable $e) {
-                // noting to do here
+            $status = 0;
+            $output = [];
+            $arg1 = escapeshellarg($class_name);
+            $arg2 = escapeshellarg($this->interface);
+            exec($this->php_binary . " $script $arg1 $arg2", $output, $status);
+
+            if ($status === 0 && $output[0] === "TRUE") {
+                yield $class_name;
             }
         }
     }
