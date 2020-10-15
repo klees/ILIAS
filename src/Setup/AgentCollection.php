@@ -178,13 +178,4 @@ class AgentCollection implements Agent
             }
         }
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function getMigrations(Config $config = null) : array
-    {
-        return $this->getXObjective("getUpdateObjective", $config);
-    }
-
 }

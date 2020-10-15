@@ -7,7 +7,7 @@ namespace ILIAS\Setup;
 /**
  * A migration objective
  */
-interface Migration extends Objective
+interface Migration // extends Objective
 {
     public const INFINITE = -1;
 
@@ -19,17 +19,18 @@ interface Migration extends Objective
     public function getDefaultIterationStep() : int;
 
     /**
-     * proceed with the migration for the number of units specified. if no
-     * number is given, use the default or all if the default is higher than the
-     * total number of units to be migrated
-     * @param int|null $next
+     * Objectives the migration depend on.
+     *
+     * @throw UnachievableException if the objective is not achievable
+     *
+     * @return Objective[]
      */
-    public function proceed(int $next = null) : void;
+    public function getPreconditions(Environment $environment) : array;
 
     /**
-     * @return float with a maximum of 1 (finished)
+     *  Run one step of the migration.
      */
-    public function getProgress() : float;
+    public function step(Environment $environment) : void;
 
     /**
      * Count up how many "things" need to be migrated. This helps the admin to
