@@ -9,6 +9,7 @@ use ILIAS\Setup\Migration;
 use ILIAS\Setup\NoConfirmationException;
 use ILIAS\Setup\Objective;
 use ILIAS\Setup\ObjectiveCollection;
+use ILIAS\Setup\ObjectiveIterator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -70,7 +71,7 @@ class MigrateCommand extends Command
 
         $migrations = $agent->getMigrations();
 
-        $objective = new ObjectiveCollection(
+        $migration_objectives = new ObjectiveCollection(
             "Handle migrations in ILIAS after update",
             false,
             ...array_map(static function (Migration $m) {
@@ -80,9 +81,11 @@ class MigrateCommand extends Command
 
         if (count($this->preconditions) > 0) {
             $objective = new Objective\ObjectiveWithPreconditions(
-                $objective,
+                $migration_objectives,
                 ...$this->preconditions
             );
+        } else {
+            $objective = $migration_objectives;
         }
 
         $environment = new ArrayEnvironment([
@@ -101,7 +104,21 @@ class MigrateCommand extends Command
 
         try {
             $this->achieveObjective($objective, $environment, $io);
-            $io->success("Installation complete. Thanks and have fun!");
+            $iterator = new ObjectiveIterator($environment, $migration_objectives);
+            $finished = true;
+
+            foreach ($iterator as $objective) {
+                if ($objective->isApplicable($environment)) {
+                    $finished = false;
+                    break;
+                }
+            }
+
+            if ($finished) {
+                $io->success("Migration complete. Thanks and have fun!");
+            } else {
+                $io->inform("Migration was successful, but there are still steps left. please rerun to proceed");
+            }
         } catch (NoConfirmationException $e) {
             $io->error("Aborting Installation, a necessary confirmation is missing:\n\n" . $e->getRequestedConfirmation());
         }

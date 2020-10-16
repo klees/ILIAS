@@ -88,6 +88,6 @@ class MigrationObjective implements Setup\Objective
      */
     public function isApplicable(Setup\Environment $environment) : bool
     {
-        return true;
+        return $this->migration->getRemainingAmountOfUnitsToMigrate() > 0;
     }
 }
