@@ -166,7 +166,12 @@ class AgentCollection implements Agent
      */
     public function getMigrations() : array
     {
-        return [];
+        $migrations = [];
+        foreach ($this->agents as $agent) {
+            $migrations[] = $agent->getMigrations();
+        }
+
+        return array_merge([], ...$migrations);
     }
 
     protected function checkConfig(Config $config)
