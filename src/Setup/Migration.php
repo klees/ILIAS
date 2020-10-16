@@ -12,6 +12,11 @@ interface Migration // extends Objective
     public const INFINITE = -1;
 
     /**
+     * @return string a meaningful name for your migration.
+     */
+    public function getLabel() : string;
+
+    /**
      * tell what the default value for a migration step is.
      * Return Migration::INFINITE if all units need to be migrated at once.
      * @return int
@@ -20,9 +25,7 @@ interface Migration // extends Objective
 
     /**
      * Objectives the migration depend on.
-     *
      * @throw UnachievableException if the objective is not achievable
-     *
      * @return Objective[]
      */
     public function getPreconditions(Environment $environment) : array;
