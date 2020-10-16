@@ -62,13 +62,6 @@ class MigrateCommand extends Command
 
         $config = $this->readAgentConfig($agent, $input);
 
-        $objective = new ObjectiveCollection(
-            "Handle migrations in ILIAS after update",
-            false,
-            $agent->getInstallObjective($config),
-            $agent->getUpdateObjective()
-        );
-
         $migrations = $agent->getMigrations();
 
         $migration_objectives = new ObjectiveCollection(
