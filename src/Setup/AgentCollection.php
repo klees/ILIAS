@@ -161,6 +161,14 @@ class AgentCollection implements Agent
         );
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function getMigrations() : array
+    {
+        return [];
+    }
+
     protected function checkConfig(Config $config)
     {
         if (!($config instanceof ConfigCollection)) {
