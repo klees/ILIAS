@@ -54,7 +54,7 @@ class MigrationObjective implements Setup\Objective
      */
     public function getPreconditions(Setup\Environment $environment) : array
     {
-        return [];
+        return $this->migration->getPreconditions($environment);
     }
 
     /**
@@ -66,12 +66,17 @@ class MigrationObjective implements Setup\Objective
          * @var $io Setup\CLI\IOWrapper
          */
         $io = $environment->getResource(Setup\Environment::RESOURCE_ADMIN_INTERACTION);
+        $this->migration->prepare($environment);
 
         $steps = $this->migration->getDefaultIterationStep();
+        if ($this->migration->getRemainingAmountOfUnitsToMigrate() < $steps) {
+            $steps = $this->migration->getRemainingAmountOfUnitsToMigrate();
+        }
         $io->confirmOrDeny("Run {$steps} steps in {$this->getLabel()}? This may take a while depending on the migration and the installation.");
         $io->inform("Trigger {$steps} steps in {$this->getLabel()}");
         $step = 0;
         $io->startProgress($steps);
+
         while ($step < $steps) {
             $io->advanceProgress();
             $this->migration->step($environment);
@@ -88,6 +93,8 @@ class MigrationObjective implements Setup\Objective
      */
     public function isApplicable(Setup\Environment $environment) : bool
     {
+        $this->migration->prepare($environment);
+
         return $this->migration->getRemainingAmountOfUnitsToMigrate() > 0;
     }
 }

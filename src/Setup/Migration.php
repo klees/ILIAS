@@ -31,6 +31,11 @@ interface Migration // extends Objective
     public function getPreconditions(Environment $environment) : array;
 
     /**
+     * @param Environment $environment
+     */
+    public function prepare(Environment $environment) : void;
+
+    /**
      *  Run one step of the migration.
      */
     public function step(Environment $environment) : void;
