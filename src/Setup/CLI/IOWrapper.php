@@ -62,6 +62,20 @@ class IOWrapper implements AdminInteraction
     }
 
     // Implementation of AdminInteraction
+    public function startProgress(int $max) : void
+    {
+        $this->style->progressStart($max);
+    }
+
+    public function advanceProgress() : void
+    {
+        $this->style->progressAdvance();
+    }
+
+    public function stopProgress() : void
+    {
+        $this->style->progressFinish();
+    }
 
     public function inform(string $message) : void
     {
