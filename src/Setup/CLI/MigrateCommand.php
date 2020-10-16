@@ -3,118 +3,107 @@
 
 namespace ILIAS\Setup\CLI;
 
-use ILIAS\Setup\Agent;
-use ILIAS\Setup\AgentCollection;
 use ILIAS\Setup\ArrayEnvironment;
-use ILIAS\Setup\Config;
 use ILIAS\Setup\Environment;
+use ILIAS\Setup\Migration;
 use ILIAS\Setup\NoConfirmationException;
 use ILIAS\Setup\Objective;
-use ILIAS\Setup\Objective\ObjectiveWithPreconditions;
 use ILIAS\Setup\ObjectiveCollection;
-use ILIAS\Setup\ObjectiveIterator;
-use ILIAS\Setup\UnachievableException;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Migrate command.
+ * Migration command.
  */
-class MigrateCommand extends BaseCommand
+class MigrateCommand extends Command
 {
+    use HasAgent;
+    use HasConfigReader;
+    use ObjectiveHelper;
+
     protected static $defaultName = "migrate";
+
+    /**
+     * var Objective[]
+     */
+    protected $preconditions;
+
+    /**
+     * @var callable    $lazy_agent    must return a Setup\Agent
+     * @var Objective[] $preconditions will be achieved before command invocation
+     */
+    public function __construct(callable $lazy_agent, ConfigReader $config_reader, array $preconditions)
+    {
+        parent::__construct();
+        $this->lazy_agent    = $lazy_agent;
+        $this->config_reader = $config_reader;
+        $this->preconditions = $preconditions;
+    }
 
     public function configure()
     {
-        parent::configure();
-        $this->setDescription("Triggers ans manages migrations in an existing ILIAS installation");
-    }
-
-    protected function printIntroMessage(IOWrapper $io)
-    {
-        $io->title("Trigger Migrations in ILIAS");
-    }
-
-    protected function printOutroMessage(IOWrapper $io)
-    {
-        $io->success("All Migrations complete. Thanks and have fun!");
-    }
-
-    protected function buildEnvironment(Agent $agent, ?Config $config, IOWrapper $io) : Environment
-    {
-        $environment = new ArrayEnvironment([
-            Environment::RESOURCE_ADMIN_INTERACTION => $io
-        ]);
-
-        if ($agent instanceof AgentCollection && $config) {
-            foreach ($config->getKeys() as $k) {
-                $environment = $environment->withConfigFor($k, $config->getConfig($k));
-            }
-        }
-
-        return $environment;
+        $this->setDescription("Starts and manages migrations needed after an update of ILIAS");
+        $this->addArgument("config", InputArgument::REQUIRED, "Configuration file for the installation");
+        $this->addOption("config", null, InputOption::VALUE_OPTIONAL|InputOption::VALUE_IS_ARRAY, "Define fields in the configuration file that should be overwritten, e.g. \"a.b.c=foo\"", []);
+        $this->addOption("yes", "y", InputOption::VALUE_NONE, "Confirm every message of the installation.");
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        // TO DISCUSS:
-        // Wir könnten hier nach dem genau gleichn Prinzip verfahren wie sonst
-        // oder eben hier explizit immer wieder nach den steps fragen:
+        $io = new IOWrapper($input, $output);
+        $io->printLicenseMessage();
+        $io->title("Trigger migrations in ILIAS");
 
-        $io = new IOWrapper($input, $output, $this->shouldSayYes($input));
+        $agent = $this->getAgent();
 
-        $this->printLicenseMessage($io, $input);
+        $config = $this->readAgentConfig($agent, $input);
 
-        $this->printIntroMessage($io);
+        $objective = new ObjectiveCollection(
+            "Handle migrations in ILIAS after update",
+            false,
+            $agent->getInstallObjective($config),
+            $agent->getUpdateObjective()
+        );
 
-        $config = $this->readAgentConfig($this->getAgent(), $input);
-        $environment = $this->buildEnvironment($this->getAgent(), $config, $io);
-        $goal = $this->getObjective($this->getAgent(), $config);
+        $migrations = $agent->getMigrations();
+
+        $objective = new ObjectiveCollection(
+            "Handle migrations in ILIAS after update",
+            false,
+            ...array_map(static function (Migration $m) {
+                return new Objective\MigrationObjective($m);
+            }, $migrations)
+        );
+
         if (count($this->preconditions) > 0) {
-            $goal = new ObjectiveWithPreconditions(
-                $goal,
+            $objective = new Objective\ObjectiveWithPreconditions(
+                $objective,
                 ...$this->preconditions
             );
         }
-        $goals = new ObjectiveIterator($environment, $goal);
+
+        $environment = new ArrayEnvironment([
+            Environment::RESOURCE_ADMIN_INTERACTION => $io
+        ]);
+        $environment = $this->addAgentConfigsToEnvironment($agent, $config, $environment);
+        // ATTENTION: This is bad because we strongly couple this generic command
+        // to something very specific here. This can go away once we have got rid of
+        // everything related to clients, since we do not need that client-id then.
+        // This will require some more work, though.
+        $common_config = $config->getConfig("common");
+        $environment   = $environment->withResource(
+            Environment::RESOURCE_CLIENT_ID,
+            $common_config->getClientId()
+        );
 
         try {
-            while ($goals->valid()) {
-                $current = $goals->current();
-                if (!$current->isApplicable($environment)) {
-                    $goals->next();
-                    continue;
-                }
-                $io->startObjective($current->getLabel(), $current->isNotable());
-                try {
-                    // TO DISCUSS:
-                    // Hier müssten wir dann entsprechend entweder einen anderen
-                    // aufruf starten, oder eine innerhalb von achieve immer wieder process
-                    // aufrufen bis fertig, oder mit NotYetFinishedException arbeiten ...
-
-
-                    $environment = $current->achieve($environment);
-                    $io->finishedLastObjective($current->getLabel(), $current->isNotable());
-                    $goals->setEnvironment($environment);
-                } catch (UnachievableException $e) {
-                    $goals->markAsFailed($current);
-                    $io->error($e->getMessage());
-                    $io->failedLastObjective($current->getLabel());
-                }
-                $goals->next();
-            }
-            $this->printOutroMessage($io);
+            $this->achieveObjective($objective, $environment, $io);
+            $io->success("Installation complete. Thanks and have fun!");
         } catch (NoConfirmationException $e) {
-            $io->error("Aborting Setup, a necessary confirmation is missing:\n\n" . $e->getRequestedConfirmation());
+            $io->error("Aborting Installation, a necessary confirmation is missing:\n\n" . $e->getRequestedConfirmation());
         }
-    }
-
-    protected function getObjective(Agent $agent, ?Config $config) : Objective
-    {
-        return new ObjectiveCollection(
-            "Migrate ILIAS",
-            false,
-            $agent->getMigrations($config)
-        );
     }
 }

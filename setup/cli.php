@@ -68,7 +68,8 @@ function build_container_for_setup(string $executed_in_directory)
             $c["command.update"],
             $c["command.build-artifacts"],
             $c["command.reload-control-structure"],
-            $c["command.status"]
+            $c["command.status"],
+            $c["command.migrate"]
         );
     };
     $c["command.install"] = function ($c) {
@@ -95,9 +96,18 @@ function build_container_for_setup(string $executed_in_directory)
             $c["common_preconditions"]
         );
     };
+
     $c["command.status"] = function ($c) {
         return new \ILIAS\Setup\CLI\StatusCommand(
             $c["agent"]
+        );
+    };
+
+    $c["command.migrate"] = function ($c) {
+        return new \ILIAS\Setup\CLI\MigrateCommand(
+            $c["agent"],
+            $c["config_reader"],
+            $c["common_preconditions"]
         );
     };
 
