@@ -72,7 +72,7 @@ class IOWrapper implements AdminInteraction
     public function confirmOrDeny(string $message) : bool
     {
         $this->outputInObjective();
-        if (!$this->say_yes) {
+        if (!$this->shouldSayYes()) {
             return $this->style->confirm($message, false);
         } else {
             $this->inform("Automatically confirmed:\n\n$message");
