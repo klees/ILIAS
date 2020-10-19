@@ -85,15 +85,6 @@ class MigrateCommand extends Command
             Environment::RESOURCE_ADMIN_INTERACTION => $io
         ]);
         $environment = $this->addAgentConfigsToEnvironment($agent, $config, $environment);
-        // ATTENTION: This is bad because we strongly couple this generic command
-        // to something very specific here. This can go away once we have got rid of
-        // everything related to clients, since we do not need that client-id then.
-        // This will require some more work, though.
-        $common_config = $config->getConfig("common");
-        $environment   = $environment->withResource(
-            Environment::RESOURCE_CLIENT_ID,
-            $common_config->getClientId()
-        );
 
         try {
             $this->achieveObjective($objective, $environment, $io);
@@ -113,7 +104,7 @@ class MigrateCommand extends Command
                 $io->inform("Migration was successful, but there are still steps left. please rerun to proceed");
             }
         } catch (NoConfirmationException $e) {
-            $io->error("Aborting Installation, a necessary confirmation is missing:\n\n" . $e->getRequestedConfirmation());
+            $io->error("Aborting Migration, a necessary confirmation is missing:\n\n" . $e->getRequestedConfirmation());
         }
     }
 }
