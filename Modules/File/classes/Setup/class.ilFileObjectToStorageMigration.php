@@ -16,7 +16,7 @@ class ilFileObjectToStorageMigration implements Setup\Migration
     /**
      * @inheritDoc
      */
-    public function getDefaultIterationStep() : int
+    public function getDefaultAmountOfStepsPerRun() : int
     {
         return 100;
     }
@@ -40,7 +40,7 @@ class ilFileObjectToStorageMigration implements Setup\Migration
     /**
      * @inheritDoc
      */
-    public function getRemainingAmountOfUnitsToMigrate() : int
+    public function getRemainingAmountOfSteps() : int
     {
         return 86574854;
     }

@@ -68,9 +68,9 @@ class MigrationObjective implements Setup\Objective
         $io = $environment->getResource(Setup\Environment::RESOURCE_ADMIN_INTERACTION);
         $this->migration->prepare($environment);
 
-        $steps = $this->migration->getDefaultIterationStep();
-        if ($this->migration->getRemainingAmountOfUnitsToMigrate() < $steps) {
-            $steps = $this->migration->getRemainingAmountOfUnitsToMigrate();
+        $steps = $this->migration->getDefaultAmountOfStepsPerRun();
+        if ($this->migration->getRemainingAmountOfSteps() < $steps) {
+            $steps = $this->migration->getRemainingAmountOfSteps();
         }
         $io->confirmOrDeny("Run {$steps} steps in {$this->getLabel()}? This may take a while depending on the migration and the installation.");
         $io->inform("Trigger {$steps} steps in {$this->getLabel()}");
@@ -83,7 +83,7 @@ class MigrationObjective implements Setup\Objective
             $step++;
         }
         $io->stopProgress();
-        $io->inform("there are {$this->migration->getRemainingAmountOfUnitsToMigrate()} steps remaining. run again to proceed.");
+        $io->inform("there are {$this->migration->getRemainingAmountOfSteps()} steps remaining. run again to proceed.");
 
         return $environment;
     }
@@ -95,6 +95,6 @@ class MigrationObjective implements Setup\Objective
     {
         $this->migration->prepare($environment);
 
-        return $this->migration->getRemainingAmountOfUnitsToMigrate() > 0;
+        return $this->migration->getRemainingAmountOfSteps() > 0;
     }
 }

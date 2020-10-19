@@ -17,11 +17,11 @@ interface Migration // extends Objective
     public function getLabel() : string;
 
     /**
-     * tell what the default value for a migration step is.
-     * Return Migration::INFINITE if all units need to be migrated at once.
+     * Tell the default amount of steps to be executed for one run of the migration.
+     * Return Migration::INFINITE if all units should be migrated at once.
      * @return int
      */
-    public function getDefaultIterationStep() : int;
+    public function getDefaultAmountOfStepsPerRun() : int;
 
     /**
      * Objectives the migration depend on.
@@ -45,5 +45,5 @@ interface Migration // extends Objective
      * decide how big he can create the steps and also how long a migration takes
      * @return int
      */
-    public function getRemainingAmountOfUnitsToMigrate() : int;
+    public function getRemainingAmountOfSteps() : int;
 }
