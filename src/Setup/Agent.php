@@ -71,8 +71,6 @@ interface Agent
     /**
      * Get the goals the agent wants to achieve during migration.
      *
-     * @throw InvalidArgumentException if Config does not match the Agent..
-     *
      * @return array<string,Migration>
      */
     public function getMigrations() : array;
