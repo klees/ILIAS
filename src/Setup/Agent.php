@@ -69,7 +69,9 @@ interface Agent
     public function getStatusObjective(Metrics\Storage $storage) : Objective;
 
     /**
-     * Get the goals the agent wants to achieve during migration.
+     * Get a named map of migrations available for this Agent.
+     *
+     * Should also return Migrations that have run completely.
      *
      * @return array<string,Migration>
      */
