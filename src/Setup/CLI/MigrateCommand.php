@@ -62,14 +62,16 @@ class MigrateCommand extends Command
 
         $config = $this->readAgentConfig($agent, $input);
 
-        $migrations = $agent->getMigrations();
+        $migrations_objectives = [];
+
+        foreach ($agent->getMigrations() as $migration) {
+            $migrations_objectives[] = new Objective\MigrationObjective($migration);
+        }
 
         $migration_objectives = new ObjectiveCollection(
             "Handle migrations in ILIAS after update",
             false,
-            ...array_map(static function (Migration $m) {
-                return new Objective\MigrationObjective($m);
-            }, $migrations)
+           ...$migrations_objectives
         );
 
         if (count($this->preconditions) > 0) {

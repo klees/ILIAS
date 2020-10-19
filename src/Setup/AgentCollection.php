@@ -185,7 +185,7 @@ class AgentCollection implements Agent
 
         }
 
-        return array_merge([], ...$migrations);
+        return $migrations;
     }
 
     protected function checkConfig(Config $config)
