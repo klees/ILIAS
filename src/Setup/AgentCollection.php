@@ -4,8 +4,6 @@
 
 namespace ILIAS\Setup;
 
-use ILIAS\UI\Component\Input\Field\Factory as FieldFactory;
-use ILIAS\UI\Component\Input\Field\Input as Input;
 use ILIAS\Refinery\Factory as Refinery;
 use ILIAS\Refinery\Transformation;
 
@@ -166,9 +164,25 @@ class AgentCollection implements Agent
      */
     public function getMigrations() : array
     {
+        $build_migration_name = function (string $class_name) : string {
+            // We assume that the name of an agent in the class ilXYZMigration really
+            // is XYZ. If that does not fit we just use the class name.
+            $match = [];
+            if (preg_match("/il(\w+)Migration/", $class_name, $match)) {
+                return $match[1];
+            }
+            return $class_name;
+        };
+
         $migrations = [];
-        foreach ($this->agents as $agent) {
-            $migrations[] = $agent->getMigrations();
+        foreach ($this->agents as $agent_key => $agent) {
+            foreach ($agent->getMigrations() as $migration) {
+                /**
+                 * @var $migration Migration
+                 */
+                $migrations[$agent_key . "." . $build_migration_name(get_class($migration))] = $migration;
+            }
+
         }
 
         return array_merge([], ...$migrations);
