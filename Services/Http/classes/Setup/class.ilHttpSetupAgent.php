@@ -92,4 +92,12 @@ class ilHttpSetupAgent implements Setup\Agent
     {
         return new ilHttpMetricsCollectedObjective($storage);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMigrations() : array
+    {
+        return [];
+    }
 }
