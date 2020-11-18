@@ -131,6 +131,13 @@ interface Factory
      *     The Main Bar is always visible and available (except in specialized views
      *     like the exam mode) as a static screen element unaffected by scrolling.
      *
+     *     The Main Bar can contain a special section, called the tools, which can
+     *     contain slates that are only available in certain contexts or when the
+     *     user requests them. These slates then will be bundled as the first entry
+     *     in the Main Bar, which also is styled differently then the other entries
+     *     in the Main Bar. When there are no tools available, the tools entry won't
+     *     be displayed.
+     *
      *   effect: >
      *     Clicking an entry will carry out its configured action. For slates, this
      *     is expanding the slate, while for Bulky Buttons this might be, e.g., just
@@ -154,11 +161,11 @@ interface Factory
      *     rendered underneath the slate. It will close all visible Slates and reset
      *     the states of all Main Bar-entries.
      *
-     *     When a tool (such as the help), whose contents are displayed in a slate,
-     *     is being triggered, a special entry is rendered as first element of the
-     *     Main Bar, making the available/invoked tool(s) accessible. Tools can be
-     *     closed, i.e. removed from the Main Bar, via a Close Button. When the last
-     *     Tool is closed, the tools-section is removed as well.
+     *     Slates in the tools are displayed either when the user specifically requests
+     *     them to be displayed (such as the help) or when the user enters the context
+     *     that makes the tools available for the first time (such as a local navigation).
+     *     After a tool has been displayed like that, it behaves just as any other slates
+     *     and will maintain it display status between reloads of the page.
      *
      *   rivals:
      *     Tab Bar: >
