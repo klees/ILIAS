@@ -418,9 +418,65 @@ above will directly serve ILIAS from the docroot.
 <a name="install-ilias"></a>
 ## Install ILIAS
 
-After having all dependencies installed and configured you should be able to run the ILIAS CLI-Setup.
+After having all dependencies installed and configured you should be able to run
+the [ILIAS Setup on the command-line](../../setup/README.md).
 
-See [ILIAS Installation](../../setup/README.md) for details on how to use the CLI-Setup.
+To do so, create a configuration file for the setup by copying the [minimal-config.json](../../setup/minimal-config.json)
+to a location outside your docroot. Fill in the configuration fields that are already
+contained in the minimal config. Have a look into the [list of available config options](../../setup/README.md#about-the-config-file)
+and add the fields that your environment and installation requires. A typical
+configuration might look like this afterwards:
+
+```
+{
+	"common" : {
+		"client_id" : "myilias"
+	},
+	"database" : {
+		"user" : "ilias_user",
+        "password" : "my_password"
+	},
+	"filesystem" : {
+		"data_dir" : "/var/www/files"
+	},
+	"http" : {
+		"path" : "http://demo1.cat06.de"
+	},
+    "language" : {
+        "default_language" : "de",
+        "install_languages" : ["de"]
+    },
+    "loggin" : {
+        "enable" : true,
+        "path_to_logfile" : "/var/www/logs/ilias.log",
+        "errorlog_dir" : "/var/www/logs/"
+    },
+	"systemfolder" : {
+		"contact" : {
+			"firstname" : "Richard",
+			"lastname" : "Klees",
+			"email" : "richard.klees@concepts-and-training.de"
+		}
+	},
+    "utilities" : {
+        "path_to_convert" : "/usr/bin/convert",
+        "path_to_zip" : "/usr/bin/zip",
+        "path_to_zip" : "/usr/bin/unzip"
+    }
+}
+```
+
+Run the ILIAS command line setup with your configuration file from your ILIAS folder:
+
+```
+php setup/setup.php install my-configuration.json
+```
+
+The installation will display what currently happens and might prompt you with
+questions. You might want to have a look into the [documenation of the command line setup](../../setup/README.md)
+or into the help of the program itself `php setup/setup.php help`. It is the tool
+to manage and monitor your ILIAS installation.
+
 
 <a name="hardening-and-security-guidance"></a>
 ## Hardening and Security Guidance
@@ -655,7 +711,36 @@ will need to update your style to match the new release.
 ## Update the Database
 
 Database updates must be done for both minor and major updates, the schema and content
-of the database probably won't match the code otherwise.
+of the database probably won't match the code otherwise. Database updates are performed
+via the [command line setup program](../../setup/README.md). The required updates
+are split into two groups. **Updates** are tasks that need to be run immediately to
+make your installation work properly. **Migrations** are tasks, that potentially take
+some time, but which can also be executed while the installation is in productive use.
+
+Run the `status` command on the command line to check if there are any updates
+available. Look into the section `database` of the output and check the fields
+`update_required`, `hotfix_required` and `custom_update_required`. If any of these
+fields is `true`, run in your ILIAS folder:
+
+```
+php setup/setup.php update
+```
+
+To check if there are migrations, run in your ILIAS folder:
+
+```
+php setup/setup.php migrate
+```
+
+The command will show you if there are migrations that need to be run for you
+installation. Run them by using the `--run` parameter and have a look into
+the help of the command for more details: `php setup/setup.php migrate --help`.
+
+Both commands will display what currently happens and might prompt you with
+questions. You might want to have a look into the [documenation of the command line setup](../../setup/README.md)
+or into the help of the program itself `php setup/setup.php help`. It is the tool
+to manage and monitor your ILIAS installation.
+
 
 ## Information on Updates
 
