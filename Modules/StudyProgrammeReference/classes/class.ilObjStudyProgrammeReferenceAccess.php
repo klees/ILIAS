@@ -48,13 +48,12 @@ class ilObjStudyProgrammeReferenceAccess extends ilContainerReferenceAccess
                     $parent = ilObjStudyProgramme::getInstanceByRefId($parent["ref_id"]);
                     foreach ($parent->getProgresses() as $parent_progress
                     ) {
-                        try {
-                            $progress =
-                                $progress_db->getInstanceForAssignment(
-                                    $target_id,
-                                    $parent_progress->getAssignmentId()
-                                );
-                        } catch (ilStudyProgrammeNoProgressForAssignmentException $e) {
+                        $progress = $progress_db->readByPrgIdAndAssignmentId(
+                            $target_id,
+                            $parent_progress->getAssignmentId()
+                        );
+                        
+                        if (!$progress) {
                             continue;
                         }
                         if ($progress->isRelevant()) {

@@ -8,3 +8,12 @@ from the models instead and simply set a new settings object to the programme ob
 * Refactoring of DIC. Split in multiple DIC with object or without. Perhaps it is possible to switch to trait
 * Remove all setObject and getObject Methods in classes
 * Refactoring subtab structure for settings
+
+# ilStudyProgrammeDashboardViewGUI
+* adjust dashboard to use current_progress and its functions instead of 
+re-implementing isCompleted/isInProgress
+
+
+# ilStudyProgrammeIndividualPlanTableGUI
+* fetchData passes a _reference_ to $plan into applyToSubTreeNodes; this
+is quite implicit and might be amended by a catamorphic "requestFromSubTreeNodes"?!
