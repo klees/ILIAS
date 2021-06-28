@@ -167,8 +167,6 @@ class ilCtrl
                     $baseClass . " <br/>" . str_replace("&", "<br />&", htmlentities($_SERVER["REQUEST_URI"]))
                 );
             }
-
-            ilComponent::getComponentInfo('Services', $service);
         }
 
         $this->getCallStructure(strtolower($baseClass));
