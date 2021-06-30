@@ -6616,3 +6616,8 @@ if (!$ilDB->tableColumnExists('il_bt_value_to_task', 'position')) {
     );
 }
 ?>
+
+<#5792>
+<?php
+$ilDB->dropTable("il_component");
+?>
