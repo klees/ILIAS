@@ -6621,3 +6621,8 @@ if (!$ilDB->tableColumnExists('il_bt_value_to_task', 'position')) {
 <?php
 $ilDB->dropTable("il_component");
 ?>
+
+<#5793>
+<?php
+$ilDB->dropTable("il_pluginslot");
+?>
