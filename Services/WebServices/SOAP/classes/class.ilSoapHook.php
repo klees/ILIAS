@@ -8,9 +8,6 @@ class ilSoapHook
 {
     protected ilComponentFactory $component_factory;
 
-    /**
-     * @param ilPluginAdmin $plugin_admin
-     */
     public function __construct(ilComponentFactory $component_factory)
     {
         $this->component_factory = $component_factory;

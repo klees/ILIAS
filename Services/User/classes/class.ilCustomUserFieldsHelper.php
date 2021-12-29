@@ -19,11 +19,6 @@ class ilCustomUserFieldsHelper
     private $lng = null;
     
     /**
-     * @var ilPluginAdmin
-     */
-    private $plugin_admin = null;
-    
-    /**
      * @var ilLogger
      */
     private $logger = null;
