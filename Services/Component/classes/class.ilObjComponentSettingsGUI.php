@@ -11,7 +11,6 @@ class ilObjComponentSettingsGUI extends ilObjectGUI
 {
     private const TYPE = 'cmps';
     public const CMD_DEFAULT = "listPlugins";
-    public const CMD_LIST_SLOTS = "listSlots";
     public const TAB_PLUGINS = "plugins";
     public const CMD_INSTALL_PLUGIN = "installPlugin";
     public const CMD_CONFIGURE = "configure";
@@ -30,7 +29,6 @@ class ilObjComponentSettingsGUI extends ilObjectGUI
     public const CMD_JUMP_TO_PLUGIN_SLOT = "jumpToPluginSlot";
     public const CMD_UNINSTALL_PLUGIN = "uninstallPlugin";
     public const CMD_CONFIRM_UNINSTALL_PLUGIN = "confirmUninstallPlugin";
-    public const TAB_SLOTS = 'slots';
     /**
      * @var string
      */
@@ -155,14 +153,6 @@ class ilObjComponentSettingsGUI extends ilObjectGUI
                 $this->lng->txt("cmps_plugins"),
                 $this->ctrl->getLinkTarget($this, self::CMD_DEFAULT)
             );
-
-            if (DEVMODE) {
-                $this->tabs_gui->addTab(
-                    self::TAB_SLOTS,
-                    $this->lng->txt("cmps_slots"),
-                    $this->ctrl->getLinkTarget($this, self::CMD_LIST_SLOTS)
-                );
-            }
         }
 
         if ($this->rbac_system->checkAccess('edit_permission', $this->object->getRefId())) {
@@ -178,17 +168,6 @@ class ilObjComponentSettingsGUI extends ilObjectGUI
         }
     }
 
-    protected function listSlots() : void
-    {
-        if (!DEVMODE) {
-            $this->ctrl->redirect($this, self::CMD_DEFAULT);
-        }
-
-        $this->tabs_gui->activateTab(self::TAB_SLOTS);
-        $comp_table = new ilComponentsTableGUI($this, self::CMD_LIST_SLOTS);
-        $this->tpl->setContent($comp_table->getHTML());
-    }
-
     protected function listPlugins() : void
     {
         $this->tabs->activateTab(self::TAB_PLUGINS);
@@ -197,75 +176,6 @@ class ilObjComponentSettingsGUI extends ilObjectGUI
         $table = new ilPluginsOverviewTableGUI($this, $filters->getData(), self::CMD_DEFAULT);
 
         $this->tpl->setContent($filters->getHTML() . $table->getHTML());
-    }
-
-    protected function showPluginSlotInfo() : void
-    {
-        if (!DEVMODE) {
-            $this->ctrl->redirect($this, self::CMD_DEFAULT);
-        }
-
-        $this->tabs->clearTargets();
-
-        $this->tabs->setBackTarget(
-            $this->lng->txt("cmps_slots"),
-            $this->ctrl->getLinkTarget($this, self::CMD_LIST_SLOTS)
-        );
-
-        $comp = ilComponent::getComponentObject($_GET[self::P_CTYPE], $_GET[self::P_CNAME]);
-
-        $form = new ilPropertyFormGUI();
-
-        // component
-        $ne = new ilNonEditableValueGUI($this->lng->txt("cmps_component"), "", true);
-        $ne->setValue($comp->getComponentType() . "/" . $comp->getName() . " [" . $comp->getId() . "]");
-        $form->addItem($ne);
-
-        // plugin slot
-        $ne = new ilNonEditableValueGUI($this->lng->txt("cmps_plugin_slot"), "", true);
-        $ne->setValue($comp->getPluginSlotName($_GET[self::P_SLOT_ID]) . " [" . $_GET[self::P_SLOT_ID] . "]");
-        $form->addItem($ne);
-
-        // main dir
-        $ne = new ilNonEditableValueGUI($this->lng->txt("cmps_main_dir"), "", true);
-        $ne->setValue($comp->getPluginSlotDirectory($_GET[self::P_SLOT_ID]) . "/&lt;Plugin_Name&gt;");
-        $form->addItem($ne);
-
-        // plugin file
-        $ne = new ilNonEditableValueGUI($this->lng->txt("cmps_plugin_file"), "", true);
-        $ne->setValue("&lt;" . $this->lng->txt("cmps_main_dir") . "&gt;" .
-            "/classes/class.il&lt;Plugin_Name&gt;Plugin.php");
-        $form->addItem($ne);
-
-        // language files
-        $ne = new ilNonEditableValueGUI($this->lng->txt("cmps_lang_files"), "", true);
-        $ne->setValue("&lt;" . $this->lng->txt("cmps_main_dir") . "&gt;" .
-            "/lang/ilias_&lt;Language ID&gt;.lang");
-        $form->addItem($ne);
-
-        // db update
-        $ne = new ilNonEditableValueGUI($this->lng->txt("cmps_db_update"), "", true);
-        $ne->setValue("&lt;" . $this->lng->txt("cmps_main_dir") . "&gt;" .
-            "/sql/dbupdate.php");
-        $form->addItem($ne);
-
-        // lang prefix
-        $ne = new ilNonEditableValueGUI($this->lng->txt("cmps_plugin_lang_prefixes"), "", true);
-        $ne->setValue($comp->getPluginSlotLanguagePrefix($_GET[self::P_SLOT_ID]) . "&lt;Plugin_ID&gt;_");
-        $form->addItem($ne);
-
-        // db prefix
-        $ne = new ilNonEditableValueGUI($this->lng->txt("cmps_plugin_db_prefixes"), "", true);
-        $ne->setValue($comp->getPluginSlotLanguagePrefix($_GET[self::P_SLOT_ID]) . "&lt;Plugin_ID&gt;_");
-        $form->addItem($ne);
-
-        $form->setTitle($this->lng->txt("cmps_plugin_slot"));
-
-        // set content and title
-        $this->tpl->setContent($form->getHTML());
-        $this->tpl->setTitle($comp->getComponentType() . "/" . $comp->getName() . ": " .
-            $this->lng->txt("cmps_plugin_slot") . " \"" . $comp->getPluginSlotName($_GET[self::P_SLOT_ID]) . "\"");
-        $this->tpl->setDescription("");
     }
 
     protected function showPlugin() : void
