@@ -79,6 +79,9 @@ class ilFileSystemComponentDataDirectoryCreatedObjective extends Setup\Objective
     public function achieve(Setup\Environment $environment) : Setup\Environment
     {
         $this->path = $this->buildPath($environment);
+        if (file_exists($this->path)) {
+            return $environment;
+        }
         return parent::achieve($environment);
     }
 
@@ -87,7 +90,6 @@ class ilFileSystemComponentDataDirectoryCreatedObjective extends Setup\Objective
      */
     public function isApplicable(Setup\Environment $environment) : bool
     {
-        $this->path = $this->buildPath($environment);
-        return parent::isApplicable($environment);
+        return true;
     }
 }
