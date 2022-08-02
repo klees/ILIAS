@@ -9775,7 +9775,6 @@ lso#:#lso_settings_intro#:#Intropage Settings###10 11 2018 new variable
 lso#:#lso_show_members_info#:#Member Gallery available for users###10 11 2018 new variable
 lso#:#lso_start_item#:#Open %s###07 02 2020 new variable
 lso#:#lso_users_already_assigned#:#The user is already assigned to this learning sequence###10 11 2018 new variable
-lso#:#mail_lso_roles#:#Send mails to roles of learning sequence.###10 11 2018 new variable
 lso#:#manage#:#Manage###07 02 2020 new variable
 lso#:#manage_content_maintab#:#Content###10 11 2018 new variable
 lso#:#members_gallery#:#Member Gallery###10 11 2018 new variable
