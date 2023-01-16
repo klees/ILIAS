@@ -136,6 +136,9 @@ class NoUIFactory implements Factory
     public function player(): C\Player\Factory
     {
     }
+    public function helpTopics(string ...$topic): array
+    {
+    }
 }
 
 class LoggingRegistry implements ResourceRegistry

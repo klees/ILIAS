@@ -23,6 +23,7 @@ namespace ILIAS\UI\Implementation\Component\Link;
 use ILIAS\UI\Component as C;
 use ILIAS\UI\Implementation\Component\ComponentHelper;
 use ILIAS\UI\Implementation\Component\HasContentLanguage;
+use ILIAS\UI\Implementation\Component\HasHelpTopics;
 use ILIAS\Data\LanguageTag;
 
 /**
@@ -32,6 +33,7 @@ abstract class Link implements C\Link\Link
 {
     use ComponentHelper;
     use HasContentLanguage;
+    use HasHelpTopics;
 
     protected string $action;
     protected ?bool $open_in_new_viewport = null;
