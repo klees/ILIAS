@@ -18,30 +18,28 @@ declare(strict_types=1);
  *
  *********************************************************************/
 
-namespace ILIAS\UI\Component\Link;
+namespace ILIAS\UI\Component;
 
-use ILIAS\UI\Component\Component;
-use ILIAS\UI\Component\HasContentLanguage;
-use ILIAS\Data\LanguageTag;
-use ILIAS\UI\Component\HasHelpTopics;
+use ILIAS\UI\Help\Topic;
 
-/**
- * Link base interface.
- */
-interface Link extends Component, HasContentLanguage, HasHelpTopics
+interface HasHelpTopics
 {
     /**
-     * Get the action url of a link
+     * Let this component have the given topics.
+     *
+     * Discards previous topics.
      */
-    public function getAction(): string;
+    public function withHelpTopics(Topic ...$topics): static;
 
     /**
-     * Set if link should be opened in new viewport
+     * Let this component also have the given topics.
+     *
+     * Keeps previous topics.
      */
-    public function withOpenInNewViewport(bool $open_in_new_viewport): Link;
+    public function withAdditionalHelpTopics(Topic ...$topics): static;
 
     /**
-     * Get if the link should be opened in new viewport
+     * @return Topic[]
      */
-    public function getOpenInNewViewport(): ?bool;
+    public function getHelpTopics(): array;
 }
