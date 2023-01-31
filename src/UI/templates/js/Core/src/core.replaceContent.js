@@ -36,8 +36,4 @@ var replaceContent = function($) {
     }
 };
 
-il = il || {};
-il.UI = il.UI || {};
-il.UI.core = il.UI.core || {};
-
-il.UI.core.replaceContent = replaceContent($);
+export default replaceContent;
