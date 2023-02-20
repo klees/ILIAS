@@ -539,6 +539,7 @@ class FileInputTest extends ILIAS_UI_TestBase
 
         $refinery = $this->getRefinery();
         $img_resolver = new ilImagePathResolver();
+        $help_text_retriever = new ILIAS\UI\Help\TextRetriever\Echoing();
 
         $component_renderer_loader
             = new LoaderCachingWrapper(
@@ -551,7 +552,8 @@ class FileInputTest extends ILIAS_UI_TestBase
                             $lng,
                             $js_binding,
                             $refinery,
-                            $img_resolver
+                            $img_resolver,
+                            $help_text_retriever
                         ),
                         new GlyphRendererFactory(
                             $ui_factory,
@@ -559,7 +561,8 @@ class FileInputTest extends ILIAS_UI_TestBase
                             $lng,
                             $js_binding,
                             $refinery,
-                            $img_resolver
+                            $img_resolver,
+                            $help_text_retriever
                         ),
                         new IconRendererFactory(
                             $ui_factory,
@@ -567,7 +570,8 @@ class FileInputTest extends ILIAS_UI_TestBase
                             $lng,
                             $js_binding,
                             $refinery,
-                            $img_resolver
+                            $img_resolver,
+                            $help_text_retriever
                         ),
                         new FieldRendererFactory(
                             $ui_factory,
@@ -575,7 +579,8 @@ class FileInputTest extends ILIAS_UI_TestBase
                             $lng,
                             $js_binding,
                             $refinery,
-                            $img_resolver
+                            $img_resolver,
+                            $help_text_retriever
                         )
                     )
                 )

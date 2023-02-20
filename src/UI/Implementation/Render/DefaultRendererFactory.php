@@ -23,6 +23,7 @@ namespace ILIAS\UI\Implementation\Render;
 use ILIAS\Refinery\Factory as Refinery;
 use ILIAS\UI\Component\Component;
 use ILIAS\UI\Factory as RootFactory;
+use ILIAS\UI\HelpTextRetriever;
 use ilLanguage;
 
 class DefaultRendererFactory implements RendererFactory
@@ -33,6 +34,7 @@ class DefaultRendererFactory implements RendererFactory
     protected JavaScriptBinding $js_binding;
     protected Refinery $refinery;
     protected ImagePathResolver $image_path_resolver;
+    protected HelpTextRetriever $help_text_retriever;
 
     public function __construct(
         RootFactory $ui_factory,
@@ -40,7 +42,8 @@ class DefaultRendererFactory implements RendererFactory
         ilLanguage $lng,
         JavaScriptBinding $js_binding,
         Refinery $refinery,
-        ImagePathResolver $image_path_resolver
+        ImagePathResolver $image_path_resolver,
+        HelpTextRetriever $help_text_retriever
     ) {
         $this->ui_factory = $ui_factory;
         $this->tpl_factory = $tpl_factory;
@@ -48,6 +51,7 @@ class DefaultRendererFactory implements RendererFactory
         $this->js_binding = $js_binding;
         $this->refinery = $refinery;
         $this->image_path_resolver = $image_path_resolver;
+        $this->help_text_retriever = $help_text_retriever;
     }
 
     /**
@@ -62,7 +66,8 @@ class DefaultRendererFactory implements RendererFactory
             $this->lng,
             $this->js_binding,
             $this->refinery,
-            $this->image_path_resolver
+            $this->image_path_resolver,
+            $this->help_text_retriever
         );
     }
 

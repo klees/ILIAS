@@ -21,6 +21,7 @@ declare(strict_types=1);
 namespace ILIAS\UI\Implementation\Component\Button;
 
 use ILIAS\UI\Implementation\Render\AbstractComponentRenderer;
+use ILIAS\UI\Implementation\Render\TooltipRenderer;
 use ILIAS\UI\Renderer as RendererInterface;
 use ILIAS\UI\Component;
 use ILIAS\UI\Implementation\Render\ResourceRegistry;
@@ -140,7 +141,10 @@ class Renderer extends AbstractComponentRenderer
             $this->additionalRenderBulky($component, $default_renderer, $tpl);
         }
 
-        return $tpl->get();
+        return $this->getTooltipRenderer()->maybeEmbedInTooltipContainer(
+            $tpl->get(),
+            ...$component->getHelpTopics()
+        );
     }
 
     /**

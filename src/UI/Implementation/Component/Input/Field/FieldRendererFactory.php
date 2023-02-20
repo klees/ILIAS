@@ -34,7 +34,8 @@ class FieldRendererFactory extends Render\DefaultRendererFactory
                 $this->lng,
                 $this->js_binding,
                 $this->refinery,
-                $this->image_path_resolver
+                $this->image_path_resolver,
+                $this->help_text_retriever
             );
         }
         return new Renderer(
@@ -43,7 +44,8 @@ class FieldRendererFactory extends Render\DefaultRendererFactory
             $this->lng,
             $this->js_binding,
             $this->refinery,
-            $this->image_path_resolver
+            $this->image_path_resolver,
+            $this->help_text_retriever
         );
     }
 }
