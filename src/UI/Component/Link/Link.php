@@ -21,14 +21,13 @@ declare(strict_types=1);
 namespace ILIAS\UI\Component\Link;
 
 use ILIAS\UI\Component\Component;
-use ILIAS\UI\Component\HasContentLanguage;
 use ILIAS\Data\LanguageTag;
 use ILIAS\UI\Component\HasHelpTopics;
 
 /**
  * Link base interface.
  */
-interface Link extends Component, HasContentLanguage, HasHelpTopics
+interface Link extends Component, HasHelpTopics
 {
     /**
      * Get the action url of a link
