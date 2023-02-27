@@ -8650,7 +8650,7 @@ code {
   border-bottom-color: transparent;
 }
 
-.c-tooltip__container [role=tooltip] {
+.c-tooltip__container .c-tooltip {
   position: absolute;
   top: calc(100% + 1em);
   left: 50%;
@@ -8667,6 +8667,12 @@ code {
   overflow: auto;
   z-index: 9999;
   display: none;
+}
+.c-tooltip__container .c-tooltip p:first-child {
+  margin-top: 0;
+}
+.c-tooltip__container .c-tooltip p:last-child {
+  margin-bottom: 0;
 }
 
 .c-tooltip__container.c-tooltip--top [role=tooltip] {
