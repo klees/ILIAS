@@ -145,6 +145,7 @@ abstract class HasDynamicInputsBase extends Input implements HasDynamicInputs
         $contains_error = false;
         $contents = [];
 
+        $clone->dynamic_inputs = [];
         foreach ((new DynamicInputDataIterator($post_data, $clone->getName())) as $index => $input_data) {
             $clone->dynamic_inputs[$index] = $this->dynamic_input_template->withInput($input_data);
             if ($clone->dynamic_inputs[$index]->getContent()->isOk()) {

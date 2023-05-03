@@ -290,6 +290,8 @@ abstract class Input implements C\Input\Field\Input, FormInputInternal
      * Collects the input, applies trafos on the input and returns
      * a new input reflecting the data that was put in.
      *
+     * This is supposed to replace existing values, not add to them.
+     *
      * @inheritdoc
      */
     public function withInput(InputData $input)
