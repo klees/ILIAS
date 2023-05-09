@@ -1016,7 +1016,7 @@ file containes the following fields:
 * **Setup**
 	* Maintenance Model: Classic
 	* 1st Maintainer: [rklees](https://docu.ilias.de/goto_docu_usr_34047.html)
-	* 2nd Maintainer: [smeyer](https://docu.ilias.de/goto_docu_usr_191.html)
+	* 2nd Maintainer: [utesche](https://docu.ilias.de/goto_docu_usr_20564.html)
 	* Testcases: [kunkel](https://docu.ilias.de/goto_docu_usr_115.html)
 	* Tester: [fwolf](https://docu.ilias.de/goto_docu_usr_29018.html)
 
