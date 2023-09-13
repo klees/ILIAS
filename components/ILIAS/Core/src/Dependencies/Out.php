@@ -27,11 +27,12 @@ class Out implements Dependency
 {
     protected Name|string $name;
     protected array $dependencies = [];
+    protected array $resolves = [];
 
     public function __construct(
         protected OutType $type,
         string $name,
-        protected ?string $class,
+        public readonly ?string $class,
         array $dependencies
     ) {
         if ($type !== OutType::INTERNAL) {
@@ -51,5 +52,15 @@ class Out implements Dependency
     public function __toString(): string
     {
         return $this->type->value . ": " . $this->name;
+    }
+
+    public function addDependency(In $in): void
+    {
+        $this->dependencies[(string) $in] = $in;
+    }
+
+    public function addResolves(In $in): void
+    {
+        $this->resolves[] = $in;
     }
 }
