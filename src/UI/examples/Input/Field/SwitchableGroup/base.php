@@ -21,7 +21,7 @@ function base()
         [
             "field_1_1" => $ui->input()->field()->text("Item 1.1", "Just some field"),
             "field_1_2" => $ui->input()->field()->text("Item 1.2", "Just some other field"),
-            "field_1_3" => $ui->input()->field()->datetime("Item 1.3", "a date")->withFormat($data->dateFormat()->germanShort())
+            "field_1_3" => $ui->input()->field()->datetime("Item 1.3", "a date")
         ],
         "Switchable Group number one (with numeric key)"
     );

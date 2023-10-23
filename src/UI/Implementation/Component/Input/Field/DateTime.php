@@ -40,7 +40,6 @@ class DateTime extends FormInput implements C\Input\Field\DateTime
 
     public const TIME_FORMAT = 'HH:mm';
 
-    protected DateFormat $format;
     protected ?DateTimeImmutable $min_date = null;
     protected ?DateTimeImmutable $max_date = null;
     protected bool $with_time = false;
@@ -93,19 +92,6 @@ class DateTime extends FormInput implements C\Input\Field\DateTime
         }
         return parent::withValue($value);
     }
-
-    public function withFormat(DateFormat $format): self
-    {
-        $clone = clone $this;
-        $clone->format = $format;
-        return $clone;
-    }
-
-    public function getFormat(): DateFormat
-    {
-        return $this->format;
-    }
-
 
     public function withTimezone(string $tz): self
     {

@@ -260,28 +260,9 @@ class FormAdapterGUI
     ): self {
         $field = $this->ui->factory()->input()->field()->dateTime($title, $description);
 
-        $format = $this->user->getDateFormat();
-        $dt_format = (string) $format;
-        /*
-        switch ((int) $this->user->getDateFormat()) {
-            case \ilCalendarSettings::DATE_FORMAT_DMY:
-                $format = $this->data->dateFormat()->germanShort();
-                $dt_format = "d.m.Y";
-                break;
-            case \ilCalendarSettings::DATE_FORMAT_MDY:
-                $format = $this->data->dateFormat()->custom()->month()->slash()->day()->slash()->year();
-                $dt_format = "m/d/Y";
-                break;
-            default:
-                $format = $this->data->dateFormat()->standard();
-                $dt_format = "Y-m-d";
-                break;
-        }*/
-
-        $field = $field->withFormat($format);
         if (!is_null($value)) {
             $field = $field->withValue(
-                (new \DateTime($value->get(IL_CAL_DATE)))->format($dt_format)
+                (new \DateTime($value->get(IL_CAL_DATE)))->format("Y-m-d")
             );
         }
         $this->addField($key, $field);

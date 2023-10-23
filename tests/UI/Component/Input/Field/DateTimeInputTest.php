@@ -79,18 +79,6 @@ class DateTimeInputTest extends ILIAS_UI_TestBase
         );
     }
 
-    public function testWithFormat(): void
-    {
-        $format = $this->data_factory->dateFormat()->germanShort();
-        $datetime = $this->factory->datetime('label', 'byline')
-                                  ->withFormat($format);
-
-        $this->assertEquals(
-            $format,
-            $datetime->getFormat()
-        );
-    }
-
     public function testWithMinValue(): void
     {
         $dat = new DateTimeImmutable('2019-01-09');

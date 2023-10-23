@@ -81,18 +81,6 @@ class DurationInputTest extends ILIAS_UI_TestBase
         };
     }
 
-    public function testWithFormat(): void
-    {
-        $format = $this->data_factory->dateFormat()->germanShort();
-        $duration = $this->factory->duration('label', 'byline')
-            ->withFormat($format);
-
-        $this->assertEquals(
-            $format,
-            $duration->getFormat()
-        );
-    }
-
     public function testWithMinValue(): void
     {
         $dat = new DateTimeImmutable('2019-01-09');

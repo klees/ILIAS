@@ -54,7 +54,6 @@ class DatetimeFactory extends BaseFactory
         $dh = $this->data_helper;
         return $this->ui_factory
             ->dateTime('placeholder')
-            ->withFormat($this->presenter->utilities()->getUserDateFormat())
             ->withAdditionalTransformation(
                 $this->refinery->custom()->transformation(
                     function ($v) use ($dh) {

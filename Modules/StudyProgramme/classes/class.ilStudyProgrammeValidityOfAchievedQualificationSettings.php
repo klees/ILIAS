@@ -111,7 +111,6 @@ class ilStudyProgrammeValidityOfAchievedQualificationSettings
         Refinery $refinery,
         Factory $data_factory
     ): \ILIAS\UI\Component\Input\Container\Form\FormInput {
-        $format = $data_factory->dateFormat()->germanShort();
         $grp1 = $input->group([], $lng->txt('prg_no_validity_qualification'));
         $grp2 = $input->group(
             [
@@ -130,8 +129,7 @@ class ilStudyProgrammeValidityOfAchievedQualificationSettings
                     $lng->txt('vq_date_label'),
                     $lng->txt('validity_qualification_date_desc')
                 )
-                ->withFormat($format)
-                ->withValue($this->getQualificationDate() !== null ? $this->getQualificationDate()->format('d.m.Y') : '')
+                ->withValue($this->getQualificationDate())
                 ->withRequired(true)
             ],
             $lng->txt('validity_qualification_date')

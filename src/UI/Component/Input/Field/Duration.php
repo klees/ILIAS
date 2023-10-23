@@ -30,16 +30,6 @@ use DateTimeImmutable;
 interface Duration extends Group
 {
     /**
-     * Get an input like this using the given format.
-     */
-    public function withFormat(DateFormat $format): Duration;
-
-    /**
-     * Get the date-format of this input.
-     */
-    public function getFormat(): DateFormat;
-
-    /**
      * Limit accepted values to Duration past (and including) the given $Duration.
      */
     public function withMinValue(DateTimeImmutable $date): Duration;

@@ -24,7 +24,6 @@ function base()
     $date_now = new \DateTimeImmutable('now');
     $formatted = $date
         ->withMinValue($date_now)
-        ->withFormat($data->dateFormat()->germanShort())
         ->withLabel('future only')
         ->withByline('Only allows to pick a date in the future. It will be shown in format DD.MM.YYYY');
 
@@ -44,22 +43,21 @@ function base()
         ->withByline('Pick any date and time you want. It will be shown in format YYYY-MM-DD HH:mm and be saved for Tokyo time zone.');
 
     //if you want a date converted to the timezone, do it on the date:
-    $date_now = new \DateTime('now');
-    $date_zoned = new \DateTime('now', new \DateTimeZone($tz));
+    $date_now = new \DateTimeImmutable('now');
+    $date_zoned = new \DateTimeImmutable('now', new \DateTimeZone($tz));
 
     //here is the usage of Data/DateFormat
-    $format = $timezoned->getFormat()->toString() . ' H:i';
     $timezoned_preset1 = $timezoned
-        ->withValue($date_now->format($format))
+        ->withValue($date_now)
         ->withLabel('to Tokyo time with local preset')
         ->withByline('Local time+date is preset. However, output will be in Tokyo timezone');
     $timezoned_preset2 = $timezoned
-        ->withValue($date_zoned->format($format))
+        ->withValue($date_zoned)
         ->withLabel('Tokyo time, both preset and output')
         ->withByline('Tokyo time+date is preset. Output is also Tokyo time.');
 
     $disabled = $date
-        ->withValue($date_now->format($timezoned->getFormat()->toString()))
+        ->withValue($date_now)
         ->withDisabled(true)
         ->withLabel('disabled')
         ->withByline('You cannot pick anything, as the field is disabled');

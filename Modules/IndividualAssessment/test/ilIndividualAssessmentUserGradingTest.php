@@ -164,7 +164,6 @@ class ilIndividualAssessmentUserGradingTest extends TestCase
             $lng,
             $refinery,
             $file_handler,
-            $df->dateFormat()->standard(),
             [
                 ilIndividualAssessmentMembers::LP_IN_PROGRESS,
                 ilIndividualAssessmentMembers::LP_FAILED,

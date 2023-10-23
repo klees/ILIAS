@@ -184,9 +184,6 @@ class ilObjTestSettingsScoringResultsGUI extends ilTestSettingsGUI
 
 
         $environment = [];
-        $environment['user_date_format'] = (new \ILIAS\Data\Factory())->dateFormat()->withTime24(
-            $this->active_user->getDateFormat()
-        );
         $environment['user_time_zone'] = $this->active_user->getTimeZone();
 
         $anonymity_flag = (bool) $this->test_object->getAnonymity();

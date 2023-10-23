@@ -645,13 +645,8 @@ class Renderer extends AbstractComponentRenderer
             $dt_type = self::TYPE_TIME;
         } else {
             $dt_type = self::TYPE_DATE;
-            $format = $this->getTransformedDateFormat(
-                $component->getFormat(),
-                self::DATEPICKER_FORMAT_MAPPING
-            );
 
             if ($component->getUseTime() === true) {
-                $format .= ' ' . $component::TIME_FORMAT;
                 $dt_type = self::TYPE_DATETIME;
             }
         }
@@ -671,8 +666,6 @@ class Renderer extends AbstractComponentRenderer
         if (!is_null($max_date)) {
             $tpl->setVariable("MAX_DATE", date_format($max_date, $min_max_format));
         }
-
-        $tpl->setVariable("PLACEHOLDER", $format);
 
         $this->applyValue($component, $tpl, function (?string $value) use ($dt_type) {
             if ($value !== null) {

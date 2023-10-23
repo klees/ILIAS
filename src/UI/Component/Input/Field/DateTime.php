@@ -31,16 +31,6 @@ use DateTimeImmutable;
 interface DateTime extends FormInput
 {
     /**
-     * Get an input like this using the given format.
-     */
-    public function withFormat(DateFormat $format): self;
-
-    /**
-     * Get the date-format of this input.
-     */
-    public function getFormat(): DateFormat;
-
-    /**
      * Get an input like this using the given timezone.
      */
     public function withTimezone(string $tz): self;

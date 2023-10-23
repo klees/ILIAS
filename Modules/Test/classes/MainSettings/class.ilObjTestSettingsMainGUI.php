@@ -253,7 +253,6 @@ class ilObjTestSettingsMainGUI extends ilTestSettingsGUI
         $user_format = $this->activeUser->getDateFormat();
 
         $environment['participant_data_exists'] = $this->test_object->participantDataExist();
-        $environment['user_date_format'] = $data_factory->dateFormat()->withTime24($user_format);
         $environment['user_time_zone'] = $this->activeUser->getTimeZone();
 
         $main_inputs = [
@@ -464,12 +463,9 @@ class ilObjTestSettingsMainGUI extends ilTestSettingsGUI
         $value = $this->getValueForActivationLimitedOptionalGroup();
 
         $data_factory = new DataFactory();
-        $user_format = $this->activeUser->getDateFormat();
-        $format = $data_factory->dateFormat()->withTime24($user_format);
 
         $inputs['time_span'] = $field_factory->duration($this->lng->txt('rep_time_period'))
             ->withTimezone($this->activeUser->getTimeZone())
-            ->withFormat($format)
             ->withUseTime(true)
             ->withRequired(true);
         $inputs['activation_visibility'] = $field_factory->checkbox(

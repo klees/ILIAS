@@ -220,7 +220,6 @@ class ilIndividualAssessmentMemberGUI extends AbstractCtrlAwareUploadHandler
             $this->lng,
             $this->refinery_factory,
             $this,
-            $this->user->getDateFormat(),
             $this->getPossibleLPStates(),
             $may_be_edited,
             $this->getObject()->getSettings()->isEventTimePlaceRequired(),

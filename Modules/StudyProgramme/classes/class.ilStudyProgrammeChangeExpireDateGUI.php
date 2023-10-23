@@ -131,13 +131,11 @@ class ilStudyProgrammeChangeExpireDateGUI
         };
 
         $option = ilObjStudyProgrammeSettingsGUI::OPT_NO_VALIDITY_OF_QUALIFICATION;
-        $format = $this->data_factory->dateFormat()->germanShort();
         $vq_date_sub_form = $ff
-            ->dateTime('', $txt('validity_qualification_date_desc'))
-            ->withFormat($format);
+            ->dateTime('', $txt('validity_qualification_date_desc'));
         $date = $prg->getSettings()->getValidityOfQualificationSettings()->getQualificationDate();
         if ($date !== null) {
-            $vq_date_sub_form = $vq_date_sub_form->withValue($date->format($format->toString()));
+            $vq_date_sub_form = $vq_date_sub_form->withValue($date);
             $option = ilObjStudyProgrammeSettingsGUI::OPT_VALIDITY_OF_QUALIFICATION_DATE;
         }
 

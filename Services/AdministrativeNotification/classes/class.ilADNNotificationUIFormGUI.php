@@ -102,8 +102,8 @@ class ilADNNotificationUIFormGUI
     public function initForm(): void
     {
         $field = $this->ui->input()->field();
-        $custom_trafo = fn (callable $c): Transformation => $this->refinery->custom()->transformation($c);
-        $custom_constraint = fn (callable $c, string $error): Transformation => $this->refinery->custom()->constraint(
+        $custom_trafo = fn(callable $c): Transformation => $this->refinery->custom()->transformation($c);
+        $custom_constraint = fn(callable $c, string $error): Transformation => $this->refinery->custom()->constraint(
             $c,
             $error
         );
@@ -148,7 +148,6 @@ class ilADNNotificationUIFormGUI
 
         $display_date_start = $field->dateTime($this->txt(self::F_DISPLAY_DATE_START))
                                     ->withUseTime(true)
-                                    ->withFormat($format)
                                     ->withValue($this->notification->getDisplayStart()->format($str))
                                     ->withAdditionalTransformation(
                                         $custom_trafo(function (?DateTimeImmutable $v): ?\DateTimeImmutable {
@@ -158,7 +157,6 @@ class ilADNNotificationUIFormGUI
                                     );
         $display_date_end = $field->dateTime($this->txt(self::F_DISPLAY_DATE_END))
                                   ->withUseTime(true)
-                                  ->withFormat($format)
                                   ->withValue($this->notification->getDisplayEnd()->format($str))
                                   ->withAdditionalTransformation(
                                       $custom_trafo(function (?DateTimeImmutable $v): ?\DateTimeImmutable {
@@ -168,7 +166,6 @@ class ilADNNotificationUIFormGUI
                                   );
         $event_date_start = $field->dateTime($this->txt(self::F_EVENT_DATE_START))
                                   ->withUseTime(true)
-                                  ->withFormat($format)
                                   ->withValue($this->notification->getEventStart()->format($str))
                                   ->withAdditionalTransformation(
                                       $custom_trafo(function (?DateTimeImmutable $v): ?\DateTimeImmutable {
@@ -178,7 +175,6 @@ class ilADNNotificationUIFormGUI
                                   );
         $event_date_end = $field->dateTime($this->txt(self::F_EVENT_DATE_END))
                                 ->withUseTime(true)
-                                ->withFormat($format)
                                 ->withValue($this->notification->getEventEnd()->format($str))
                                 ->withAdditionalTransformation(
                                     $custom_trafo(function (?DateTimeImmutable $v): ?\DateTimeImmutable {

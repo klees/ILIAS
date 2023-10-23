@@ -71,8 +71,6 @@ class ilStudyProgrammeDeadlineSettings
         Refinery $refinery,
         Factory $data_factory
     ): \ILIAS\UI\Component\Input\Container\Form\FormInput {
-        $format = $data_factory->dateFormat()->germanShort();
-
         $grp1 = $input->group([], $lng->txt('prg_no_deadline'));
         $grp2 = $input->group(
             [
@@ -91,8 +89,7 @@ class ilStudyProgrammeDeadlineSettings
                     $lng->txt('prg_deadline_date_label'),
                     $lng->txt('prg_deadline_date_desc')
                 )
-                ->withFormat($format)
-                ->withValue($this->getDeadlineDate() !== null ? $this->getDeadlineDate()->format('d.m.Y') : '')
+                ->withValue($this->getDeadlineDate())
                 ->withRequired(true)
             ],
             $lng->txt('prg_deadline_date')
