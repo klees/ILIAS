@@ -136,7 +136,7 @@ class Resolver
             );
         }
         foreach ($candidates as $candidate) {
-            if ($candidate->class === $preferred_class) {
+            if ($candidate->aux["class"] === $preferred_class) {
                 $in->addResolution($candidate);
                 return;
             }
