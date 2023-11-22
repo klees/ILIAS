@@ -68,6 +68,18 @@ class Resolver
             }
         }
 
+        $cycles = $this->findCycles(...$components);
+        if (!empty($cycles)) {
+            throw new LogicException(
+                "Detected Cycles in Dependency Tree: " .
+                join("\n", array_map(
+                    fn($k, $v) => "$k: " . join(" -> ", (string) $c),
+                    array_keys($cycles),
+                    $cycles,
+                ))
+            );
+        }
+
         return $components;
     }
 
@@ -156,5 +168,13 @@ class Resolver
             }
         }
         return null;
+    }
+
+    /**
+     * @var array<string, Dependency>
+     */
+    protected function findCycles(OfComponent ...$components): array
+    {
+        // Hier bitte implementieren =)
     }
 }
