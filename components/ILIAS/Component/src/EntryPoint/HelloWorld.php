@@ -18,20 +18,26 @@
 
 declare(strict_types=1);
 
-namespace ILIAS;
+namespace ILIAS\Component\EntryPoint;
 
-class Component implements Component\Component
+use ILIAS\Component\EntryPoint;
+use ILIAS\Component\Component;
+
+/**
+ * A simple entrypoint that just says hello, for testing and documentation
+ * purpose.
+ */
+class HelloWorld extends Base
 {
-    public function init(
-        array | \ArrayAccess &$define,
-        array | \ArrayAccess &$implement,
-        array | \ArrayAccess &$use,
-        array | \ArrayAccess &$contribute,
-        array | \ArrayAccess &$seek,
-        array | \ArrayAccess &$provide,
-        array | \ArrayAccess &$pull,
-        array | \ArrayAccess &$internal,
-    ): void {
-        $contribute[Component\EntryPoint::class] = fn() => new Component\EntryPoint\HelloWorld($this);
+    public function __construct(
+        protected Component $component
+    ) {
+        parent::__construct($component, "HelloWorld");
+    }
+
+    public function enter(): int
+    {
+        echo get_class($this->getComponent()) . ", entry point " . $this->getName() . ": \"Hello World!\"\n";
+        return 0;
     }
 }

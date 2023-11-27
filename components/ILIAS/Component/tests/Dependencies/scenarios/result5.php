@@ -23,7 +23,7 @@ function entry_point(string $component, string $name)
     $null_dic = new ILIAS\Component\Dependencies\NullDIC();
 
 
-    $component_0 = new ILIAS\Component\Tests\Dependencies\Scenario1\ComponentA();
+    $component_0 = new ILIAS\Component\Tests\Dependencies\Scenario5\ComponentA();
 
     $implement_0 = new ILIAS\Component\Dependencies\RenamingDIC(new Pimple\Container());
     $use = new Pimple\Container();
@@ -37,7 +37,9 @@ function entry_point(string $component, string $name)
 
 
     $entry_points = [
-        ILIAS\Component\Tests\Dependencies\Scenario1\ComponentA::class => [],
+        ILIAS\Component\Tests\Dependencies\Scenario5\ComponentA::class => [
+            "just a name" => fn() => $contribute_0[ILIAS\Component\EntryPoint::class . "_0"],
+        ],
     ];
 
     if (!isset($entry_points[$component]) || !isset($entry_points[$component][$name])) {
