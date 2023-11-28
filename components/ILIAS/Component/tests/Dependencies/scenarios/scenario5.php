@@ -30,7 +30,7 @@ class ComponentAEntryPoint implements EntryPoint
     {
         return "just a name";
     }
-    public function enter(): void
+    public function enter(): int
     {
     }
 }
