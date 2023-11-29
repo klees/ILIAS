@@ -11,6 +11,4 @@
 // The entry "*" for the dependant will define fallbacks to be used for all components
 // that have no explicit disambiguation.
 
-return [
-    "*" => []
-];
+return [];
