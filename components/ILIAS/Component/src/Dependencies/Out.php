@@ -28,7 +28,6 @@ class Out implements Dependency
     protected Name|string $name;
     protected array $dependencies = [];
     protected ?OfComponent $component = null;
-    protected array $resolves = [];
 
     public function __construct(
         protected OutType $type,
@@ -90,10 +89,5 @@ class Out implements Dependency
     public function getDependencies(): array
     {
         return $this->dependencies;
-    }
-
-    public function addResolves(In $in): void
-    {
-        $this->resolves[] = $in;
     }
 }

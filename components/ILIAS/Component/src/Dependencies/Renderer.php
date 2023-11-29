@@ -102,7 +102,7 @@ PHP;
     {
         $use = "";
         foreach ($component->getInDependenciesOf(InType::USE) as $in) {
-            $r = $in->getResolvedBy()[0];
+            $r = $component->getResolution($in);
             $p = $r->aux["position"];
             $o = $component_lookup[$r->getComponent()->getComponentName()];
             $use .= "\n" . <<<PHP
@@ -116,7 +116,7 @@ PHP;
     {
         $seek = "";
         foreach ($component->getInDependenciesOf(InType::SEEK) as $in) {
-            $rs = $in->getResolvedBy();
+            $rs = $component->getResolution($in);
             $u = [];
             $a = "";
             foreach ($rs as $r) {
@@ -142,7 +142,7 @@ PHP;
     {
         $pull = "";
         foreach ($component->getInDependenciesOf(InType::PULL) as $in) {
-            $r = $in->getResolvedBy()[0];
+            $r = $component->getResolution($in);
             $o = $component_lookup[$r->getComponent()->getComponentName()];
             $pull .= "\n" . <<<PHP
     \$pull[{$in->getName()}::class] = fn() => \$provide_{$o}[{$r->getName()}::class];

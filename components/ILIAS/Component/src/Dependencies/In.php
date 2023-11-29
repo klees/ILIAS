@@ -30,8 +30,7 @@ class In implements Dependency
 
     public function __construct(
         protected InType $type,
-        string $name,
-        protected array $resolved_by = []
+        string $name
     ) {
         if ($type !== InType::INTERNAL) {
             $name = new Name($name);
@@ -58,26 +57,5 @@ class In implements Dependency
     {
         $this->dependant[(string) $out] = $out;
         $out->addDependency($this);
-    }
-
-    public function addResolution(Out $other): void
-    {
-        if ($this->type !== InType::SEEK && count($this->resolved_by) > 0) {
-            throw new LogicException(
-                "Dependency of type {$this->type} can only be resolved once."
-            );
-        }
-        $this->resolved_by[] = $other;
-        $other->addResolves($this);
-    }
-
-    public function getResolvedBy(): array
-    {
-        return $this->resolved_by;
-    }
-
-    public function isResolved(): bool
-    {
-        return count($this->resolved_by) > 0;
     }
 }

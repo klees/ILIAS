@@ -26,6 +26,7 @@ class OfComponent implements \ArrayAccess
 {
     protected Component $component;
     protected array $dependencies = [];
+    protected array $resolutions = [];
 
     public function __construct(Component $component, Dependency ...$ds)
     {
@@ -83,6 +84,51 @@ class OfComponent implements \ArrayAccess
                 }
             }
         }
+    }
+
+    public function addResolution(In $in, array|Out $other)
+    {
+        if (!isset($this[(string) $in])) {
+            throw new \LogicException("Can't add resolution for unknown dependency.");
+        }
+        if ($in->getType() !== InType::SEEK) {
+            if (isset($this->resolution)) {
+                throw new \LogicException(
+                    "Dependency of type {$in->getType()->value} can only be resolved once."
+                );
+            }
+            if (!($other instanceof Out)) {
+                throw new \LogicException(
+                    "Dependency of type {$in->getType()->value} can only be resolved by plain Out."
+                );
+            }
+            $this->resolutions[(string) $in] = $other;
+        } else {
+            if (!isset($this->resolution)) {
+                $this->resolutions[(string) $in] = [];
+            }
+            if (!is_array($other)) {
+                throw new \LogicException(
+                    "Dependency of type {$in->getType()->value} can only be resolved by array of Outs."
+                );
+            }
+            $this->resolutions[(string) $in] = $other;
+        }
+    }
+
+    public function getResolution(In $in): array|Out
+    {
+        if (!isset($this->resolutions[(string) $in])) {
+            throw new \LogicException(
+                "No resolution for {$in}..."
+            );
+        }
+        return $this->resolutions[(string) $in];
+    }
+
+    public function isResolved(In $in): bool
+    {
+        return isset($this->resolutions[(string) $in]);
     }
 
     // ArrayAccess

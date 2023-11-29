@@ -88,11 +88,7 @@ class Resolver
      */
     protected function resolveDependency(array $visited, OfComponent $component, In $in): \Generator
     {
-        // Since SEEK-dependencies might in fact have no resolution and this
-        // is also fine, this would lead to these dependencies be checked
-        // again, even if that is not necessary. We take this potential
-        // trade off for some simplicity.
-        if ($in->isResolved()) {
+        if ($component->isResolved($in)) {
             return;
         }
 
@@ -134,20 +130,22 @@ class Resolver
         }
 
         yield from $this->resolveTransitiveDependencies($visited, $candidate);
-        $in->addResolution($candidate);
+        $component->addResolution($in, $candidate);
     }
 
     protected function resolveSeek(array $visited, OfComponent $component, In $in): \Generator
     {
+        $resolutions = [];
         foreach ($this->components as $other) {
             if ($other->offsetExists("CONTRIBUTE: " . $in->getName())) {
                 // For CONTRIBUTEd, we just use all contributions.
                 foreach ($other["CONTRIBUTE: " . $in->getName()] as $o) {
                     yield from $this->resolveTransitiveDependencies($visited, $o);
-                    $in->addResolution($o);
+                    $resolutions[] = $o;
                 }
             }
         }
+        $component->addResolution($in, $resolutions);
     }
 
     protected function resolveUse(array $visited, OfComponent $component, In $in): \Generator
@@ -169,7 +167,7 @@ class Resolver
 
         if (count($candidates) === 1) {
             yield from $this->resolveTransitiveDependencies($visited, $candidates[0]);
-            $in->addResolution($candidates[0]);
+            $component->addResolution($in, $candidates[0]);
             return;
         }
 
@@ -183,7 +181,7 @@ class Resolver
         foreach ($candidates as $candidate) {
             if ($candidate->aux["class"] === $preferred_class) {
                 yield from $this->resolveTransitiveDependencies($visited, $candidates[0]);
-                $in->addResolution($candidate);
+                $component->addResolution($in, $candidate);
                 return;
             }
         }

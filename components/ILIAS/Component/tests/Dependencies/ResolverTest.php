@@ -74,9 +74,9 @@ class ResolverTest extends TestCase
 
         $pull = new D\In(D\InType::PULL, $name);
         $provide = new D\Out(D\OutType::PROVIDE, $name, null, []);
-        $pull->addResolution($provide);
 
         $c1 = new D\OfComponent($component, $pull);
+        $c1->addResolution($pull, $provide);
         $c2 = new D\OfComponent($component, $provide);
 
         $this->assertEquals([$c1, $c2], $result);
@@ -147,14 +147,12 @@ class ResolverTest extends TestCase
 
         $result = $this->resolver->resolveDependencies([], $c1, $c2, $c3);
 
-
         $seek = new D\In(D\InType::SEEK, $name);
         $contribute1 = new D\Out(D\OutType::CONTRIBUTE, $name, null, []);
         $contribute2 = new D\Out(D\OutType::CONTRIBUTE, $name, null, []);
-        $seek->addResolution($contribute1);
-        $seek->addResolution($contribute2);
 
         $c1 = new D\OfComponent($component, $seek);
+        $c1->addResolution($seek, [$contribute1, $contribute2]);
         $c2 = new D\OfComponent($component, $contribute1);
         $c3 = new D\OfComponent($component, $contribute2);
 
@@ -177,9 +175,9 @@ class ResolverTest extends TestCase
 
         $use = new D\In(D\InType::USE, $name);
         $implement = new D\Out(D\OutType::IMPLEMENT, $name, ["class" => "Some\\Class"], []);
-        $use->addResolution($implement);
 
         $c1 = new D\OfComponent($component, $use);
+        $c1->addResolution($use, $implement);
         $c2 = new D\OfComponent($component, $implement);
 
         $this->assertEquals([$c1, $c2], $result);
@@ -245,9 +243,9 @@ class ResolverTest extends TestCase
         $use = new D\In(D\InType::USE, $name);
         $implement1 = new D\Out(D\OutType::IMPLEMENT, $name, ["class" => "Some\\Class"], []);
         $implement2 = new D\Out(D\OutType::IMPLEMENT, $name, ["class" => "Some\\OtherClass"], []);
-        $use->addResolution($implement2);
 
         $c1 = new D\OfComponent($component, $use);
+        $c1->addResolution($use, $implement2);
         $c2 = new D\OfComponent($component, $implement1);
         $c3 = new D\OfComponent($component, $implement2);
 
@@ -277,10 +275,9 @@ class ResolverTest extends TestCase
         $use = new D\In(D\InType::USE, $name);
         $implement1 = new D\Out(D\OutType::IMPLEMENT, $name, ["class" => "Some\\Class"], []);
         $implement2 = new D\Out(D\OutType::IMPLEMENT, $name, ["class" => "Some\\OtherClass"], []);
-        $use->addResolution($implement2);
-
 
         $c1 = new D\OfComponent($component, $use);
+        $c1->addResolution($use, $implement2);
         $c2 = new D\OfComponent($component, $implement1);
         $c3 = new D\OfComponent($component, $implement2);
 
