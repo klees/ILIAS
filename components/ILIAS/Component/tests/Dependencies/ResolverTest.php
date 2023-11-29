@@ -23,7 +23,24 @@ namespace ILIAS\Component\Tests\Dependencies;
 use PHPUnit\Framework\TestCase;
 use ILIAS\Component\Dependencies\Resolver;
 use ILIAS\Component\Dependencies as D;
+use ILIAS\Component\Dependencies\ResolutionDirective as RD;
 use ILIAS\Component\Component;
+
+interface Component1 extends Component
+{
+}
+
+interface Component2 extends Component
+{
+}
+
+interface Component3 extends Component
+{
+}
+
+interface Component4 extends Component
+{
+}
 
 class ResolverTest extends TestCase
 {
@@ -216,13 +233,14 @@ class ResolverTest extends TestCase
         $c2 = new D\OfComponent($component, $implement1);
         $c3 = new D\OfComponent($component, $implement2);
 
-        $disambiguation = [
-            get_class($component) => [
-                TestInterface::class => "Some\\OtherClass"
-            ]
+        $directives = [
+            new RD\InComponent(
+                get_class($component),
+                new RD\ForXUseY(TestInterface::class, "Some\\OtherClass")
+            )
         ];
 
-        $result = $this->resolver->resolveDependencies($disambiguation, $c1, $c2, $c3);
+        $result = $this->resolver->resolveDependencies($directives, $c1, $c2, $c3);
 
         $use = new D\In(D\InType::USE, $name);
         $implement1 = new D\Out(D\OutType::IMPLEMENT, $name, ["class" => "Some\\Class"], []);
@@ -250,19 +268,79 @@ class ResolverTest extends TestCase
         $c2 = new D\OfComponent($component, $implement1);
         $c3 = new D\OfComponent($component, $implement2);
 
-        $disambiguation = [
-            "*" => [
-                TestInterface::class => "Some\\OtherClass"
-            ]
+        $directives = [
+            new RD\ForXUseY(TestInterface::class, "Some\\OtherClass")
         ];
 
-        $result = $this->resolver->resolveDependencies($disambiguation, $c1, $c2, $c3);
+        $result = $this->resolver->resolveDependencies($directives, $c1, $c2, $c3);
 
         $use = new D\In(D\InType::USE, $name);
         $implement1 = new D\Out(D\OutType::IMPLEMENT, $name, ["class" => "Some\\Class"], []);
         $implement2 = new D\Out(D\OutType::IMPLEMENT, $name, ["class" => "Some\\OtherClass"], []);
         $use->addResolution($implement2);
 
+
+        $c1 = new D\OfComponent($component, $use);
+        $c2 = new D\OfComponent($component, $implement1);
+        $c3 = new D\OfComponent($component, $implement2);
+
+        $this->assertEquals([$c1, $c2, $c3], $result);
+    }
+
+    public function testDisambiguateTransitive(): void
+    {
+        $component1 = $this->createMock(Component1::class);
+        $component2 = $this->createMock(Component2::class);
+        $component3 = $this->createMock(Component3::class);
+        $component4 = $this->createMock(Component4::class);
+
+        $name = TestInterface::class;
+        $name2 = TestInterface2::class;
+
+        $pull1 = new D\In(D\InType::PULL, $name);
+        $pull2 = new D\In(D\InType::PULL, $name);
+        $use = new D\In(D\InType::USE, $name2);
+        $provide = new D\Out(D\OutType::PROVIDE, $name, ["class" => "Some\\Class"], [$use]);
+        $implement1 = new D\Out(D\OutType::IMPLEMENT, $name2, ["class" => "Some\\OtherClass"], []);
+        $implement2 = new D\Out(D\OutType::IMPLEMENT, $name2, ["class" => "Some\\DifferentClass"], []);
+
+        $c1 = new D\OfComponent($component1, $pull1);
+        $c2 = new D\OfComponent($component2, $pull2);
+        $c3 = new D\OfComponent($component3, $provide, $use);
+        $c4 = new D\OfComponent($component4, $implement1, $implement2);
+
+        $directives = [
+            new RD\InComponent(
+                get_class($component1),
+                new RD\WhenPulling(
+                    $name,
+                    new RD\ForXUseY($name2, "Some\\OtherClass")
+                )
+            ),
+            new RD\InComponent(
+                get_class($component2),
+                new RD\WhenPulling(
+                    $name,
+                    new RD\ForXUseY($name2, "Some\\DifferentClass")
+                )
+            )
+        ];
+
+        $result = $this->resolver->resolveDependencies($directives, $c1, $c2, $c3, $c4);
+
+        $pull1 = new D\In(D\InType::PULL, $name);
+        $pull2 = new D\In(D\InType::PULL, $name);
+        $use1 = new D\In(D\InType::USE, $name2);
+        $use2 = new D\In(D\InType::USE, $name2);
+        $provide1 = new D\Out(D\OutType::PROVIDE, $name, ["class" => "Some\\Class"], [$use1]);
+        $provide2 = new D\Out(D\OutType::PROVIDE, $name, ["class" => "Some\\Class"], [$use2]);
+        $implement1 = new D\Out(D\OutType::IMPLEMENT, $name2, ["class" => "Some\\OtherClass"], []);
+        $implement2 = new D\Out(D\OutType::IMPLEMENT, $name2, ["class" => "Some\\DifferentClass"], []);
+
+        $use1->addResolution($implement1);
+        $use2->addResolution($implement2);
+        $pull1->addResolution($provide1);
+        $pull1->addResolution($provide2);
 
         $c1 = new D\OfComponent($component, $use);
         $c2 = new D\OfComponent($component, $implement1);

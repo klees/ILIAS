@@ -20,55 +20,37 @@ declare(strict_types=1);
 
 namespace ILIAS\Component\Dependencies;
 
+use ILIAS\Component\Dependencies\ResolutionDirective as RD;
+
 class Resolver
 {
+    // Dependencies are resolved recursively, we capture where we are currently
+    // at. Will contain pairs (OfComponent, In-Dependency)
+    protected array $stack;
+
+    // Components to be resolved.
+    protected array $components;
+
+    // Directives to resolve dependencies.
+    protected array $directives;
+
     /**
-     * Resolves dependencies of all components. This is unambigous for all types of
-     * dependencies but the use/implement-pair. If there would be ambiguities, these
-     * can be disambiguated by the first argument.
+     * Resolves dependencies of all components. Use ResolutionDirective to dis-
+     * ambiguate use/implement-pairs or force special resolutions for certain
+     * circumstances.
      *
-     * The structure of the first argument is as such: keys are components that use
-     * services ("dependant") that need disambiguation, value for each dependant is
-     * an array where the key is the definition ("dependency") and the value is the
-     * implementation ("implementation") to be used.
-     *
-     * The entry "*" for the dependant will define fallbacks to be used for all
-     * components that have no explicit disambiguation.
-     *
-     * So, the array might look as such:
-     *
-     * [
-     *    "*" => [
-     *      "ILIAS\Logger\Logger" => ILIAS\Logger\DBLogger
-     *    ],
-     *    "ILIAS\Database\DB" => [
-     *      "ILIAS\Logger\Logger" => ILIAS\Logger\StdErrLogger
-     *    ]
-     * ]
-     *
-     * @param array<string, array<string, string>> $disambiguation
+     * @param array<ResolutionDirective> $directives
      * @param OfComponent[]
      * @return OfComponent[]
      */
-    public function resolveDependencies(array $disambiguation, OfComponent ...$components): array
+    public function resolveDependencies(array $directives, OfComponent ...$components): array
     {
-        foreach ($components as $component) {
-            foreach ($component->getInDependencies() as $d) {
-                switch ($d->getType()) {
-                    case InType::PULL:
-                        $this->resolvePull($d, $components);
-                        break;
-                    case InType::SEEK:
-                        $this->resolveSeek($d, $components);
-                        break;
-                    case InType::USE:
-                        $this->resolveUse($component, $disambiguation, $d, $components);
-                        break;
-                }
-            }
-        }
+        usort($directives, fn($l, $r) => $l->getSpecificity() <=> $r->getSpecificity());
 
-        $cycles = iterator_to_array($this->findCycles(...$components));
+        $this->directives = $directives;
+        $this->components = $components;
+
+        $cycles = iterator_to_array($this->resolveDependenciesSeed());
         if (!empty($cycles)) {
             throw new \LogicException(
                 "Detected Cycles in Dependency Tree: " .
@@ -85,14 +67,57 @@ class Resolver
             );
         }
 
+        // TODO: Make this return void, modifies components in place.
         return $components;
     }
 
-    protected function resolvePull(In $in, array &$others): void
+    /**
+     * @return Generator<array<OfComponent, Dependency>> cycles in the dependency graph
+     */
+    protected function resolveDependenciesSeed(): \Generator
+    {
+        foreach ($this->components as $component) {
+            foreach ($component->getInDependencies() as $in) {
+                yield from $this->resolveDependency([], $component, $in);
+            }
+        }
+    }
+
+    /**
+     * @return Generator<array<OfComponent, Dependency>> cycles in the dependency graph
+     */
+    protected function resolveDependency(array $visited, OfComponent $component, In $in): \Generator
+    {
+        // Since SEEK-dependencies might in fact have no resolution and this
+        // is also fine, this would lead to these dependencies be checked
+        // again, even if that is not necessary. We take this potential
+        // trade off for some simplicity.
+        if ($in->isResolved()) {
+            return;
+        }
+
+        // This is a cycle, we arrived where we started.
+        if (!empty($visited) && $visited[0][0] === $component && $visited[0][1] == $in) {
+            yield $visited;
+            return;
+        }
+
+        array_push($visited, [$component, $in]);
+        yield from match ($in->getType()) {
+            InType::PULL => $this->resolvePull($visited, $component, $in),
+            InType::SEEK => $this->resolveSeek($visited, $component, $in),
+            InType::USE => $this->resolveUse($visited, $component, $in),
+            default => throw new \LogicException("Unknown type: {$in->getType()}")
+        };
+        array_pop($visited);
+    }
+
+
+    protected function resolvePull(array $visited, OfComponent $component, In $in): \Generator
     {
         $candidate = null;
 
-        foreach ($others as $other) {
+        foreach ($this->components as $other) {
             if ($other->offsetExists("PROVIDE: " . $in->getName())) {
                 if (!is_null($candidate)) {
                     throw new \LogicException(
@@ -108,26 +133,28 @@ class Resolver
             throw new \LogicException("Could not resolve dependency for: " . (string) $in);
         }
 
+        yield from $this->resolveTransitiveDependencies($visited, $candidate);
         $in->addResolution($candidate);
     }
 
-    protected function resolveSeek(In $in, array &$others): void
+    protected function resolveSeek(array $visited, OfComponent $component, In $in): \Generator
     {
-        foreach ($others as $other) {
+        foreach ($this->components as $other) {
             if ($other->offsetExists("CONTRIBUTE: " . $in->getName())) {
                 // For CONTRIBUTEd, we just use all contributions.
                 foreach ($other["CONTRIBUTE: " . $in->getName()] as $o) {
+                    yield from $this->resolveTransitiveDependencies($visited, $o);
                     $in->addResolution($o);
                 }
             }
         }
     }
 
-    protected function resolveUse(OfComponent $component, array &$disambiguation, In $in, array &$others): void
+    protected function resolveUse(array $visited, OfComponent $component, In $in): \Generator
     {
         $candidates = [];
 
-        foreach ($others as $other) {
+        foreach ($this->components as $other) {
             if ($other->offsetExists("IMPLEMENT: " . $in->getName())) {
                 // For IMPLEMENTed dependencies, we need to make choice.
                 $candidates[] = $other["IMPLEMENT: " . $in->getName()];
@@ -141,19 +168,21 @@ class Resolver
         }
 
         if (count($candidates) === 1) {
+            yield from $this->resolveTransitiveDependencies($visited, $candidates[0]);
             $in->addResolution($candidates[0]);
             return;
         }
 
-        $preferred_class = $this->disambiguate($component, $disambiguation, $in);
+        $preferred_class = $this->disambiguateUse($component, $this->directives, $in);
         if (is_null($preferred_class)) {
             throw new \LogicException(
                 "Dependency {$in->getName()} is provided (at least) twice, " .
-                "no disambiguation for {$component->getComponentName()}."
+                "no directives for {$component->getComponentName()}."
             );
         }
         foreach ($candidates as $candidate) {
             if ($candidate->aux["class"] === $preferred_class) {
+                yield from $this->resolveTransitiveDependencies($visited, $candidates[0]);
                 $in->addResolution($candidate);
                 return;
             }
@@ -164,47 +193,26 @@ class Resolver
         );
     }
 
-    protected function disambiguate(OfComponent $component, array &$disambiguation, In $in): ?string
+    protected function resolveTransitiveDependencies(array $visited, Out $out): \Generator
     {
-        $service_name = (string) $in->getName();
-        foreach ([$component->getComponentName(), "*"] as $c) {
-            if (isset($disambiguation[$c]) && isset($disambiguation[$c][$service_name])) {
-                return $disambiguation[$c][$service_name];
+        $component = $out->getComponent();
+        array_push($visited, [$component, $out]);
+        foreach ($out->getDependencies() as $dep) {
+            yield from $this->resolveDependency($visited, $component, $dep);
+        }
+        array_pop($visited);
+    }
+
+    protected function disambiguateUse(OfComponent $component, array $directives, In $in): ?string
+    {
+        foreach ($directives as $d) {
+            if ($d instanceof RD\InComponent && $d->getComponentName() === $component->getComponentName()) {
+                return $this->disambiguateUse($component, $d->getDirectives(), $in);
+            }
+            if ($d instanceof RD\ForXUseY && $d->getX() == (string) $in->getName()) {
+                return $d->getY();
             }
         }
         return null;
-    }
-
-    /**
-     * @var Generator<array<OfComponent, Dependency>>
-     */
-    protected function findCycles(OfComponent ...$components): \Generator
-    {
-        foreach ($components as $component) {
-            foreach ($component->getInDependencies() as $in) {
-                foreach ($this->findCyclesWith([], $component, $in) as $cycle) {
-                    yield $cycle;
-                }
-            }
-        }
-    }
-
-    protected function findCyclesWith(array $visited, OfComponent $component, In $in): \Generator
-    {
-        if (!empty($visited) && $visited[0][0] === $component && $visited[0][1] == $in) {
-            yield $visited;
-            return;
-        }
-
-        array_push($visited, [$component, $in]);
-        foreach ($in->getResolvedBy() as $out) {
-            $other = $out->getComponent();
-            array_push($visited, [$component, $out]);
-            foreach ($out->getDependencies() as $next) {
-                yield from $this->findCyclesWith($visited, $out->getComponent(), $next);
-            }
-            array_pop($visited);
-        }
-        array_pop($visited);
     }
 }

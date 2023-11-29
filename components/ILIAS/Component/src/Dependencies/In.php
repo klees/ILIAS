@@ -75,4 +75,9 @@ class In implements Dependency
     {
         return $this->resolved_by;
     }
+
+    public function isResolved(): bool
+    {
+        return count($this->resolved_by) > 0;
+    }
 }
