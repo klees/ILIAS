@@ -243,7 +243,8 @@ interface Factory
      *       targets and bear a label.
      *   composition: >
      *       An additional column will be added at the very end of the table
-     *       containing a Button (or Dropdown, for more than one action) if applicable.
+     *       containing Dropdown containing Buttons for the actions. The column will
+     *       be empty if there are no actions.
      *       If there is at least one Multi Action, an unlabled column will be
      *       added at the very beginning of the table containing a checkbox to
      *       include the row in the selection.
