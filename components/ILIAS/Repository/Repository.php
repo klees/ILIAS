@@ -32,6 +32,9 @@ class Repository implements Component\Component
         array | \ArrayAccess &$pull,
         array | \ArrayAccess &$internal,
     ): void {
-        // ...
+        $contribute[\ILIAS\Setup\Agent::class] = fn() =>
+            new \ilRepositorySetupAgent(
+                $pull[\ILIAS\Refinery\Factory::class]
+            );
     }
 }
