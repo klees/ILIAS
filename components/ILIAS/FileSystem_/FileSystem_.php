@@ -32,6 +32,9 @@ class FileSystem_ implements Component\Component
         array | \ArrayAccess &$pull,
         array | \ArrayAccess &$internal,
     ): void {
-        // ...
+        $contribute[\ILIAS\Setup\Agent::class] = fn() =>
+            new \ilFileSystemSetupAgent(
+                $pull[\ILIAS\Refinery\Factory::class]
+            );
     }
 }

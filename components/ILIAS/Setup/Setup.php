@@ -44,6 +44,12 @@ class Setup implements Component\Component
                 $internal["command.migrate"]
             );
 
+        $contribute[\ILIAS\Setup\Agent::class] = fn() =>
+            new \ilSetupAgent(
+                $pull[\ILIAS\Refinery\Factory::class],
+                $pull[\ILIAS\Data\Factory::class]
+            );
+
         $internal["command.install"] = fn() =>
             new \ILIAS\Setup\CLI\InstallCommand(
                 $internal["agent_finder"],
@@ -95,9 +101,7 @@ class Setup implements Component\Component
                 $pull[\ILIAS\Data\Factory::class],
                 $use[\ILIAS\Language\Language::class],
                 $internal["interface_finder"],
-                [
-                    "common" => $internal["common_agent"]
-                ]
+                $seek[\ILIAS\Setup\Agent::class]
             );
 
         $internal["config_reader"] = fn() =>
