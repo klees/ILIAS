@@ -43,7 +43,7 @@ class ilFileSystemSetupAgent implements Setup\Agent
      */
     public function getArrayToConfigTransformation(): Refinery\Transformation
     {
-        return $this->refinery->custom()->transformation(fn ($data): \ilFileSystemSetupConfig => new \ilFileSystemSetupConfig(
+        return $this->refinery->custom()->transformation(fn($data): \ilFileSystemSetupConfig => new \ilFileSystemSetupConfig(
             $data["data_dir"]
         ));
     }
@@ -72,7 +72,7 @@ class ilFileSystemSetupAgent implements Setup\Agent
     /**
      * @inheritdoc
      */
-    public function getBuildArtifactObjective(): Setup\Objective
+    public function getBuildObjective(): Setup\Objective
     {
         return new Setup\Objective\NullObjective();
     }
