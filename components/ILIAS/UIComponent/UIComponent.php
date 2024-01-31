@@ -32,6 +32,9 @@ class UIComponent implements Component\Component
         array | \ArrayAccess &$pull,
         array | \ArrayAccess &$internal,
     ): void {
-        // ...
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "Explorer2.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "ilOverlay.js");
     }
 }

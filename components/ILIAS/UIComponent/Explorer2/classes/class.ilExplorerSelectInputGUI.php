@@ -152,7 +152,7 @@ abstract class ilExplorerSelectInputGUI extends ilFormPropertyGUI implements ilT
     {
         $lng = $this->lng;
 
-        $this->global_tpl->addJavascript("./components/ILIAS/UIComponent/Explorer2/js/Explorer2.js");
+        $this->global_tpl->addJavascript("assets/js/Explorer2.js");
         $this->global_tpl->addJavascript("./components/ILIAS/UIComponent/Modal/js/Modal.js");
         $this->global_tpl->addOnLoadCode(
             "il.Explorer2.initSelect('" . $this->getFieldId() . "');"
