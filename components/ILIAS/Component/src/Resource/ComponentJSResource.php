@@ -18,21 +18,21 @@
 
 declare(strict_types=1);
 
-namespace ILIAS;
+namespace ILIAS\Component\Resource;
 
-class Registration implements Component\Component
+/**
+ * An public asset is a file or folder that should be served via the web.
+ */
+class ComponentJSResource extends ComponentResource
 {
-    public function init(
-        array | \ArrayAccess &$define,
-        array | \ArrayAccess &$implement,
-        array | \ArrayAccess &$use,
-        array | \ArrayAccess &$contribute,
-        array | \ArrayAccess &$seek,
-        array | \ArrayAccess &$provide,
-        array | \ArrayAccess &$pull,
-        array | \ArrayAccess &$internal,
-    ): void {
-        $contribute[Component\Resource\PublicAsset::class] = fn() =>
-            new Component\Resource\Endpoint($this, "confirmReg.php");  
+    /**
+     * @param $component this belongs to
+     * @param $source path relative to the components resource directory
+     */
+    public function __construct(
+        \ILIAS\Component\Component $component,
+        string $source,
+    ) {
+        parent::__construct($component, $source, "assets/js");
     }
 }
