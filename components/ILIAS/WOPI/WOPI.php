@@ -36,5 +36,8 @@ class WOPI implements Component\Component
             new \ilWOPISetupAgent(
                 $pull[\ILIAS\Refinery\Factory::class]
             );
+
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+        new Component\Resource\ComponentResource($this, "wopi/index.php", "wopi");
     }
 }
