@@ -34,6 +34,8 @@ class Notifications implements Component\Component
     ): void {
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
             new Component\Resource\ComponentJS($this, "notifications.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+        new Component\Resource\ComponentJS($this, "browser_notifications.js");
 
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
             new Component\Resource\ComponentCSS($this, "osd.css");

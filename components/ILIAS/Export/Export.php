@@ -32,6 +32,9 @@ class Export implements Component\Component
         array | \ArrayAccess &$pull,
         array | \ArrayAccess &$internal,
     ): void {
-        // ...
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+        new Component\Resource\ComponentJS($this, "./components/ILIAS/Form/js/Form.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+        new Component\Resource\ComponentJS($this, "./components/ILIAS/CopyWizard/js/ilContainer.js");
     }
 }
