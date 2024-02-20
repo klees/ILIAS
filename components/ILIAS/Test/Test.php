@@ -36,5 +36,14 @@ class Test implements Component\Component
             new \ilTestSetupAgent(
                 $pull[\ILIAS\Refinery\Factory::class]
             );
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "settings_confirmation.js");
+
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "ilTestPlayerQuestionEditControl.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "settings_confirmation.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "settings_confirmation.js");
     }
 }

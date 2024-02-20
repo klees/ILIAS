@@ -1077,7 +1077,7 @@ class ilPageObjectGUI
         //		$this->initSelfAssessmentRendering();
         ilObjMediaObjectGUI::includePresentationJS($main_tpl);
 
-        $main_tpl->addJavaScript("./components/ILIAS/COPage/js/ilCOPagePres.js");
+        $main_tpl->addJavaScript("assets/js/ilCOPagePres.js");
 
         // needed for overlays in iim
         ilOverlayGUI::initJavascript();
