@@ -36,6 +36,6 @@ class WebDAV implements Component\Component
             new Component\Resource\Endpoint($this, "webdav.php");
 
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
-        new Component\Resource\Endpoint($this, "rootindex.php");
+            new Component\Resource\Endpoint($this, "rootindex.php");
     }
 }

@@ -34,5 +34,7 @@ class Accordion implements Component\Component
     ): void {
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
             new Component\Resource\ComponentJS($this, "accordion.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\NodeModule("owl.carousel/dist/owl.carousel.js");
     }
 }

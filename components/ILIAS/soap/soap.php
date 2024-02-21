@@ -33,9 +33,9 @@ class soap implements Component\Component
         array | \ArrayAccess &$internal,
     ): void {
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
-        new Component\Resource\Endpoint($this, "soap/nusoapserver.php", "soap");
+            new Component\Resource\Endpoint($this, "soap/nusoapserver.php", "soap");
 
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
-        new Component\Resource\Endpoint($this, "soap/server.php", "soap");
+            new Component\Resource\Endpoint($this, "soap/server.php", "soap");
     }
 }

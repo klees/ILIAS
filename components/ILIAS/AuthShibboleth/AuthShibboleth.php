@@ -33,9 +33,9 @@ class AuthShibboleth implements Component\Component
         array | \ArrayAccess &$internal,
     ): void {
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
-        new Component\Resource\Endpoint($this, "shib_login.php");
+            new Component\Resource\Endpoint($this, "shib_login.php");
 
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
-        new Component\Resource\Endpoint($this, "shib_logout.php");
+            new Component\Resource\Endpoint($this, "shib_logout.php");
     }
 }

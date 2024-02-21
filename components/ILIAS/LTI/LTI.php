@@ -38,6 +38,6 @@ class LTI implements Component\Component
             );
 
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
-        new Component\Resource\Endpoint($this, "lti.php");
+            new Component\Resource\Endpoint($this, "lti.php");
     }
 }
