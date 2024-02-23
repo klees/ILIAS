@@ -34,5 +34,7 @@ class Dashboard implements Component\Component
     ): void {
         $contribute[Component\Resource\PublicAsset::class] = fn() =>
             new Component\Resource\ComponentJS($this, "ReplaceModalContent.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "SortationUserInputHandler.js");
     }
 }

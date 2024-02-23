@@ -234,7 +234,7 @@ class ilObjForumGUI extends ilObjectGUI implements ilDesktopItemHandling, ilForu
         if (ilForumPostDraft::isAutoSavePostDraftAllowed()) {
             $interval = ilForumPostDraft::lookupAutosaveInterval();
 
-            $this->tpl->addJavaScript('./components/ILIAS/Forum/js/autosave.js');
+            $this->tpl->addJavaScript('assets/js/autosave.js');
             $autosave_cmd = 'autosaveDraftAsync';
             if ($this->objCurrentPost->getId() === 0 && $this->objCurrentPost->getThreadId() === 0) {
                 $autosave_cmd = 'autosaveThreadDraftAsync';

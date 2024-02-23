@@ -32,6 +32,20 @@ class OnScreenChat implements Component\Component
         array | \ArrayAccess &$pull,
         array | \ArrayAccess &$internal,
     ): void {
-        // ...
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "chat.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "moment.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "onscreenchat.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\ComponentJS($this, "onscreenchat-notifications.js");
+
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\NodeModule("@andxor/jquery-ui-touch-punch-fix/jquery.ui.touch-punch.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\NodeModule("moment/min/moment-with-locales.min.js");
+        $contribute[Component\Resource\PublicAsset::class] = fn() =>
+            new Component\Resource\NodeModule("socket.io-client/dist/socket.io.js");
     }
 }
