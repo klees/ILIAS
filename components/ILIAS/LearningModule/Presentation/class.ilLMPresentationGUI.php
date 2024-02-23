@@ -624,7 +624,7 @@ class ilLMPresentationGUI implements ilCtrlBaseClassInterface, ilCtrlSecurityInt
             ilAccordionGUI::addJavaScript();
             ilAccordionGUI::addCss();
 
-            $this->tpl->addJavaScript("./components/ILIAS/LearningModule/js/LearningModule.js");
+            $this->tpl->addJavaScript("assets/js/LearningModule.js");
 
             // handle initial content
             if ($this->requested_frame == "") {
