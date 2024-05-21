@@ -125,9 +125,9 @@ Request.
 as possible. Depending on the Authority, the Component, and your role in the
 community, you might be invited for a short talk to get to know you and your
 plans for the component better.
-* If the Product Manager and the Technical Board see no obstacles to your
-application, they table the Pull Request for the next Jour Fixe and merge it
-afterwards.
+* If the Product Manager and the Technical Board see no obstacles, ie. sees no
+reason to veto the change, to your application, they table the Pull Request for
+the next Jour Fixe and merge it afterwards.
 
 
 ## How Authority Assignments are Stored
