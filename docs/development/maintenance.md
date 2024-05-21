@@ -105,6 +105,31 @@ addition the company the person is working for can be listed, too.
 Authorities** the company can propose a prioritized candidate for the
 succession.
 
+## Process to Change Authorities
+* Please contact the Product Manager and the Techncial Board per email, if you
+would like to give up an Authority.
+* If an Authority has nobody assigned or if the holder of an Authority would like
+to pass the responsibility over to somebody else, the Authority is listed in
+the agenda of the Jour Fixe.
+* To apply for an Authority of a component that currently has a holder of the
+Authority to (De-)Assign Authorities, it is recommended to contact this person
+before taking the next step.
+* To change the Assignement of an Authority please provide a Pull Request against
+the `trunk`-branch of the [official ILIAS Repository](https://github.com/ILIAS-eLearning/ILIAS)
+making the corresponding change. Please explain in its message why this change
+should be made. Also shortly report your exchange with the person holding the
+Authority to (De-)Assign Authorities, if you are not this person.
+* Add the tags `authorities`, `documentation`, and `technical board` to the Pull
+Request.
+* The Product Manager and the Technical Board will discuss your request as quickly
+as possible. Depending on the Authority, the Component, and your role in the
+community, you might be invited for a short talk to get to know you and your
+plans for the component better.
+* If the Product Manager and the Technical Board see no obstacles to your
+application, they table the Pull Request for the next Jour Fixe and merge it
+afterwards.
+
+
 ## How Authority Assignments are Stored
 Authorities are tracked in `maintenance.json` files placed in the root of the
 corresponding [component](https://github.com/ILIAS-eLearning/ILIAS/blob/trunk/docs/development/components-and-directories.md)
