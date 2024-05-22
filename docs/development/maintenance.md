@@ -128,6 +128,11 @@ afterwards.
 with the `Authority to (De-)Assign Authorities` in that Component. If you are the
 last person holding that `Authority`, please contact the Product Manager and the
 Technical Board per email instead.
+* If the person with `Authority to (De-)Assign Authorities` for a `Component` wants
+to remove someone from an assignment to an `Authority` in said `Component`, she should
+open a PR against the `trunk`-branch of the [official ILIAS Repository](https://github.com/ILIAS-eLearning/ILIAS)
+and tag it with `authorities`, `documentation` and `jour fixe`. The change will
+then be announced on the next Jour Fixed.
 * If an Authority has nobody assigned or if the holder of an Authority would like
 to pass the responsibility over to somebody else, the Authority is listed in
 the agenda of the Jour Fixe.
