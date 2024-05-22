@@ -106,28 +106,31 @@ Authorities** the company can propose a prioritized candidate for the
 succession.
 
 ## Process to Change Authorities
-* Please contact the Product Manager and the Techncial Board per email, if you
-would like to give up an Authority.
+* To apply for an `Authority` of a `Component` that currently has a holder of the
+`Authority to (De-)Assign Authorities`, it is recommended to contact this person
+before taking the next step.
+* Please provide a Pull Request against the `trunk`-branch of the [official ILIAS Repository](https://github.com/ILIAS-eLearning/ILIAS)
+to change assignments to `Authorities` for some `Component`. Please explain in
+its message why this change hould be made. Also shortly report your exchange with
+the person holding the Authority to (De-)Assign Authorities, if you are not this
+person. Add the tags `authorities` and `documentation`.
+* The PR will be assigned to all persons with `Authorities to (De-)Assign Authority`.
+These persons are asked to document in the PR if they accept the new assignment
+or not. If they accept the assignment, they should also add the tag `technical board`.
+* The Product Manager and the Technical Board will discuss the request as quickly
+as possible. Depending on the Authority, the Component, and your role in the
+community, the new assignees might be invited for a short talk to get to know them 
+and their plans for the component better.
+* If the Product Manager and the Technical Board do not veto the new assignment, 
+they take the Pull Request for the next Jour Fixe for an announcement and merge it
+afterwards.
+* If you want to give up an `Authority` for a `Component` please contact all persons
+with the `Authority to (De-)Assign Authorities` in that Component. If you are the
+last person holding that `Authority`, please contact the Product Manager and the
+Technical Board per email instead.
 * If an Authority has nobody assigned or if the holder of an Authority would like
 to pass the responsibility over to somebody else, the Authority is listed in
 the agenda of the Jour Fixe.
-* To apply for an Authority of a component that currently has a holder of the
-Authority to (De-)Assign Authorities, it is recommended to contact this person
-before taking the next step.
-* To change the Assignement of an Authority please provide a Pull Request against
-the `trunk`-branch of the [official ILIAS Repository](https://github.com/ILIAS-eLearning/ILIAS)
-making the corresponding change. Please explain in its message why this change
-should be made. Also shortly report your exchange with the person holding the
-Authority to (De-)Assign Authorities, if you are not this person.
-* Add the tags `authorities`, `documentation`, and `technical board` to the Pull
-Request.
-* The Product Manager and the Technical Board will discuss your request as quickly
-as possible. Depending on the Authority, the Component, and your role in the
-community, you might be invited for a short talk to get to know you and your
-plans for the component better.
-* If the Product Manager and the Technical Board see no obstacles, ie. sees no
-reason to veto the change, to your application, they table the Pull Request for
-the next Jour Fixe and merge it afterwards.
 
 
 ## How Authority Assignments are Stored
