@@ -35,8 +35,8 @@ class ArrayStorageTest extends TestCase
 
     public function testBasicStorage(): void
     {
-        $m1 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, true, "desc1");
-        $m2 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, true, "desc2");
+        $m1 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, fn() => true, "desc1");
+        $m2 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, fn() => true, "desc2");
 
         $this->storage->store("m1", $m1);
         $this->storage->store("m2", $m2);
@@ -51,8 +51,8 @@ class ArrayStorageTest extends TestCase
 
     public function testOverwrites(): void
     {
-        $m1 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, true, "desc1");
-        $m2 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, true, "desc2");
+        $m1 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, fn() => true, "desc1");
+        $m2 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, fn() => true, "desc2");
 
         $this->storage->store("m1", $m1);
         $this->storage->store("m1", $m2);
@@ -66,7 +66,7 @@ class ArrayStorageTest extends TestCase
 
     public function testNesting(): void
     {
-        $m1 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, true, "desc1");
+        $m1 = new M(M::STABILITY_CONFIG, M::TYPE_BOOL, fn() => true, "desc1");
 
         $this->storage->store("a.b.c", $m1);
 
@@ -83,16 +83,16 @@ class ArrayStorageTest extends TestCase
 
     public function testAsMetric(): void
     {
-        $this->storage->store("a", new M(M::STABILITY_STABLE, M::TYPE_COUNTER, 0));
-        $this->storage->store("b.c", new M(M::STABILITY_VOLATILE, M::TYPE_BOOL, true));
+        $this->storage->store("a", new M(M::STABILITY_STABLE, M::TYPE_COUNTER, fn() => 0));
+        $this->storage->store("b.c", new M(M::STABILITY_VOLATILE, M::TYPE_BOOL, fn() => true));
 
         $expected = new M(
             M::STABILITY_MIXED,
             M::TYPE_COLLECTION,
             [
-                "a" => new M(M::STABILITY_STABLE, M::TYPE_COUNTER, 0),
-                "b" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-                    "c" => new M(M::STABILITY_VOLATILE, M::TYPE_BOOL, true)
+                "a" => new M(M::STABILITY_STABLE, M::TYPE_COUNTER, fn() => 0),
+                "b" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+                    "c" => new M(M::STABILITY_VOLATILE, M::TYPE_BOOL, fn() => true)
                 ])
             ]
         );

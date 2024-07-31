@@ -76,6 +76,25 @@ class StatusCommand extends Command
         $this->achieveObjective($objective, $environment);
 
         $metric = $storage->asMetric();
+
+        $filter = explode(".", "key.subkey.subsubkey");
+        $candidates = [$metric];
+
+        while(count($filter) > 0) {
+            if($metric->getType() !== Metric::TYPE_COLLECTION) {
+                throw new \RuntimeException("Cannot find key...");
+            }
+
+            $current = array_shift($filter);
+            $metrics = $metric->getValue();
+            if (!array_key_exists($current, $metrics)) {
+                throw new \RuntimeException("Cannot find key...");
+            }
+            $metric = $metrics[$current];
+        }
+
+
+
         list($config, $other) = $metric->extractByStability(Metrics\Metric::STABILITY_CONFIG);
         if ($other) {
             $values = $other->getValue();

@@ -64,37 +64,23 @@ final class Metric
     public const TYPE_COLLECTION = "collection";
 
     /**
-     * @var string one of STABILITY_*
-     */
-    protected string $stability;
-
-    /**
-     * @var string one of TYPE_*
-     */
-    protected string $type;
-
-    /**
      * @var mixed
      */
-    protected $value;
-
-
-    protected ?string $description;
+    protected $value = null;
 
     public function __construct(
-        string $stability,
-        string $type,
-        $value,
-        string $description = null
+        protected string $stability,
+        protected string $type,
+        protected $value_producer,
+        protected ?string $description = null
     ) {
         $this->checkStability($stability, $type);
         $this->checkType($type);
-        $this->checkValue($type, $value);
-
-        $this->stability = $stability;
-        $this->type = $type;
-        $this->value = $value;
-        $this->description = $description;
+        if (!is_callable($value_producer)) {
+            throw new \InvalidArgumentException(
+                "Expected \$value_producer to be callable."
+            );
+        }
     }
 
     protected function checkStability(string $stability, string $type): void
@@ -168,6 +154,14 @@ final class Metric
      */
     public function getValue()
     {
+        if (!is_null($this->value)) {
+            return $this->value;
+        }
+
+        $value = $this->value_producer();
+        $this->checkValue($type, $value);
+        $this->value = $value;
+
         return $this->value;
     }
 

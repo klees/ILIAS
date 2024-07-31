@@ -39,7 +39,7 @@ class MetricTest extends TestCase
         if (!$success) {
             $this->expectException(\InvalidArgumentException::class);
         }
-        $metric = new Metrics\Metric($stability, $type, $value, $description);
+        $metric = new Metrics\Metric($stability, $type, fn() => $value, $description);
         $this->assertEquals($stability, $metric->getStability());
         $this->assertEquals($type, $metric->getType());
         $this->assertEquals($value, $metric->getValue());
@@ -60,7 +60,7 @@ class MetricTest extends TestCase
         $text = Metrics\Metric::TYPE_TEXT;
         $collection = Metrics\Metric::TYPE_COLLECTION;
 
-        $other_metric = new Metrics\Metric($volatile, $bool, true);
+        $other_metric = new Metrics\Metric($volatile, $bool, fn() => true);
 
         return [
             "invalid_stability" => ["no_stability", $bool, true, "", false],
@@ -126,37 +126,37 @@ class MetricTest extends TestCase
     public function typedMetricsProvider(): array
     {
         return [
-            "bool_true" => [new M(M::STABILITY_STABLE, M::TYPE_BOOL, true), "true"],
-            "bool_false" => [new M(M::STABILITY_STABLE, M::TYPE_BOOL, false), "false"],
-            "counter_0" => [new M(M::STABILITY_STABLE, M::TYPE_COUNTER, 0), "0"],
-            "counter_1337" => [new M(M::STABILITY_STABLE, M::TYPE_COUNTER, 1337), "1337"],
-            "gauge_23" => [new M(M::STABILITY_STABLE, M::TYPE_GAUGE, 23), "23"],
-            "gauge_42_0" => [new M(M::STABILITY_STABLE, M::TYPE_GAUGE, 42.0), "42.000"],
-            "gauge_42_001" => [new M(M::STABILITY_STABLE, M::TYPE_GAUGE, 42.001), "42.001"],
-            "timestamp" => [new M(M::STABILITY_STABLE, M::TYPE_TIMESTAMP, new \DateTimeImmutable("1985-05-04T13:37:00+01:00")), "1985-05-04T13:37:00+0100"],
-            "text" => [new M(M::STABILITY_STABLE, M::TYPE_TEXT, "some text"), "some text"],
-            "text_with_nl" => [new M(M::STABILITY_STABLE, M::TYPE_TEXT, "some\ntext"), ">\nsome\ntext"],
+            "bool_true" => [new M(M::STABILITY_STABLE, M::TYPE_BOOL, fn() => true), "true"],
+            "bool_false" => [new M(M::STABILITY_STABLE, M::TYPE_BOOL, fn() => false), "false"],
+            "counter_0" => [new M(M::STABILITY_STABLE, M::TYPE_COUNTER, fn() => 0), "0"],
+            "counter_1337" => [new M(M::STABILITY_STABLE, M::TYPE_COUNTER, fn() => 1337), "1337"],
+            "gauge_23" => [new M(M::STABILITY_STABLE, M::TYPE_GAUGE, fn() => 23), "23"],
+            "gauge_42_0" => [new M(M::STABILITY_STABLE, M::TYPE_GAUGE, fn() => 42.0), "42.000"],
+            "gauge_42_001" => [new M(M::STABILITY_STABLE, M::TYPE_GAUGE, fn() => 42.001), "42.001"],
+            "timestamp" => [new M(M::STABILITY_STABLE, M::TYPE_TIMESTAMP, fn() => new \DateTimeImmutable("1985-05-04T13:37:00+01:00")), "1985-05-04T13:37:00+0100"],
+            "text" => [new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "some text"), "some text"],
+            "text_with_nl" => [new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "some\ntext"), ">\nsome\ntext"],
         ];
     }
 
     public function testIndentation(): void
     {
-        $metrics = new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, [
-            "a" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, [
-                "h" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "a_h"),
-                "c" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, [
-                    "d" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, [
-                        "e" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "a_c_d_e"),
-                        "f" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "a_c_d_f")
+        $metrics = new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, fn() => [
+            "a" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, fn() => [
+                "h" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "a_h"),
+                "c" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, fn() => [
+                    "d" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, fn() => [
+                        "e" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "a_c_d_e"),
+                        "f" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "a_c_d_f")
                     ]),
-                    "g" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "a_c_g")
+                    "g" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "a_c_g")
                 ]),
-                "i" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "a_i\na_i")
+                "i" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "a_i\na_i")
             ]),
-            "b" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, [
-                "j" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "b_j")
+            "b" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, fn() => [
+                "j" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "b_j")
             ]),
-            "k" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "k")
+            "k" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "k")
         ]);
 
         $expected = <<<METRIC
@@ -180,45 +180,45 @@ METRIC;
 
     public function testExtractBySeverity(): void
     {
-        $metrics = new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-            "a" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-                "h" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, "a_h"),
-                "c" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-                    "d" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-                        "e" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "a_c_d_e"),
-                        "f" => new M(M::STABILITY_VOLATILE, M::TYPE_TEXT, "a_c_d_f")
+        $metrics = new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+            "a" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+                "h" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, fn() => "a_h"),
+                "c" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+                    "d" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+                        "e" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "a_c_d_e"),
+                        "f" => new M(M::STABILITY_VOLATILE, M::TYPE_TEXT, fn() => "a_c_d_f")
                     ]),
-                    "g" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, "a_c_g")
+                    "g" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, fn() => "a_c_g")
                 ]),
-                "i" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "a_i\na_i")
+                "i" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "a_i\na_i")
             ]),
-            "b" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-                "j" => new M(M::STABILITY_VOLATILE, M::TYPE_TEXT, "b_j")
+            "b" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+                "j" => new M(M::STABILITY_VOLATILE, M::TYPE_TEXT, fn() => "b_j")
             ]),
-            "k" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, "k")
+            "k" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, fn() => "k")
         ]);
 
-        $expected_extracted = new M(M::STABILITY_CONFIG, M::TYPE_COLLECTION, [
-            "a" => new M(M::STABILITY_CONFIG, M::TYPE_COLLECTION, [
-                "h" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, "a_h"),
-                "c" => new M(M::STABILITY_CONFIG, M::TYPE_COLLECTION, [
-                    "g" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, "a_c_g")
+        $expected_extracted = new M(M::STABILITY_CONFIG, M::TYPE_COLLECTION, fn() => [
+            "a" => new M(M::STABILITY_CONFIG, M::TYPE_COLLECTION, fn() => [
+                "h" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, fn() => "a_h"),
+                "c" => new M(M::STABILITY_CONFIG, M::TYPE_COLLECTION, fn() => [
+                    "g" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, fn() => "a_c_g")
                 ]),
             ]),
-            "k" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, "k")
+            "k" => new M(M::STABILITY_CONFIG, M::TYPE_TEXT, fn() => "k")
         ]);
-        $expected_rest = new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-            "a" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-                "c" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-                    "d" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-                        "e" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "a_c_d_e"),
-                        "f" => new M(M::STABILITY_VOLATILE, M::TYPE_TEXT, "a_c_d_f")
+        $expected_rest = new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+            "a" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+                "c" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+                    "d" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+                        "e" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "a_c_d_e"),
+                        "f" => new M(M::STABILITY_VOLATILE, M::TYPE_TEXT, fn() => "a_c_d_f")
                     ])
                 ]),
-                "i" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, "a_i\na_i")
+                "i" => new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "a_i\na_i")
             ]),
-            "b" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, [
-                "j" => new M(M::STABILITY_VOLATILE, M::TYPE_TEXT, "b_j")
+            "b" => new M(M::STABILITY_MIXED, M::TYPE_COLLECTION, fn() => [
+                "j" => new M(M::STABILITY_VOLATILE, M::TYPE_TEXT, fn() => "b_j")
             ])
         ]);
 
@@ -238,8 +238,8 @@ METRIC;
 
     public function testToArrayWithDeepOne(): void
     {
-        $metric = new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, [
-           "bool_true" => new M(M::STABILITY_STABLE, M::TYPE_BOOL, true)
+        $metric = new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, fn() => [
+           "bool_true" => new M(M::STABILITY_STABLE, M::TYPE_BOOL, fn() => true)
         ]);
 
         $this->assertEquals(["bool_true" => "true"], $metric->toArray());
@@ -247,9 +247,9 @@ METRIC;
 
     public function testToArrayWithDeepTwo(): void
     {
-        $metric = new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, [
-            "db" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, [
-                "bool_true" => new M(M::STABILITY_STABLE, M::TYPE_BOOL, true)
+        $metric = new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, fn() => [
+            "db" => new M(M::STABILITY_STABLE, M::TYPE_COLLECTION, fn() => [
+                "bool_true" => new M(M::STABILITY_STABLE, M::TYPE_BOOL, fn() => true)
             ])
         ]);
 
@@ -278,7 +278,7 @@ METRIC;
             ->willReturn($panel_f)
         ;
 
-        $metric = new M(M::STABILITY_STABLE, M::TYPE_TEXT, "string", "");
+        $metric = new M(M::STABILITY_STABLE, M::TYPE_TEXT, fn() => "string", "");
 
         $result = $metric->toUIReport($factory, "Status");
 
