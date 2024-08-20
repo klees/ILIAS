@@ -32,6 +32,27 @@ class FileServices implements Component\Component
         array | \ArrayAccess &$pull,
         array | \ArrayAccess &$internal,
     ): void {
+        $implement[UI\Component\Input\Field\PhpUploadLimit::class] = static fn() =>
+            new class () implements UI\Component\Input\Field\PhpUploadLimit {
+                public function getPhpUploadLimitInBytes(): int
+                {
+                    return (int) \ilFileUtils::getPhpUploadSizeLimitInBytes();
+                }
+            };
+
+        $implement[UI\Component\Input\Field\GlobalUploadLimit::class] = static fn() =>
+            new class () implements UI\Component\Input\Field\GlobalUploadLimit {
+                public function getGlobalUploadLimitInBytes(): ?int
+                {
+                    global $DIC;
+                    if ($DIC->offsetExists('upload_policy_resolver')) {
+                        /** @var $DIC array{upload_policy_resolver: \UploadPolicyResolver} */
+                        return $DIC['upload_policy_resolver']->getUserUploadSizeLimitInBytes();
+                    }
+                    return null;
+                }
+            };
+
         $contribute[\ILIAS\Setup\Agent::class] = fn() =>
             new \ilFileServicesSetupAgent(
                 $pull[\ILIAS\Refinery\Factory::class]

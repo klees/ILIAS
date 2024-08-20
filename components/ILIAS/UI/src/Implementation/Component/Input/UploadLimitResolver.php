@@ -20,6 +20,8 @@ declare(strict_types=1);
 namespace ILIAS\UI\Implementation\Component\Input;
 
 use ILIAS\UI\Component\Input\Field\UploadHandler;
+use ILIAS\UI\Component\Input\Field\PhpUploadLimit;
+use ILIAS\UI\Component\Input\Field\GlobalUploadLimit;
 
 /**
  * This class will bee used by @see FileUpload to resolve upload-limits.
@@ -39,14 +41,13 @@ use ILIAS\UI\Component\Input\Field\UploadHandler;
  */
 class UploadLimitResolver
 {
-    /**
-     * @param int      $php_upload_limit_in_bytes           smaller php-ini option of 'post_max_size' and 'upload_max_filesize'
-     * @param int|null $custom_global_upload_limit_in_bytes custom upload limit (may exceed $php_upload_limit_in_bytes)
-     */
-    public function __construct(
-        protected int $php_upload_limit_in_bytes,
-        protected ?int $custom_global_upload_limit_in_bytes = null
-    ) {
+    protected int $php_upload_limit_in_bytes;
+    protected ?int $global_upload_limit_in_bytes = null;
+
+    public function __construct(PhpUploadLimit $php_upload_limit, GlobalUploadLimit $global_upload_limit)
+    {
+        $this->php_upload_limit_in_bytes = $php_upload_limit->getPhpUploadLimitInBytes();
+        $this->global_upload_limit_in_bytes = $global_upload_limit->getGlobalUploadLimitInBytes();
     }
 
     public function getBestPossibleUploadLimitInBytes(
@@ -57,13 +58,18 @@ class UploadLimitResolver
             return $local_limit_in_bytes;
         }
 
-        if (null !== $this->custom_global_upload_limit_in_bytes &&
-            $this->canUploadLimitBeUsed($upload_handler, $this->custom_global_upload_limit_in_bytes)
+        if (null !== $this->global_upload_limit_in_bytes &&
+            $this->canUploadLimitBeUsed($upload_handler, $this->global_upload_limit_in_bytes)
         ) {
-            return $this->custom_global_upload_limit_in_bytes;
+            return $this->global_upload_limit_in_bytes;
         }
 
         return $this->php_upload_limit_in_bytes;
+    }
+
+    public function getGlobalUploadLimitInBytes(): int
+    {
+        return $this->global_upload_limit_in_bytes;
     }
 
     public function getPhpUploadLimitInBytes(): int
