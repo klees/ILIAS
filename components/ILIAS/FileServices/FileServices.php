@@ -53,7 +53,7 @@ class FileServices implements Component\Component
                 }
             };
 
-        $contribute[\ILIAS\Setup\Agent::class] = fn() =>
+        $contribute[\ILIAS\Setup\Agent::class] = static fn() =>
             new \ilFileServicesSetupAgent(
                 $pull[\ILIAS\Refinery\Factory::class]
             );

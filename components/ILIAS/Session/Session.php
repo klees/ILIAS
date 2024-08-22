@@ -35,7 +35,7 @@ class Session implements Component\Component
         $implement[UI\Component\Table\Storage::class] = static fn() =>
             $internal[UI\Component\Table\Storage::class];
 
-        $contribute[\ILIAS\Setup\Agent::class] = fn() =>
+        $contribute[\ILIAS\Setup\Agent::class] = static fn() =>
             new \ilSessionSetupAgent(
                 $pull[\ILIAS\Refinery\Factory::class]
             );
