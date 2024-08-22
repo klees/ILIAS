@@ -1124,7 +1124,6 @@ class ilInitialisation
             return;
         }
 
-        $GLOBALS["DIC"] = new Container();
         $GLOBALS["DIC"]["ilLoggerFactory"] = function ($c) {
             return ilLoggerFactory::getInstance();
         };
@@ -1469,44 +1468,6 @@ class ilInitialisation
     }
 
     /**
-     * init the ILIAS UI framework.
-     */
-    public static function initUIFramework(\ILIAS\DI\Container $c): void
-    {
-        $init_ui = new InitUIFramework();
-        $init_ui->init($c);
-
-        $component_repository = $c["component.repository"];
-        $component_factory = $c["component.factory"];
-        foreach ($component_repository->getPlugins() as $pl) {
-            if (!$pl->isActive()) {
-                continue;
-            }
-            $plugin = $component_factory->getPlugin($pl->getId());
-            $c['ui.renderer'] = $plugin->exchangeUIRendererAfterInitialization($c);
-
-            foreach ($c->keys() as $key) {
-                if (strpos($key, "ui.factory") === 0) {
-                    $c[$key] = $plugin->exchangeUIFactoryAfterInitialization($key, $c);
-                }
-            }
-        }
-    }
-
-    /**
-     * @param \ILIAS\DI\Container $container
-     */
-    protected static function initRefinery(\ILIAS\DI\Container $container): void
-    {
-        $container['refinery'] = function ($container) {
-            $dataFactory = new \ILIAS\Data\Factory();
-            $language = $container['lng'];
-
-            return new \ILIAS\Refinery\Factory($dataFactory, $language);
-        };
-    }
-
-    /**
      * @param Container $container
      */
     protected static function replaceSuperGlobals(\ILIAS\DI\Container $container): void
@@ -1550,7 +1511,6 @@ class ilInitialisation
             self::initUploadPolicies($DIC);
         }
 
-        self::initUIFramework($GLOBALS["DIC"]);
         $tpl = new ilGlobalPageTemplate($DIC->globalScreen(), $DIC->ui(), $DIC->http());
         self::initGlobal("tpl", $tpl);
 

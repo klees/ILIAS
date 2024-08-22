@@ -22,9 +22,9 @@ if (!file_exists('../ilias.ini.php')) {
     die('The ILIAS setup is not completed. Please run the setup routine.');
 }
 
-require_once '../vendor/composer/vendor/autoload.php';
+require_once(__DIR__ . "/../artifacts/bootstrap_default.php");
 
-ilInitialisation::initILIAS();
+entry_point("This is an adapter to make the legacy initialisation happen, not the way we want to do this in the future. Please look into docs/development/components-and-directories.md for further information.");
 
 /** @var $DIC \ILIAS\DI\Container */
 global $DIC;
