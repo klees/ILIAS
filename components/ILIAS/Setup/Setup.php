@@ -50,6 +50,9 @@ class Setup implements Component\Component
                 $pull[\ILIAS\Data\Factory::class]
             );
 
+        $contribute[\ILIAS\Component\Activities\Activity::class] = static fn() =>
+            new \ILIAS\Setup\Activities\GetStatus();
+
         $internal["command.install"] = static fn() =>
             new \ILIAS\Setup\CLI\InstallCommand(
                 $internal["agent_finder"],
