@@ -25,20 +25,18 @@ class ilProxySettings
     protected string $host = '';
     protected int $port = 80;
     protected bool $active = false;
-    protected ilSetting $setting;
 
-    protected function __construct()
-    {
-        global $DIC;
-
-        $this->setting = $DIC->settings();
+    public function __construct(
+        protected ilSetting $setting
+    ) {
         $this->read();
     }
 
     public static function _getInstance(): ilProxySettings
     {
         if (null === self::$_instance) {
-            self::$_instance = new self();
+            global $DIC;
+            self::$_instance = new self($DIC->settings());
         }
 
         return self::$_instance;

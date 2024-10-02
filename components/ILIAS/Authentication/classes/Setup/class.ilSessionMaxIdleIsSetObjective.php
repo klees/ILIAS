@@ -58,6 +58,8 @@ class ilSessionMaxIdleIsSetObjective implements Setup\Objective
     {
         $client_ini = $environment->getResource(Setup\Environment::RESOURCE_CLIENT_INI);
         $admin_interaction = $environment->getResource(Setup\Environment::RESOURCE_ADMIN_INTERACTION);
+        $factory = $environment->getResource(Setup\Environment::RESOURCE_SETTINGS_FACTORY);
+        $settings = $factory->settingsFor("common");
 
         $session_max_idle = $this->config->getSessionMaxIdle();
 
@@ -69,7 +71,7 @@ class ilSessionMaxIdleIsSetObjective implements Setup\Objective
 
         $key = bin2hex(random_bytes(32));
         $this->generateServerInfoFile($key);
-        var_dump($this->getPHPIniValues($key));
+        var_dump($this->getPHPIniValues($settings, $key));
         die();
         list($cookie_lifetime, $gc_maxlifetime) = $this->getPHPIniValues();
 
@@ -109,9 +111,12 @@ class ilSessionMaxIdleIsSetObjective implements Setup\Objective
         return exec("wget -q -O - {$url} | grep 'Loaded Configuration File' | cut -d '<' -f5 | cut -d '>' -f2");
     }
 
-    protected function getPHPIniValues(string $key): array
+    protected function getPHPIniValues(ilSetting $settings, string $key): array
     {
-        $curl = new ilCurlConnection("http://doil/trunk10/server_info.php?token=$key");
+        $curl = new ilCurlConnection(
+            "http://doil/trunk10/server_info.php?token=$key",
+            new ilProxySettings($settings)
+        );
         $curl->init();
         //        try {
         //            $curl = new ilCurlConnection("http://doil/trunk10/server_info.php?token=$key");
@@ -129,7 +134,6 @@ class ilSessionMaxIdleIsSetObjective implements Setup\Objective
 
         //        $curl->exec();
         //        var_dump($curl->getResponseBody());
-        die();
         return  explode(",", $foo);
     }
 

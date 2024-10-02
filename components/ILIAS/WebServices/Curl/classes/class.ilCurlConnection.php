@@ -34,18 +34,16 @@ declare(strict_types=1);
  */
 class ilCurlConnection
 {
-    protected string $url = '';
-
     /** @var CurlHandle|resource|null $ch */
     protected $ch = null;
     private string $header_plain = '';
     private array $header_arr = array();
     private string $response_body = '';
 
-    public function __construct(string $a_url = '')
-    {
-        $this->url = $a_url;
-
+    public function __construct(
+        protected string $url = '',
+        protected ?ilProxySettings $proxy_settings = null
+    ) {
         if (!self::_isCurlExtensionLoaded()) {
             throw new ilCurlConnectionException('Curl extension not enabled.');
         }
@@ -87,7 +85,7 @@ class ilCurlConnection
 
         if ($set_proxy) {
             // use a proxy, if configured by ILIAS
-            $proxy = ilProxySettings::_getInstance();
+            $proxy = $this->proxy_settings ?? ilProxySettings::_getInstance();
             if ($proxy->isActive()) {
                 $this->setOpt(CURLOPT_HTTPPROXYTUNNEL, true);
 
