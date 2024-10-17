@@ -358,7 +358,7 @@ class Component implements \ILIAS\Core\Component
         array | \ArrayAccess &$define,
         // ...
     ) {
-        $define[] = Vendor\Component\Service::class];
+        $define[] = Vendor\Component\Service::class;
     }
 ```
 
