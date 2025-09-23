@@ -1,4 +1,4 @@
-# Strategy of the Technical Board - July 2023
+# Strategy of the Technical Board - Sep 2025
 
 
 ## Introduction
@@ -166,6 +166,22 @@ We set the following goals:
   benefit from our knowledge and code, just as we benefit from theirs. We shall
   cooperate closely with communities that share our values and challenges.
 
+
+### Use of Artificial Intelligence
+
+AI has become an important topic in software development, education and virtually
+every other field of work. We see potential to improve our processes and product,
+but we also see risks for our software and community. To reap benefits and control
+risks, we ask for deliberate approaches to incorporate AI.
+
+We set the following goals:
+
+* When designing interfaces to AI systems, we look to follow the goals outlined
+  in "Platform for Learning".
+* Before introducing AI tools to our processes, potential shortcomings and benefits
+  are considered to make an informed decision.
+* The use of AI by contributors benefits the general qualities we are looking for
+  in our product and processes.
 
 
 ## Usage of this Document
